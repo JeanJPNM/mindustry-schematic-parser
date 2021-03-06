@@ -1,0 +1,32 @@
+{
+  "name": "mindustry-schematic-parser",
+  "version": "1.0.0",
+  "description": "A simple api to parse mindustry schematics",
+  "main": "build/index.js",
+  "scripts": {
+    "start": "node .",
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "keywords": [
+    "Mindustry"
+  ],
+  "author": "JeanJPNM",
+  "license": "ISC",
+  "dependencies": {
+    "pako": "^2.0.3"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^14.14.31",
+    "@types/pako": "^1.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.16.1",
+    "@typescript-eslint/parser": "^4.16.1",
+    "eslint": "^7.21.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "prettier": "^2.2.1",
+    "typescript": "^4.2.3"
+  }
+}
