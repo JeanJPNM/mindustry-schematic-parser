@@ -17,7 +17,7 @@ import Pako from 'pako'
 import { Point2 } from './arc'
 import StreamedDataView from './streamed_data_view'
 export default class SchematicCode {
-  readonly data: StreamedDataView
+  private readonly data: StreamedDataView
 
   constructor(public readonly value: string) {
     const decoded = Buffer.from(value, 'base64').toString('binary')
