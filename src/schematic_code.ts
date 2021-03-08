@@ -19,6 +19,8 @@ import StreamedDataView from './streamed_data_view'
 export default class SchematicCode {
   private readonly data: StreamedDataView
 
+  private schematic?: Schematic
+
   constructor(public readonly value: string) {
     const decoded = Buffer.from(value, 'base64').toString('binary')
     const arr = new Uint8Array(decoded.length)
@@ -214,6 +216,7 @@ export default class SchematicCode {
   }
 
   parse(): Schematic {
+    if (this.schematic) return this.schematic
     if (!this.isValid(true)) {
       throw new Error('Parsing error: this is not a valid schematic')
     }
@@ -223,6 +226,7 @@ export default class SchematicCode {
     const tags = this.tags(cData)
     const blocks = this.blocks(cData)
     const tiles = this.tiles(cData, blocks, version)
-    return new Schematic(tiles, tags, width, height)
+    this.schematic = new Schematic(tiles, tags, width, height)
+    return this.schematic
   }
 }
