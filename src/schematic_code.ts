@@ -86,12 +86,10 @@ export default class SchematicCode {
       block instanceof Unloader ||
       block instanceof ItemSource
     ) {
-      console.log('item config: ' + value)
       // return Vars.content.item(value)
       return
     }
     if (block instanceof LiquidSource) {
-      console.log('liquid:' + value)
       // return Vars.content.liquid(value)
       return
     }
@@ -225,10 +223,6 @@ export default class SchematicCode {
     const tags = this.tags(cData)
     const blocks = this.blocks(cData)
     const tiles = this.tiles(cData, blocks, version)
-    for (const tile of tiles) {
-      const { block } = tile
-      console.log(block.name, '=> x: ', tile.x, ', y: ', tile.y)
-    }
     return new Schematic(tiles, tags, width, height)
   }
 }
