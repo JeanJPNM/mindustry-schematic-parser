@@ -1,55 +1,7 @@
 import SchematicCode from './schematic_code'
-import StreamedDataView from './streamed_data_view'
-import pako from 'pako'
 
-function read(encoded: string) {
-  const decoded = Buffer.from(encoded, 'base64').toString('binary')
-  const u8intArray = new Uint8Array(decoded.length)
-  for (let i = 0; i < decoded.length; i++) {
-    u8intArray[i] = decoded.codePointAt(i) ?? 0
-  }
-  const data = new StreamedDataView(u8intArray.buffer)
-  const header = 'msch'
-  for (const char of header) {
-    const value = data.readChar()
-    console.log(`${char} == ${value}`)
-    if (char !== value) throw new Error('not a valid schematic')
-  }
-  const version = data.readUint8()
-  console.log(version)
-  const decompressedBinary = pako.inflate(u8intArray.subarray(data.offset))
-  parse(decompressedBinary)
-}
-function parse(decompressedBinary: Uint8Array) {
-  const data = new StreamedDataView(decompressedBinary.buffer)
-  const width = data.readShort(),
-    height = data.readShort()
-  console.log(`width: ${width} height: ${height}`)
-  const tags = new Map<string, string>()
-  const numberOfTags = data.readByte()
-  for (let i = 0; i < numberOfTags; i++) {
-    const name = data.readUTF()
-    const value = data.readUTF()
-    tags.set(name, value)
-  }
-  console.log(tags)
-  const length = data.readByte()
-  const blocks: string[] = []
-  for (let i = 0; i < length; i++) {
-    const block = data.readUTF()
-    console.log(block)
-    blocks.push(block)
-  }
-  const total = data.readInt()
-  const tiles = []
-  // TODO: figure out how to replicate mindustry blocks
-  for (let i = 0; i < total; i++) {
-    const block = blocks[i]
-    const position = data.readInt()
-  }
-}
 const originalCode =
-  'bXNjaAF4nD2LAQ6DIAxFP6ImSzbNDsIpdhICdSFBMAym3n5UtzVp+9/vL3p0Am3QM+HySHucfHG2x7jqTEnRlpM2OSbcs8s6uDIrE8Ob9mqN5pdXs9soYSjBUpp8XNWzvuO2FP8ifrDFZQyLr679M3DFWaJ2c0rJJJiawxLyEIKHhGghz2TLt66uL0mmjukDypUqCw=='
+  'bXNjaAF4nE2N227CMAyGf9KjhrRpSNznBXqFtBfhCUJjUBEklUkH7NG5oDhppWHH+Rwf/iBDqZA7cyZ8b24/emuc1cHrbcumx9LSpeWuD513WL899MFrvWOxGh/9cPol7v6IJfdX4sZ5S/jqnJQD2ebiBYzPwVni/clfm4MJhPo4uDZJl/NEyX6IrHYmCO8AVvi3RTpQdQWMT6hxlBBKVYlLZ3zMo9mEHKleFDHN0vYiQjxPW6koUQjyNFVKVsSOmiSiOqr5A7myCUlZzcovD0488Q=='
 const scode = new SchematicCode(originalCode)
 console.log(scode.parse().requirements())
 // read(
