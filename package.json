@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "A simple api to parse mindustry schematics",
   "main": "build/index.js",
+  "types": "build/index.d.ts",
   "scripts": {
     "start": "node .",
     "build": "tsc",
-    "watch": "tsc --watch"
+    "watch": "tsc --watch",
+    "prepublish": "tsc"
   },
   "keywords": [
     "Mindustry"
