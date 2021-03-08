@@ -29,5 +29,16 @@
     "eslint-plugin-prettier": "^3.3.1",
     "prettier": "^2.2.1",
     "typescript": "^4.2.3"
-  }
+  },
+  "directories": {
+    "example": "example"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JeanJPNM/mindustry-schematic-parser.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JeanJPNM/mindustry-schematic-parser/issues"
+  },
+  "homepage": "https://github.com/JeanJPNM/mindustry-schematic-parser#readme"
 }
