@@ -24,6 +24,24 @@ export default class Schematic {
   ) {}
 
   /**
+   * The name of this schematic
+   *
+   * Shorhand for `tags.get('name')`
+   */
+  get name(): string {
+    return this.tags.get('name') as string
+  }
+
+  /**
+   * The description of this schematic
+   *
+   * Shorhand for `tags.get('name')`
+   */
+  get description(): string | undefined {
+    return this.tags.get('description')
+  }
+
+  /**
    * The amount of power this schematic can produce
    *
    * This is a separated measurement that does not interfere with `powerConsumption`
