@@ -16,11 +16,23 @@ import { BlockfromCode } from './mindustry/block/blocks'
 import Pako from 'pako'
 import { Point2 } from './arc'
 import StreamedDataView from './streamed_data_view'
+
+/**
+ * A simple way to parse schematic codes
+ */
 export default class SchematicCode {
-  readonly data: StreamedDataView
+  private readonly data: StreamedDataView
+
+  /** The parsed schematic, will be `undefined` until parsing is complete */
+  private schematic?: Schematic
 
   constructor(public readonly value: string) {
-    const decoded = Buffer.from(value, 'base64').toString('binary')
+    let decoded: string
+    if (typeof window === 'undefined') {
+      decoded = Buffer.from(value, 'base64').toString('binary')
+    } else {
+      decoded = atob(value)
+    }
     const arr = new Uint8Array(decoded.length)
     for (let i = 0; i < decoded.length; i++) {
       arr[i] = decoded.codePointAt(i) || 0
@@ -86,12 +98,10 @@ export default class SchematicCode {
       block instanceof Unloader ||
       block instanceof ItemSource
     ) {
-      console.log('item config: ' + value)
       // return Vars.content.item(value)
       return
     }
     if (block instanceof LiquidSource) {
-      console.log('liquid:' + value)
       // return Vars.content.liquid(value)
       return
     }
@@ -215,7 +225,13 @@ export default class SchematicCode {
     return tiles
   }
 
+  /**
+   * Parses the text and returns a schematic
+   *
+   * If called multiple times, the same `Schematic` instance will be returned
+   */
   parse(): Schematic {
+    if (this.schematic) return this.schematic
     if (!this.isValid(true)) {
       throw new Error('Parsing error: this is not a valid schematic')
     }
@@ -225,10 +241,7 @@ export default class SchematicCode {
     const tags = this.tags(cData)
     const blocks = this.blocks(cData)
     const tiles = this.tiles(cData, blocks, version)
-    for (const tile of tiles) {
-      const { block } = tile
-      console.log(block.name, '=> x: ', tile.x, ', y: ', tile.y)
-    }
-    return new Schematic(tiles, tags, width, height)
+    this.schematic = new Schematic(tiles, tags, width, height)
+    return this.schematic
   }
 }
