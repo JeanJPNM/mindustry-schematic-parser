@@ -6,6 +6,9 @@ export interface BlockProperties {
   size: number
   powerConsumption?: number
 }
+/**
+ * A generic way to represent a block
+ */
 export abstract class Block
   extends UnlockableContent
   implements BlockProperties {
