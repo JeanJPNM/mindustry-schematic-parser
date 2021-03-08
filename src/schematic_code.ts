@@ -16,9 +16,14 @@ import { BlockfromCode } from './mindustry/block/blocks'
 import Pako from 'pako'
 import { Point2 } from './arc'
 import StreamedDataView from './streamed_data_view'
+
+/**
+ * A simple way to parse schematic codes
+ */
 export default class SchematicCode {
   private readonly data: StreamedDataView
 
+  /** The parsed schematic, will be `undefined` until parsing is complete */
   private schematic?: Schematic
 
   constructor(public readonly value: string) {
@@ -220,6 +225,11 @@ export default class SchematicCode {
     return tiles
   }
 
+  /**
+   * Parses the text and returns a schematic
+   *
+   * If called multiple times, the same `Schematic` instance will be returned
+   */
   parse(): Schematic {
     if (this.schematic) return this.schematic
     if (!this.isValid(true)) {
