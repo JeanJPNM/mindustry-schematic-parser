@@ -22,7 +22,12 @@ export default class SchematicCode {
   private schematic?: Schematic
 
   constructor(public readonly value: string) {
-    const decoded = Buffer.from(value, 'base64').toString('binary')
+    let decoded: string
+    if (typeof window === 'undefined') {
+      decoded = Buffer.from(value, 'base64').toString('binary')
+    } else {
+      decoded = atob(value)
+    }
     const arr = new Uint8Array(decoded.length)
     for (let i = 0; i < decoded.length; i++) {
       arr[i] = decoded.codePointAt(i) || 0
