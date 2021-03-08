@@ -143,8 +143,8 @@ export default class StreamedDataView {
   }
 
   getBool(): boolean {
-    const value = this.data.getInt32(this.currentOffset)
-    this.currentOffset += 4
+    const value = this.getInt8()
+    if (value < 0) throw new Error('Bat byte input')
     return value !== 0
   }
 }
