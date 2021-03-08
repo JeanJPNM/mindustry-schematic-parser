@@ -15,8 +15,8 @@ export default class StreamedDataView {
     return this.currentOffset
   }
 
-  getFloat32(): number {
-    const value = this.data.getFloat32(this.currentOffset)
+  getFloat32(littleEndian?: boolean): number {
+    const value = this.data.getFloat32(this.currentOffset, littleEndian)
     this.currentOffset += 4
     return value
   }
