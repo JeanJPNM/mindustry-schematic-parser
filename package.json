@@ -1,6 +1,6 @@
 {
   "name": "mindustry-schematic-parser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple api to parse mindustry schematics",
   "main": "build/index.js",
   "types": "build/index.d.ts",
