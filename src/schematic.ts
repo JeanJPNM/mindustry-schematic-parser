@@ -73,6 +73,13 @@ export default class Schematic {
   }
 
   /**
+   * The overall power balance of this schematic
+   */
+  get powerBalance(): number {
+    return this.powerProduction - this.powerConsumption
+  }
+
+  /**
    * The items needed to build this schematic
    */
   get requirements(): ItemCost {
