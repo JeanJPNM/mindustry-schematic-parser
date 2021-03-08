@@ -4,6 +4,3 @@ const originalCode =
   'bXNjaAF4nE2N227CMAyGf9KjhrRpSNznBXqFtBfhCUJjUBEklUkH7NG5oDhppWHH+Rwf/iBDqZA7cyZ8b24/emuc1cHrbcumx9LSpeWuD513WL899MFrvWOxGh/9cPol7v6IJfdX4sZ5S/jqnJQD2ebiBYzPwVni/clfm4MJhPo4uDZJl/NEyX6IrHYmCO8AVvi3RTpQdQWMT6hxlBBKVYlLZ3zMo9mEHKleFDHN0vYiQjxPW6koUQjyNFVKVsSOmiSiOqr5A7myCUlZzcovD0488Q=='
 const scode = new SchematicCode(originalCode)
 console.log(scode.parse().requirements())
-// read(
-//   'bXNjaAF4nEWNbw6CMAzFH+NvNNHoCbgAn0y8CCeYrBqMbmQMUY/uB7EbJK7rfs1r+4YYmUCi5Z2wOzyPZS21Kp0p68bKDmtFfWPbzrVGAwVW3XB7kG3fZLk2I9lKG0XYtpplR6rqDcNiM2hF9nwzY3WRjlBcB90El2yZyKwZPPOTdMwXgD3+JwoXosiB6QsxTZxMVgUHd6bPMhrPSBD0NPVlHLYjD44kbAWRM2UkYSrjKvUdMVt4d+TLB/zEM4KzWJx/c5A02A=='
-// )
