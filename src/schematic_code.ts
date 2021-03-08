@@ -187,7 +187,6 @@ export default class SchematicCode {
     const tiles: SchematicTile[] = []
     for (let i = 0; i < total; i++) {
       const block = blocks[cData.readByte()]
-      console.log(block)
       const position = cData.readInt()
       const config =
         version === 0
