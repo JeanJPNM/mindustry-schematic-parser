@@ -10,7 +10,8 @@
     "importHelpers": true,
     "strict": true,
     "module": "CommonJS",
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
+    "declaration": true
   },
   "include": ["src/*"]
 }
