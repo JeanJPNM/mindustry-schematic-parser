@@ -9,7 +9,7 @@ export default class Schematic {
     public height: number
   ) {}
 
-  powerProduction(): number {
+  get powerProduction(): number {
     let result = 0
     for (const tile of this.tiles) {
       result +=
@@ -18,7 +18,7 @@ export default class Schematic {
     return result
   }
 
-  powerConsumption(): number {
+  get powerConsumption(): number {
     let result = 0
     for (const tile of this.tiles) {
       result += tile.block.powerConsumption
@@ -26,7 +26,7 @@ export default class Schematic {
     return result
   }
 
-  requirements(): ItemCost {
+  get requirements(): ItemCost {
     const requirements: ItemCost = {}
     for (const tile of this.tiles) {
       const { block } = tile
