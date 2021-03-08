@@ -5,7 +5,12 @@
     "target": "ES2020",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "outDir": "build"
+    "outDir": "build",
+    "isolatedModules": true,
+    "importHelpers": true,
+    "strict": true,
+    "module": "CommonJS",
+    "moduleResolution": "Node"
   },
   "include": ["src/*"]
 }

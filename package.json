@@ -16,7 +16,6 @@
   "dependencies": {
     "pako": "^2.0.3"
   },
-  "type": "module",
   "devDependencies": {
     "@types/node": "^14.14.31",
     "@types/pako": "^1.0.1",
