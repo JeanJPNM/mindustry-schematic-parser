@@ -83,6 +83,8 @@ interface PowerGeneratorProperties extends BlockProperties {
 export class PowerGenerator extends Block {
   constructor(properties: PowerGeneratorProperties) {
     super(properties)
+    /// gets the actual amount consumed per second
+    this.powerGeneration *= 60
   }
 
   powerGeneration!: number
