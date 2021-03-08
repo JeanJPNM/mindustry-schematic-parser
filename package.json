@@ -8,7 +8,7 @@
     "start": "node .",
     "build": "tsc",
     "watch": "tsc --watch",
-    "prepublish": "tsc"
+    "prepare": "tsc"
   },
   "keywords": [
     "Mindustry"
