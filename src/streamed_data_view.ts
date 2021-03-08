@@ -1,5 +1,6 @@
 /**
- * Similar to a DataView, but it has an auto incrementing offset
+ * Similar to a DataView, but it has an auto incrementing offset.
+ * A mix of `DataView` and the `DataInputStream` java class
  */
 export default class StreamedDataView {
   readonly data: DataView
@@ -8,55 +9,81 @@ export default class StreamedDataView {
     this.data = new DataView(buffer)
   }
 
-  closed = false
-
   private currentOffset = 0
 
   get offset(): number {
     return this.currentOffset
   }
 
+  getFloat32(): number {
+    const value = this.data.getFloat32(this.currentOffset)
+    this.currentOffset += 4
+    return value
+  }
+
+  getFloat64(littleEndian?: boolean): number {
+    const value = this.data.getFloat64(this.currentOffset, littleEndian)
+    this.currentOffset += 8
+    return value
+  }
+
+  getInt8(): number {
+    const value = this.data.getInt8(this.currentOffset)
+    this.currentOffset++
+    return value
+  }
+
+  getInt16(littleEndian?: boolean): number {
+    const value = this.data.getInt16(this.currentOffset, littleEndian)
+    this.currentOffset += 2
+    return value
+  }
+
+  getInt32(littleEndian?: boolean): number {
+    const value = this.data.getInt32(this.currentOffset, littleEndian)
+    this.currentOffset += 4
+    return value
+  }
+
+  getUint8(): number {
+    const value = this.data.getUint8(this.currentOffset)
+    this.currentOffset++
+    return value
+  }
+
+  getUint16(littleEndian?: boolean): number {
+    const value = this.data.getUint16(this.currentOffset, littleEndian)
+    this.currentOffset += 2
+    return value
+  }
+
+  getUint32(littleEndian?: boolean): number {
+    const value = this.data.getUint32(this.currentOffset, littleEndian)
+    this.currentOffset += 4
+    return value
+  }
+
+  getBigInt64(littleEndian?: boolean): bigint {
+    const value = this.data.getBigInt64(this.currentOffset, littleEndian)
+    this.currentOffset += 8
+    return value
+  }
+
+  getBigUint64(littleEndian?: boolean): bigint {
+    const value = this.data.getBigUint64(this.currentOffset, littleEndian)
+    this.currentOffset += 8
+    return value
+  }
+
   /**
    * Returns a unicode character with the code from the next byte
    */
-  readChar(): string {
-    return String.fromCodePoint(this.data.getUint8(this.currentOffset++))
+  getChar(): string {
+    return String.fromCodePoint(this.getUint8())
   }
 
-  /**
-   * reads the next byte as an unsigned 8-bit integer
-   */
-  readUint8(): number {
-    return this.data.getUint8(this.currentOffset++)
-  }
-
-  /**
-   * reads the next byte as a signed 8-bit integer
-   */
-  readByte(): number {
-    return this.data.getInt8(this.currentOffset++)
-  }
-
-  /**
-   * reads the next two bytes as a signed 16-bit integer
-   */
-  readShort(): number {
-    const value = this.data.getInt16(this.currentOffset)
-    this.currentOffset += 2
-    return value
-  }
-
-  /**
-   * reads the next two bytes as an unsigned 16-bit integer
-   */
-  readUShort(): number {
-    const value = this.data.getUint16(this.currentOffset)
-    this.currentOffset += 2
-    return value
-  }
-
-  readUTF(): string {
-    const utflen = this.readUShort()
+  getString(): string {
+    const utflen = this.getUint16()
     let c = 0,
       c2 = 0,
       c3 = 0
@@ -64,13 +91,13 @@ export default class StreamedDataView {
     const end = utflen + this.currentOffset
     let result = ''
     while (start < end) {
-      c = this.readUint8()
+      c = this.getUint8()
       if (c > 127) break
       start++
       result += String.fromCodePoint(c)
     }
     while (start < end) {
-      c = this.readUint8()
+      c = this.getUint8()
       switch (c >> 4) {
         case 0:
         case 1:
@@ -115,33 +142,9 @@ export default class StreamedDataView {
     return result
   }
 
-  readInt(): number {
-    const value = this.data.getInt32(this.currentOffset++)
-    this.currentOffset += 4
-    return value
-  }
-
-  readLong(): bigint {
-    const value = this.data.getBigInt64(this.currentOffset)
-    this.currentOffset += 8
-    return value
-  }
-
-  readFloat(): number {
-    const value = this.data.getFloat32(this.currentOffset)
-    this.currentOffset += 4
-    return value
-  }
-
-  readBoolean(): boolean {
+  getBool(): boolean {
     const value = this.data.getInt32(this.currentOffset)
     this.currentOffset += 4
     return value !== 0
-  }
-
-  readDouble(): number {
-    const value = this.data.getFloat64(this.currentOffset)
-    this.currentOffset += 8
-    return value
   }
 }
