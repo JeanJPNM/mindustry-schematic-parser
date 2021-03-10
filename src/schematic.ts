@@ -1,5 +1,6 @@
 import { Block, PowerGenerator } from './mindustry/block'
 import { ItemCode, ItemCost } from './mindustry/item'
+import { SchematicDecoder } from './schematic_io'
 /**
  * A simple representation for a mindustry schematic
  */
@@ -20,8 +21,18 @@ export default class Schematic {
     /**
      * Height of the schematic in tiles
      */
-    public height: number
+    public height: number,
+
+    public base64?: string
   ) {}
+
+  static decode(base64: string): Schematic {
+    return new SchematicDecoder(base64).decode()
+  }
+
+  static encode(schematic: Schematic): string {
+    return schematic.encode()
+  }
 
   /**
    * The name of this schematic
@@ -32,13 +43,21 @@ export default class Schematic {
     return this.tags.get('name') as string
   }
 
+  set name(value: string) {
+    this.tags.set('name', value)
+  }
+
   /**
    * The description of this schematic
    *
    * Shorhand for `tags.get('name')`
    */
-  get description(): string | undefined {
-    return this.tags.get('description')
+  get description(): string {
+    return this.tags.get('description') ?? ''
+  }
+
+  set description(value: string) {
+    this.tags.set('description', value)
   }
 
   /**
@@ -97,6 +116,18 @@ export default class Schematic {
       }
     }
     return requirements
+  }
+
+  /**
+   * Converts this schematic to a base 64 string
+   */
+  encode(): string {
+    if (!this.base64)
+      throw new Error(
+        'by now, the schematic needs to be generated from a SchematicDecoder'
+      )
+
+    return new SchematicDecoder(this.base64).encodeWithTags(this)
   }
 }
 export class SchematicTile {
