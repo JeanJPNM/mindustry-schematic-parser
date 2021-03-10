@@ -1,6 +1,6 @@
 import { Block } from './block'
-
-export class MechanicalDrill extends Block {
+class Drill extends Block {}
+export class MechanicalDrill extends Drill {
   constructor() {
     super({
       name: 'mechanical-drill',
@@ -9,7 +9,7 @@ export class MechanicalDrill extends Block {
     })
   }
 }
-export class PneumaticDrill extends Block {
+export class PneumaticDrill extends Drill {
   constructor() {
     super({
       name: 'pneumatic-drill',
@@ -18,7 +18,7 @@ export class PneumaticDrill extends Block {
     })
   }
 }
-export class LaserDrill extends Block {
+export class LaserDrill extends Drill {
   constructor() {
     super({
       name: 'laser-drill',
@@ -28,7 +28,7 @@ export class LaserDrill extends Block {
     })
   }
 }
-export class BlastDrill extends Block {
+export class BlastDrill extends Drill {
   constructor() {
     super({
       name: 'blast-drill',
@@ -38,7 +38,7 @@ export class BlastDrill extends Block {
     })
   }
 }
-export class WaterExtractor extends Block {
+export class WaterExtractor extends Drill {
   constructor() {
     super({
       name: 'water-extractor',

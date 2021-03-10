@@ -27,15 +27,6 @@ export class CoreNucleus extends Block {
     })
   }
 }
-export class Vault extends Block {
-  constructor() {
-    super({
-      name: 'vault',
-      requirements: { titanium: 250, thorium: 125 },
-      size: 3,
-    })
-  }
-}
 export class Container extends Block {
   constructor() {
     super({
@@ -45,6 +36,15 @@ export class Container extends Block {
     })
   }
 }
+export class Vault extends Container {
+  constructor() {
+    super()
+    this.name = 'vault'
+    this.requirements = { titanium: 250, thorium: 125 }
+    this.size = 3
+  }
+}
+
 export class Unloader extends Block {
   constructor() {
     super({

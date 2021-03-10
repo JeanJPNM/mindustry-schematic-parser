@@ -10,14 +10,18 @@ export class LaunchPad extends Block {
     })
   }
 }
-export class LaunchPadLarge extends Block {
+export class LaunchPadLarge extends LaunchPad {
   constructor() {
-    super({
-      name: 'launch-pad-large',
-      requirements: { titanium: 200, silicon: 150, lead: 250, plastanium: 75 },
-      size: 4,
-      powerConsumption: 6.0,
-    })
+    super()
+    this.name += '-large'
+    this.requirements = {
+      titanium: 200,
+      silicon: 150,
+      lead: 250,
+      plastanium: 75,
+    }
+    this.size = 4
+    this.powerConsumption = 6
   }
 }
 export class InterplanetaryAccelerator extends Block {

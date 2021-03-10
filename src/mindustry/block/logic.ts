@@ -54,13 +54,12 @@ export class MemoryCell extends Block {
     })
   }
 }
-export class MemoryBank extends Block {
+export class MemoryBank extends MemoryCell {
   constructor() {
-    super({
-      name: 'memory-bank',
-      requirements: { graphite: 80, silicon: 80, 'phase-fabric': 30 },
-      size: 2,
-    })
+    super()
+    this.name = 'memory-bank'
+    this.requirements = { graphite: 80, silicon: 80, 'phase-fabric': 30 }
+    this.size = 2
   }
 }
 export class LogicDisplay extends Block {
@@ -72,17 +71,16 @@ export class LogicDisplay extends Block {
     })
   }
 }
-export class LargeLogicDisplay extends Block {
+export class LargeLogicDisplay extends LogicDisplay {
   constructor() {
-    super({
-      name: 'large-logic-display',
-      requirements: {
-        lead: 200,
-        silicon: 150,
-        metaglass: 100,
-        'phase-fabric': 75,
-      },
-      size: 6,
-    })
+    super()
+    this.name = `large-${this.name}`
+    this.requirements = {
+      lead: 200,
+      silicon: 150,
+      metaglass: 100,
+      'phase-fabric': 75,
+    }
+    this.size = 6
   }
 }

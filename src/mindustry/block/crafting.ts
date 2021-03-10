@@ -134,19 +134,18 @@ export class Separator extends Block {
     })
   }
 }
-export class Disassembler extends Block {
+export class Disassembler extends Separator {
   constructor() {
-    super({
-      name: 'disassembler',
-      requirements: {
-        graphite: 140,
-        titanium: 100,
-        silicon: 150,
-        'surge-alloy': 70,
-      },
-      size: 3,
-      powerConsumption: 4.0,
-    })
+    super()
+    this.name = 'disassembler'
+    this.requirements = {
+      graphite: 140,
+      titanium: 100,
+      silicon: 150,
+      'surge-alloy': 70,
+    }
+    this.size = 3
+    this.powerConsumption = 4
   }
 }
 export class SporePress extends Block {

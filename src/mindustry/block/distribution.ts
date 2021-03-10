@@ -9,13 +9,11 @@ export class Conveyor extends Block {
     })
   }
 }
-export class TitaniumConveyor extends Block {
+export class TitaniumConveyor extends Conveyor {
   constructor() {
-    super({
-      name: 'titanium-conveyor',
-      requirements: { copper: 1, lead: 1, titanium: 1 },
-      size: 1,
-    })
+    super()
+    this.name = `titanium-${this.name}`
+    this.requirements = { copper: 1, lead: 1, titanium: 1 }
   }
 }
 export class PlastaniumConveyor extends Block {
@@ -27,13 +25,11 @@ export class PlastaniumConveyor extends Block {
     })
   }
 }
-export class ArmoredConveyor extends Block {
+export class ArmoredConveyor extends Conveyor {
   constructor() {
-    super({
-      name: 'armored-conveyor',
-      requirements: { plastanium: 1, thorium: 1, metaglass: 1 },
-      size: 1,
-    })
+    super()
+    this.name = `armored-${this.name}`
+    this.requirements = { plastanium: 1, thorium: 1, metaglass: 1 }
   }
 }
 export class Junction extends Block {
@@ -54,14 +50,17 @@ export class ItemBridge extends Block {
     })
   }
 }
-export class PhaseConveyor extends Block {
+export class PhaseConveyor extends ItemBridge {
   constructor() {
-    super({
-      name: 'phase-conveyor',
-      requirements: { 'phase-fabric': 5, silicon: 7, lead: 10, graphite: 10 },
-      size: 1,
-      powerConsumption: 0.3,
-    })
+    super()
+    this.name = 'phase-conveyor'
+    this.requirements = {
+      'phase-fabric': 5,
+      silicon: 7,
+      lead: 10,
+      graphite: 10,
+    }
+    this.powerConsumption = 0.3
   }
 }
 export class Sorter extends Block {
@@ -73,13 +72,10 @@ export class Sorter extends Block {
     })
   }
 }
-export class InvertedSorter extends Block {
+export class InvertedSorter extends Sorter {
   constructor() {
-    super({
-      name: 'inverted-sorter',
-      requirements: { lead: 2, copper: 2 },
-      size: 1,
-    })
+    super()
+    this.name = `inverted-${this.name}`
   }
 }
 export class Router extends Block {

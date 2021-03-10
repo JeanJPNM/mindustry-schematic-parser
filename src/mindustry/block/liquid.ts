@@ -1,6 +1,6 @@
 import { Block } from './block'
-
-export class MechanicalPump extends Block {
+class Pump extends Block {}
+export class MechanicalPump extends Pump {
   constructor() {
     super({
       name: 'mechanical-pump',
@@ -9,7 +9,7 @@ export class MechanicalPump extends Block {
     })
   }
 }
-export class RotaryPump extends Block {
+export class RotaryPump extends Pump {
   constructor() {
     super({
       name: 'rotary-pump',
@@ -19,7 +19,7 @@ export class RotaryPump extends Block {
     })
   }
 }
-export class ThermalPump extends Block {
+export class ThermalPump extends Pump {
   constructor() {
     super({
       name: 'thermal-pump',
@@ -44,22 +44,18 @@ export class Conduit extends Block {
     })
   }
 }
-export class PulseConduit extends Block {
+export class PulseConduit extends Conduit {
   constructor() {
-    super({
-      name: 'pulse-conduit',
-      requirements: { titanium: 2, metaglass: 1 },
-      size: 1,
-    })
+    super()
+    this.name = `pulse-${this.name}`
+    this.requirements = { titanium: 2, metaglass: 1 }
   }
 }
-export class PlatedConduit extends Block {
+export class PlatedConduit extends Conduit {
   constructor() {
-    super({
-      name: 'plated-conduit',
-      requirements: { thorium: 2, metaglass: 1, plastanium: 1 },
-      size: 1,
-    })
+    super()
+    this.name = `plated-${this.name}`
+    this.requirements = { thorium: 2, metaglass: 1, plastanium: 1 }
   }
 }
 export class LiquidRouter extends Block {
@@ -71,13 +67,12 @@ export class LiquidRouter extends Block {
     })
   }
 }
-export class LiquidTank extends Block {
+export class LiquidTank extends LiquidRouter {
   constructor() {
-    super({
-      name: 'liquid-tank',
-      requirements: { titanium: 25, metaglass: 25 },
-      size: 3,
-    })
+    super()
+    this.name = 'liquid-tank'
+    this.requirements = { titanium: 25, metaglass: 25 }
+    this.size = 3
   }
 }
 export class LiquidJunction extends Block {
@@ -98,18 +93,16 @@ export class BridgeConduit extends Block {
     })
   }
 }
-export class PhaseConduit extends Block {
+export class PhaseConduit extends BridgeConduit {
   constructor() {
-    super({
-      name: 'phase-conduit',
-      requirements: {
-        'phase-fabric': 5,
-        silicon: 7,
-        metaglass: 20,
-        titanium: 10,
-      },
-      size: 1,
-      powerConsumption: 0.3,
-    })
+    super()
+    this.name = 'phase-conduit'
+    this.requirements = {
+      'phase-fabric': 5,
+      silicon: 7,
+      metaglass: 20,
+      titanium: 10,
+    }
+    this.powerConsumption = 0.3
   }
 }
