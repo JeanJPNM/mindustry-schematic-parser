@@ -24,7 +24,11 @@ export default class Schematic {
     public height: number,
 
     public base64?: string
-  ) {}
+  ) {
+    if (!this.description) {
+      this.description = ''
+    }
+  }
 
   static decode(base64: string): Schematic {
     return new SchematicDecoder(base64).decode()
