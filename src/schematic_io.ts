@@ -42,25 +42,25 @@ export class SchematicDecoder extends SchematicIO {
     this.data = new StreamedDataReader(arr.buffer)
   }
 
-  private isValid(consumeData = false) {
+  private isValid(data: StreamedDataReader, consumeData = false) {
     const { header } = SchematicIO
     if (consumeData) {
       for (const char of header) {
-        if (char !== this.data.getChar()) return false
+        if (char !== data.getChar()) return false
       }
       return true
     }
     for (let i = 0; i < header.length; i++) {
-      if (header[i] !== String.fromCodePoint(this.data.data.getUint8(i))) {
+      if (header[i] !== String.fromCodePoint(data.data.getUint8(i))) {
         return false
       }
     }
     return true
   }
 
-  private compressedData(): StreamedDataReader {
+  private compressedData(data: StreamedDataReader): StreamedDataReader {
     const bytes = Pako.inflate(
-      new Uint8Array(this.data.buffer).subarray(this.data.offset)
+      new Uint8Array(data.buffer).subarray(data.offset)
     )
     return new StreamedDataReader(bytes.buffer)
   }
@@ -138,6 +138,8 @@ export class SchematicDecoder extends SchematicIO {
           }
         })()
       case 5:
+        cData.getInt8()
+        cData.getInt16()
         return
       // return Vars.content.getByID(
       //   (ContentType[
@@ -239,11 +241,11 @@ export class SchematicDecoder extends SchematicIO {
    */
   decode(): Schematic {
     if (this.schematic) return this.schematic
-    if (!this.isValid(true)) {
+    if (!this.isValid(this.data, true)) {
       throw new Error('Parsing error: this is not a valid schematic')
     }
-    const version = this.data.getUint8()
-    const cData = this.compressedData()
+    const version = this.data.getInt8()
+    const cData = this.compressedData(this.data)
     const { width, height } = this.schematicSize(cData)
     const tags = this.tags(cData)
     const blocks = this.blocks(cData)
@@ -256,11 +258,16 @@ export class SchematicDecoder extends SchematicIO {
     if (!schematic.base64)
       throw new Error('cannot save the tags of a non parsed schematic')
     const decoded = Buffer.from(schematic.base64, 'base64').toString('binary')
-
-    const data = new StreamedDataReader(new ArrayBuffer(decoded.length))
+    const arr = new Uint8Array(decoded.length)
+    for (let i = 0; i < decoded.length; i++) {
+      arr[i] = decoded.codePointAt(i) || 0
+    }
+    const data = new StreamedDataReader(arr.buffer)
+    // read header
+    this.isValid(data, true)
     // read version
-    data.getUint8()
-    const cData = this.compressedData()
+    data.getInt8()
+    const cData = this.compressedData(data)
     // read size
     this.schematicSize(cData)
     const tagsStart = cData.offset
@@ -277,7 +284,7 @@ export class SchematicDecoder extends SchematicIO {
     const newBuffer = writer.buffer.slice(0, writer.offset)
     const result = concatBytes(
       new Uint8Array(cData.buffer).subarray(0, tagsStart),
-      new Uint8Array(newBuffer),
+      new Uint8Array(newBuffer).subarray(0, writer.offset),
       new Uint8Array(cData.buffer).subarray(tagsEnd)
     )
     const bytes = Pako.deflate(result)
@@ -290,7 +297,9 @@ export class SchematicDecoder extends SchematicIO {
     for (let i = 0; i < bytes.length; i++) {
       resultWriter.setUint8(bytes[i])
     }
-    return Buffer.from(resultWriter.buffer).toString('base64')
+    return Buffer.from(
+      resultWriter.buffer.slice(0, resultWriter.offset)
+    ).toString('base64')
   }
 }
 function concatBytes(...arrays: Uint8Array[]) {
