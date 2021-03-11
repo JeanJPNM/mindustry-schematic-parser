@@ -5,7 +5,7 @@
     "target": "ES5",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "outDir": "build",
+    "outDir": "dist",
     "isolatedModules": true,
     "importHelpers": true,
     "strict": true,
