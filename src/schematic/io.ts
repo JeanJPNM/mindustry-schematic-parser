@@ -281,8 +281,12 @@ export abstract class SchematicIO {
     // read old tags
     this.tags(cData)
     const tagsEnd = cData.offset
-    const writer = new StreamedDataWriter(new ArrayBuffer(1024))
     const newTags = schematic.tags
+    let tagSafeSize = 0
+    newTags.forEach((val, key) => {
+      tagSafeSize += val.length + key.length
+    })
+    const writer = new StreamedDataWriter(new ArrayBuffer(tagSafeSize * 2))
     writer.setInt8(newTags.size)
     newTags.forEach((value, key) => {
       writer.setString(key)
@@ -295,7 +299,9 @@ export abstract class SchematicIO {
       new Uint8Array(cData.buffer).subarray(tagsEnd)
     )
     const bytes = Pako.deflate(result)
-    const resultWriter = new StreamedDataWriter(new ArrayBuffer(1024))
+    const resultWriter = new StreamedDataWriter(
+      new ArrayBuffer(bytes.byteLength + 5)
+    )
     resultWriter.setChar('m')
     resultWriter.setChar('s')
     resultWriter.setChar('c')
