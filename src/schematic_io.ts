@@ -12,7 +12,7 @@ import {
   Unloader,
 } from './mindustry/block'
 import Schematic, { SchematicTile } from './schematic'
-import { StreamedDataReader, StreamedDataWriter } from './streamed_data_io'
+import { StreamedDataReader, StreamedDataWriter } from './streamed_data'
 import { BlockfromCode } from './mindustry/block/blocks'
 // import { Content } from './mindustry/ctype/content'
 import Pako from 'pako'
