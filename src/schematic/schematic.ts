@@ -1,10 +1,10 @@
-import { Block, PowerGenerator } from './mindustry/block'
-import { ItemCode, ItemCost } from './mindustry/item'
-import { SchematicDecoder } from './schematic_io'
+import { ItemCode, ItemCost, PowerGenerator } from '../mindustry'
+import { SchematicIO } from './io'
+import { SchematicTile } from './tile'
 /**
  * A simple representation for a mindustry schematic
  */
-export default class Schematic {
+export class Schematic {
   constructor(
     /**
      * The tiles that compose this schematic
@@ -31,7 +31,7 @@ export default class Schematic {
   }
 
   static decode(base64: string): Schematic {
-    return new SchematicDecoder(base64).decode()
+    return SchematicIO.decode(base64)
   }
 
   static encode(schematic: Schematic): string {
@@ -130,31 +130,6 @@ export default class Schematic {
       throw new Error(
         'by now, the schematic needs to be generated from a SchematicDecoder'
       )
-
-    return new SchematicDecoder(this.base64).encodeWithTags(this)
+    return SchematicIO.encodeTags(this)
   }
-}
-export class SchematicTile {
-  constructor(
-    /**
-     * The block occupying this tile
-     */
-    public block: Block,
-    /**
-     * The x coordinate of this tile
-     */
-    public x: number,
-    /**
-     * The y coordinate of this tile
-     */
-    public y: number,
-    /**
-     * The configuration of this tile (varies according to the block), may be `undefined` or `null`
-     */
-    public config: unknown,
-    /**
-     * The rotation of this tile
-     */
-    public rotation: number
-  ) {}
 }

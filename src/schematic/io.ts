@@ -10,39 +10,24 @@ import {
   PhaseConveyor,
   Sorter,
   Unloader,
-} from './mindustry/block'
-import Schematic, { SchematicTile } from './schematic'
-import { StreamedDataReader, StreamedDataWriter } from './streamed_data'
-import { BlockfromCode } from './mindustry/block/blocks'
+} from '../mindustry/block'
+import { StreamedDataReader, StreamedDataWriter } from '../streamed_data'
+import { BlockfromCode } from '../mindustry/block/blocks'
 // import { Content } from './mindustry/ctype/content'
 import Pako from 'pako'
-import { Point2 } from './arc'
-abstract class SchematicIO {
+import { Point2 } from '../arc'
+import { Schematic } from './schematic'
+import { SchematicTile } from './tile'
+
+export abstract class SchematicIO {
   static readonly header = 'msch'
 
   static readonly version = 1
-}
 
-/**
- * A simple way to decode schematics
- */
-export class SchematicDecoder extends SchematicIO {
-  private readonly data: StreamedDataReader
-
-  /** The parsed schematic, will be `undefined` until parsing is complete */
-  private schematic?: Schematic
-
-  constructor(public readonly value: string) {
-    super()
-    const decoded = Buffer.from(value, 'base64').toString('binary')
-    const arr = new Uint8Array(decoded.length)
-    for (let i = 0; i < decoded.length; i++) {
-      arr[i] = decoded.codePointAt(i) || 0
-    }
-    this.data = new StreamedDataReader(arr.buffer)
-  }
-
-  private isValid(data: StreamedDataReader, consumeData = false) {
+  private static isValid(
+    data: StreamedDataReader,
+    consumeData = false
+  ): boolean {
     const { header } = SchematicIO
     if (consumeData) {
       for (const char of header) {
@@ -58,20 +43,14 @@ export class SchematicDecoder extends SchematicIO {
     return true
   }
 
-  private compressedData(data: StreamedDataReader): StreamedDataReader {
+  private static compressedData(data: StreamedDataReader): StreamedDataReader {
     const bytes = Pako.inflate(
       new Uint8Array(data.buffer).subarray(data.offset)
     )
     return new StreamedDataReader(bytes.buffer)
   }
 
-  private schematicSize(cData: StreamedDataReader) {
-    const width = cData.getInt16(),
-      height = cData.getInt16()
-    return { width, height }
-  }
-
-  private tags(cData: StreamedDataReader): Map<string, string> {
+  private static tags(cData: StreamedDataReader): Map<string, string> {
     const tags = new Map<string, string>()
     const numberOfTags = cData.getInt8()
     for (let i = 0; i < numberOfTags; i++) {
@@ -82,7 +61,7 @@ export class SchematicDecoder extends SchematicIO {
     return tags
   }
 
-  private blocks(cData: StreamedDataReader) {
+  private static blocks(cData: StreamedDataReader) {
     const length = cData.getInt8()
     const blocks: Block[] = []
     for (let i = 0; i < length; i++) {
@@ -92,7 +71,7 @@ export class SchematicDecoder extends SchematicIO {
     return blocks
   }
 
-  private mapConfig(block: Block, value: number, position: number) {
+  private static mapConfig(block: Block, value: number, position: number) {
     // by now, lets just throw the config info away
     if (
       block instanceof Sorter ||
@@ -112,6 +91,7 @@ export class SchematicDecoder extends SchematicIO {
       block instanceof ItemBridge ||
       block instanceof PhaseConveyor
     ) {
+      console.log('unpacked from legacy')
       return Point2.unpack(value).sub(Point2.x(position), Point2.y(position))
     }
     if (block instanceof LightBlock) return value
@@ -119,7 +99,7 @@ export class SchematicDecoder extends SchematicIO {
     return null
   }
 
-  private readConfigObject(cData: StreamedDataReader) {
+  private static readConfigObject(cData: StreamedDataReader) {
     const type = cData.getInt8()
     switch (type) {
       case 0:
@@ -177,6 +157,7 @@ export class SchematicDecoder extends SchematicIO {
 
       // TODO: somehow implement java code bellow
       case 9:
+        //  by now just ignore the config data
         cData.getInt8()
         cData.getInt16()
         break
@@ -198,17 +179,27 @@ export class SchematicDecoder extends SchematicIO {
       case 14:
         return (() => {
           const blen = cData.getInt32()
-          for (let i = 0; i < blen; i++) cData.getInt8()
+          const bytes = []
+          for (let i = 0; i < blen; i++) bytes.push(cData.getInt8())
+          return bytes
         })()
       // int blen = read.i(); byte[] bytes = new byte[blen]; read.b(bytes); return bytes;
-      // case 15: return UnitCommand.all[read.b()];
-      default:
-        // throw new IllegalArgumentException('Unknown object type: ' + type)
+      case 15:
+        // by now just ignore the data
+        cData.getInt8()
+        // case 15: return UnitCommand.all[read.b()];
         return
+      default:
+        throw new Error('Unknown object type: ' + type)
+      // throw new IllegalArgumentException('Unknown object type: ' + type)
     }
   }
 
-  private tiles(cData: StreamedDataReader, blocks: Block[], version: number) {
+  private static tiles(
+    cData: StreamedDataReader,
+    blocks: Block[],
+    version: number
+  ) {
     const total = cData.getInt32()
     const tiles: SchematicTile[] = []
     for (let i = 0; i < total; i++) {
@@ -234,33 +225,49 @@ export class SchematicDecoder extends SchematicIO {
     return tiles
   }
 
+  private static schematicSize(cData: StreamedDataReader) {
+    const width = cData.getInt16(),
+      height = cData.getInt16()
+    return { width, height }
+  }
+
   /**
    * Parses the text and returns a schematic
-   *
-   * If called multiple times, the same `Schematic` instance will be returned
+   *  @param base64 The base64 code of the schematic
    */
-  decode(): Schematic {
-    if (this.schematic) return this.schematic
-    if (!this.isValid(this.data, true)) {
+  static decode(base64: string): Schematic {
+    const decoded = Buffer.from(base64.trim(), 'base64').toString('binary')
+
+    const arr = new Uint8Array(decoded.length)
+    for (let i = 0; i < decoded.length; i++) {
+      const char = decoded.codePointAt(i)
+      if (char === null || char === undefined)
+        throw new Error('unknown character at: ' + i)
+      arr[i] = char
+    }
+    const data = new StreamedDataReader(arr.buffer)
+    if (!this.isValid(data, true)) {
       throw new Error('Parsing error: this is not a valid schematic')
     }
-    const version = this.data.getInt8()
-    const cData = this.compressedData(this.data)
+    const version = data.getInt8()
+    const cData = this.compressedData(data)
     const { width, height } = this.schematicSize(cData)
     const tags = this.tags(cData)
     const blocks = this.blocks(cData)
     const tiles = this.tiles(cData, blocks, version)
-    this.schematic = new Schematic(tiles, tags, width, height, this.value)
-    return this.schematic
+    return new Schematic(tiles, tags, width, height, base64)
   }
 
-  encodeWithTags(schematic: Schematic): string {
+  /** Takes a decoded schematic and saves its new tags
+   * @param schematic A decoded schematic in wich the tags were modified
+   */
+  static encodeTags(schematic: Schematic): string {
     if (!schematic.base64)
       throw new Error('cannot save the tags of a non parsed schematic')
     const decoded = Buffer.from(schematic.base64, 'base64').toString('binary')
     const arr = new Uint8Array(decoded.length)
     for (let i = 0; i < decoded.length; i++) {
-      arr[i] = decoded.codePointAt(i) || 0
+      arr[i] = decoded.codePointAt(i) ?? 0
     }
     const data = new StreamedDataReader(arr.buffer)
     // read header
@@ -279,7 +286,7 @@ export class SchematicDecoder extends SchematicIO {
     writer.setInt8(newTags.size)
     newTags.forEach((value, key) => {
       writer.setString(key)
-      writer.setString(value)
+      writer.setString(value ?? '')
     })
     const newBuffer = writer.buffer.slice(0, writer.offset)
     const result = concatBytes(
@@ -294,7 +301,7 @@ export class SchematicDecoder extends SchematicIO {
     resultWriter.setChar('c')
     resultWriter.setChar('h')
     resultWriter.setInt8(1)
-    for (let i = 0; i < bytes.length; i++) {
+    for (let i = 0; i < bytes.byteLength; i++) {
       resultWriter.setUint8(bytes[i])
     }
     return Buffer.from(
@@ -302,10 +309,54 @@ export class SchematicDecoder extends SchematicIO {
     ).toString('base64')
   }
 }
+/**
+ * A simple way to decode schematics
+ * @deprecated The use of this class is deprecated, use the static methods of `SchematicIO`
+ */
+export class SchematicDecoder extends SchematicIO {
+  private readonly data: StreamedDataReader
+
+  /** The parsed schematic, will be `undefined` until parsing is complete */
+  private schematic?: Schematic
+
+  constructor(public readonly value: string) {
+    super()
+    const decoded = Buffer.from(value.trim(), 'base64').toString('binary')
+
+    const arr = new Uint8Array(decoded.length)
+    for (let i = 0; i < decoded.length; i++) {
+      const char = decoded.codePointAt(i)
+      if (char === null || char === undefined)
+        throw new Error('unknown character at: ' + i)
+      arr[i] = char
+    }
+    this.data = new StreamedDataReader(arr.buffer)
+  }
+
+  /**
+   * Parses the text and returns a schematic
+   *
+   * If called multiple times, the same `Schematic` instance will be returned
+   *
+   * @deprecated This class is deprecated use `SchematicIO.decode` instead
+   */
+  decode(): Schematic {
+    if (this.schematic) return this.schematic
+    this.schematic = SchematicIO.decode(this.value)
+    return this.schematic
+  }
+
+  /**
+   * @deprecated The use of this method is deprecated, use `SchematicIO.encodeTags` instead
+   */
+  encodeWithTags(schematic: Schematic): string {
+    return SchematicIO.encodeTags(schematic)
+  }
+}
 function concatBytes(...arrays: Uint8Array[]) {
   let totalLength = 0
   for (const arr of arrays) {
-    totalLength += arr.length
+    totalLength += arr.byteLength
   }
   const result = new Uint8Array(totalLength)
   let currentOffset = 0
@@ -315,8 +366,3 @@ function concatBytes(...arrays: Uint8Array[]) {
   }
   return result
 }
-// WARNING: this part of the project is temporatily abandoned
-// because of the huge dependecy tree on mindustry's java code
-/**
- * A simple way to encode schematics
- */
