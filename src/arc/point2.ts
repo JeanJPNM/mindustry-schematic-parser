@@ -201,8 +201,19 @@ export class Point2 {
     return x === ox && y === oy
   }
 
-  public equals(x: number, y: number): boolean {
-    return this.x === x && this.y === y
+  public equals(other: Point2): boolean
+
+  public equals(x: number, y: number): boolean
+
+  public equals(...args: [Point2] | [number, number]): boolean {
+    {
+      if (args[0] instanceof Point2) {
+        const [other] = args
+        return this.x === other.x && this.y === other.y
+      }
+      const [x, y] = args
+      return this.x === x && this.y === y
+    }
   }
 
   public hashCode(): number {
