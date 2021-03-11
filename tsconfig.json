@@ -14,5 +14,5 @@
     "declaration": true
   },
   "include": ["src/*"],
-  "exclude": ["**/*.spec.ts", "node_modules"]
+  "exclude": ["**/*.(spec|test).ts", "node_modules"]
 }
