@@ -317,7 +317,7 @@ export abstract class SchematicIO {
 }
 /**
  * A simple way to decode schematics
- * @deprecated The use of this class is deprecated, use the static methods of `SchematicIO`
+ * @deprecated The use of this class is deprecated, use `Schematic.decode` instead
  */
 export class SchematicDecoder extends SchematicIO {
   private readonly data: StreamedDataReader
@@ -344,7 +344,7 @@ export class SchematicDecoder extends SchematicIO {
    *
    * If called multiple times, the same `Schematic` instance will be returned
    *
-   * @deprecated This class is deprecated use `SchematicIO.decode` instead
+   * @deprecated This class is deprecated use `Schematic.decode` instead
    */
   decode(): Schematic {
     if (this.schematic) return this.schematic
@@ -353,7 +353,7 @@ export class SchematicDecoder extends SchematicIO {
   }
 
   /**
-   * @deprecated The use of this method is deprecated, use `SchematicIO.encodeTags` instead
+   * @deprecated The use of this method is deprecated, use `Schematic.encode` instead
    */
   encodeWithTags(schematic: Schematic): string {
     return SchematicIO.encodeTags(schematic)

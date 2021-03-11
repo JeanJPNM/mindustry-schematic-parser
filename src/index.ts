@@ -1,5 +1,5 @@
 export * from './arc'
 export * from './mindustry'
 export { SchematicTile, Schematic } from './schematic'
-export { SchematicDecoder, SchematicIO } from './schematic/io'
+export { SchematicDecoder } from './schematic/io'
 export { StreamedDataReader, StreamedDataWriter } from './streamed_data'
