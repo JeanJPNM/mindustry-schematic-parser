@@ -11,9 +11,11 @@ import {
   Sorter,
   Unloader,
 } from '../mindustry/block'
+import { Liquid, UnitCommand } from '../mindustry'
 import { StreamedDataReader, StreamedDataWriter } from '../streamed_data'
 import { BlockfromCode } from '../mindustry/block/blocks'
 // import { Content } from './mindustry/ctype/content'
+import Item from '../mindustry/item'
 import Pako from 'pako'
 import { Point2 } from '../arc'
 import { Schematic } from './schematic'
@@ -91,7 +93,6 @@ export abstract class SchematicIO {
       block instanceof ItemBridge ||
       block instanceof PhaseConveyor
     ) {
-      console.log('unpacked from legacy')
       return Point2.unpack(value).sub(Point2.x(position), Point2.y(position))
     }
     if (block instanceof LightBlock) return value
@@ -110,17 +111,27 @@ export abstract class SchematicIO {
         return cData.getBigInt64()
       case 3:
         return cData.getFloat32()
-      case 4:
-        return (() => {
-          const exists = cData.getInt8()
-          if (exists !== 0) {
-            return cData.getString()
-          }
-        })()
-      case 5:
-        cData.getInt8()
-        cData.getInt16()
-        return
+      case 4: {
+        const exists = cData.getInt8()
+        if (exists !== 0) {
+          return cData.getString()
+        }
+        return null
+      }
+      case 5: {
+        const value = cData.getInt8()
+        const code = cData.getInt16()
+        switch (value) {
+          case 0:
+            return Item.fromCode(code)
+          case 4:
+            return Liquid.fromCode(code)
+          default:
+            // consume the short to avoid errors
+            cData.getInt16()
+            return
+        }
+      }
       // return Vars.content.getByID(
       //   (ContentType[
       //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -185,10 +196,7 @@ export abstract class SchematicIO {
         })()
       // int blen = read.i(); byte[] bytes = new byte[blen]; read.b(bytes); return bytes;
       case 15:
-        // by now just ignore the data
-        cData.getInt8()
-        // case 15: return UnitCommand.all[read.b()];
-        return
+        return UnitCommand[cData.getInt8()]
       default:
         throw new Error('Unknown object type: ' + type)
       // throw new IllegalArgumentException('Unknown object type: ' + type)

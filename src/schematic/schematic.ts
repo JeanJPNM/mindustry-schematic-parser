@@ -1,4 +1,4 @@
-import { ItemCode, ItemCost, PowerGenerator } from '../mindustry'
+import { ItemCost, ItemName, PowerGenerator } from '../mindustry'
 import { SchematicIO } from './io'
 import { SchematicTile } from './tile'
 /**
@@ -113,7 +113,7 @@ export class Schematic {
       const req = block.requirements
       for (const key in req) {
         // console.log(block.name, req)
-        const item = key as ItemCode
+        const item = key as ItemName
         const cost = req[item] as number
         const currentCost = requirements[item] ?? 0
         requirements[item] = currentCost + cost

@@ -1,4 +1,6 @@
-import { Block } from '../mindustry'
+import { Block, Liquid } from '../mindustry'
+import Item from '../mindustry/item'
+import { Point2 } from '../arc'
 
 export class SchematicTile {
   constructor(
@@ -17,7 +19,18 @@ export class SchematicTile {
     /**
      * The configuration of this tile (varies according to the block), may be `undefined` or `null`
      */
-    public config: unknown,
+    public config:
+      | string
+      | number
+      | bigint
+      | boolean
+      | number[]
+      | Point2
+      | Point2[]
+      | Item
+      | Liquid
+      | null
+      | undefined,
     /**
      * The rotation of this tile
      */
