@@ -24,6 +24,7 @@ export class Item {
       'sand',
       'coal',
       'titanium',
+      'thorium',
       'scrap',
       'silicon',
       'plastanium',

@@ -7,6 +7,7 @@ export const Items = {
   sand: Item.create('sand'),
   coal: Item.create('coal'),
   titanium: Item.create('titanium'),
+  thorium: Item.create('thorium'),
   scrap: Item.create('scrap'),
   silicon: Item.create('silicon'),
   plastanium: Item.create('plastanium'),
