@@ -1,5 +1,4 @@
-import { Block, Liquid } from '../mindustry'
-import Item from '../mindustry/item'
+import { Block, Item, Liquid } from '../mindustry'
 import { Point2 } from '../arc'
 
 export class SchematicTile {
