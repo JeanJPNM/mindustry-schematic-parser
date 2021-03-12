@@ -1,9 +1,24 @@
 import { LiquidName } from './liquid_name'
 
+type LiquidColorMap = {
+  [x in LiquidName]: string
+}
+
+const liquidColors: LiquidColorMap = {
+  water: '#596ab8',
+  slag: '#ffa166',
+  oil: '#313131',
+  cryofluid: '#6ecdec',
+}
+
 export class Liquid {
   private static liquidMap: Map<LiquidName, Liquid> = new Map()
 
-  constructor(public readonly name: LiquidName) {}
+  readonly color: string
+
+  private constructor(public readonly name: LiquidName) {
+    this.color = liquidColors[name]
+  }
 
   static create(name: LiquidName): Liquid {
     let liquid = this.liquidMap.get(name)
