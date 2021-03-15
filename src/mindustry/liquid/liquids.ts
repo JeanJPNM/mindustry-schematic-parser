@@ -1,8 +1,8 @@
 import { Liquid } from './liquid'
 
 export const Liquids = {
-  water: new Liquid('water'),
-  slag: new Liquid('slag'),
-  oil: new Liquid('oil'),
-  cryofluid: new Liquid('cryofluid'),
+  water: Liquid.create('water'),
+  slag: Liquid.create('slag'),
+  oil: Liquid.create('oil'),
+  cryofluid: Liquid.create('cryofluid'),
 }
