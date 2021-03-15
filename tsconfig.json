@@ -11,7 +11,8 @@
     "strict": true,
     "module": "CommonJS",
     "moduleResolution": "Node",
-    "declaration": true
+    "declaration": true,
+    "sourceMap": true
   },
   "include": ["src/*"],
   "exclude": ["**/*.(spec|test).ts", "node_modules"]
