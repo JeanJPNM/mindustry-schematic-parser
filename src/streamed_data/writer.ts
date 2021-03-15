@@ -25,7 +25,7 @@ export class StreamedDataWriter {
   /**
    * Writes a 32-bit float in the next 4 bytes. There is
    */
-  setFloat32(value: number, littleEndian?: boolean): void {
+  setFloat32(value: number, littleEndian = false): void {
     this.data.setFloat32(this.currentOffset, value, littleEndian)
     this.currentOffset += 4
   }
@@ -33,7 +33,7 @@ export class StreamedDataWriter {
   /**
    * Writes a 64-bit float in the next 8 bytes.
    */
-  setFloat64(value: number, littleEndian?: boolean): void {
+  setFloat64(value: number, littleEndian = false): void {
     this.data.setFloat64(this.currentOffset, value, littleEndian)
     this.currentOffset += 8
   }
@@ -49,7 +49,7 @@ export class StreamedDataWriter {
   /**
    * Writes a 16-bit int in the next 2 bytes.
    */
-  setInt16(value: number, littleEndian?: boolean): void {
+  setInt16(value: number, littleEndian = false): void {
     this.data.setInt16(this.currentOffset, value, littleEndian)
     this.currentOffset += 2
   }
@@ -57,7 +57,7 @@ export class StreamedDataWriter {
   /**
    * Writes a 32-bit int in the next 2 bytes.
    */
-  setInt32(value: number, littleEndian?: boolean): void {
+  setInt32(value: number, littleEndian = false): void {
     this.data.setInt32(this.currentOffset, value, littleEndian)
     this.currentOffset += 4
   }
@@ -73,7 +73,7 @@ export class StreamedDataWriter {
   /**
    * Writes a 16-bit unsigned int in the next 2 bytes.
    */
-  setUint16(value: number, littleEndian?: boolean): void {
+  setUint16(value: number, littleEndian = false): void {
     this.data.setUint16(this.currentOffset, value, littleEndian)
     this.currentOffset += 2
   }
@@ -81,7 +81,7 @@ export class StreamedDataWriter {
   /**
    * Writes a 32-bit unsigned int in the next 4 bytes.
    */
-  setUint32(value: number, littleEndian?: boolean): void {
+  setUint32(value: number, littleEndian = false): void {
     this.data.setUint32(this.currentOffset, value, littleEndian)
     this.currentOffset += 4
   }
@@ -89,7 +89,7 @@ export class StreamedDataWriter {
   /**
    * Writes a 64-bit bigint in the next 8 bytes.
    */
-  setBigInt64(value: bigint, littleEndian?: boolean): void {
+  setBigInt64(value: bigint, littleEndian = false): void {
     this.data.setBigInt64(this.currentOffset, value, littleEndian)
     this.currentOffset += 8
   }
@@ -97,7 +97,7 @@ export class StreamedDataWriter {
   /**
    * Writes a 64-bit bigint in the next 8 bytes.
    */
-  setBigUint64(value: bigint, littleEndian?: boolean): void {
+  setBigUint64(value: bigint, littleEndian = false): void {
     this.data.setBigUint64(this.currentOffset, value, littleEndian)
     this.currentOffset += 8
   }

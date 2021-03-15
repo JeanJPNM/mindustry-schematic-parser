@@ -30,7 +30,7 @@ export class StreamedDataReader {
    * Reads the next 4 bytes as a 32-bit float value. There is
    * no alignment constraint; multi-byte values may be fetched from any offset.
    */
-  getFloat32(littleEndian?: boolean): number {
+  getFloat32(littleEndian = false): number {
     const value = this.data.getFloat32(this.currentOffset, littleEndian)
     this.currentOffset += 4
     return value
@@ -40,7 +40,7 @@ export class StreamedDataReader {
    * Reads the next 8 bytes as a 64-bit float value. There is
    * no alignment constraint; multi-byte values may be fetched from any offset.
    */
-  getFloat64(littleEndian?: boolean): number {
+  getFloat64(littleEndian = false): number {
     const value = this.data.getFloat64(this.currentOffset, littleEndian)
     this.currentOffset += 8
     return value
@@ -60,7 +60,7 @@ export class StreamedDataReader {
    * Reads the next 2 bytes as a 16-bit int. There is
    * no alignment constraint; multi-byte values may be fetched from any offset.
    */
-  getInt16(littleEndian?: boolean): number {
+  getInt16(littleEndian = false): number {
     const value = this.data.getInt16(this.currentOffset, littleEndian)
     this.currentOffset += 2
     return value
@@ -70,7 +70,7 @@ export class StreamedDataReader {
    * Reads the next 4 bytes as a 32-bit int. There is
    * no alignment constraint; multi-byte values may be fetched from any offset.
    */
-  getInt32(littleEndian?: boolean): number {
+  getInt32(littleEndian = false): number {
     const value = this.data.getInt32(this.currentOffset, littleEndian)
     this.currentOffset += 4
     return value
@@ -90,7 +90,7 @@ export class StreamedDataReader {
    * Reads the next 2 bytes as a 16-bit unsigned int. There is
    * no alignment constraint; multi-byte values may be fetched from any offset.
    */
-  getUint16(littleEndian?: boolean): number {
+  getUint16(littleEndian = false): number {
     const value = this.data.getUint16(this.currentOffset, littleEndian)
     this.currentOffset += 2
     return value
@@ -100,7 +100,7 @@ export class StreamedDataReader {
    * Reads the next 4 bytes as a 32-bit unsigned int. There is
    * no alignment constraint; multi-byte values may be fetched from any offset.
    */
-  getUint32(littleEndian?: boolean): number {
+  getUint32(littleEndian = false): number {
     const value = this.data.getUint32(this.currentOffset, littleEndian)
     this.currentOffset += 4
     return value
@@ -110,7 +110,7 @@ export class StreamedDataReader {
    * Reads the next 8 bytes as a 64-bit int. There is
    * no alignment constraint; multi-byte values may be fetched from any offset.
    */
-  getBigInt64(littleEndian?: boolean): bigint {
+  getBigInt64(littleEndian = false): bigint {
     const value = this.data.getBigInt64(this.currentOffset, littleEndian)
     this.currentOffset += 8
     return value
@@ -120,7 +120,7 @@ export class StreamedDataReader {
    * Reads the next 8 bytes as a 64-bit unsigned int. There is
    * no alignment constraint; multi-byte values may be fetched from any offset.
    */
-  getBigUint64(littleEndian?: boolean): bigint {
+  getBigUint64(littleEndian = false): bigint {
     const value = this.data.getBigUint64(this.currentOffset, littleEndian)
     this.currentOffset += 8
     return value
