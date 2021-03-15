@@ -17,7 +17,9 @@
   "author": "JeanJPNM",
   "license": "ISC",
   "dependencies": {
-    "pako": "^2.0.3"
+    "canvas": "^2.7.0",
+    "pako": "^2.0.3",
+    "pkg-dir": "^5.0.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
