@@ -81,12 +81,10 @@ export abstract class SchematicIO {
       block instanceof Unloader ||
       block instanceof ItemSource
     ) {
-      // return Vars.content.item(value)
-      return
+      return Item.fromCode(value)
     }
     if (block instanceof LiquidSource) {
-      // return Vars.content.liquid(value)
-      return
+      return Liquid.fromCode(value)
     }
     if (
       block instanceof MassDriver ||
