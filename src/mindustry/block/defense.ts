@@ -1,18 +1,32 @@
 import { Block, BlockProperties } from './block'
-import { ItemCode, ItemCost } from '../item'
+import { ItemCost, ItemName } from '../item'
+import { Canvas } from 'canvas'
+import { SchematicTile } from '../../schematic'
+
+const category = 'defense'
 function multiplyRequirements(requirements: ItemCost, multiplier = 4): void {
   for (const requirement in requirements) {
-    const code = requirement as ItemCode
+    const code = requirement as ItemName
     const cost = requirements[code]
     if (cost) {
       requirements[code] = cost * multiplier
     }
   }
 }
-interface WallProperties extends BlockProperties {
-  name: ItemCode
+abstract class DefenseBlock extends Block {
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: [this.name],
+    })
+  }
 }
-export class Wall extends Block {
+interface WallProperties extends BlockProperties {
+  name: ItemName
+}
+export abstract class Wall extends DefenseBlock {
   constructor(properties: WallProperties) {
     const { requirements, size } = properties
     super({
@@ -137,7 +151,7 @@ export class SurgeWallLarge extends SurgeWall {
     multiplyRequirements(this.requirements)
   }
 }
-export class Door extends Block {
+export class Door extends DefenseBlock {
   constructor() {
     super({
       name: 'door',
@@ -193,7 +207,7 @@ export class ScrapWallGigantic extends ScrapWall {
   }
 }
 
-export class Mender extends Block {
+export class Mender extends DefenseBlock {
   constructor() {
     super({
       name: 'mender',
@@ -203,7 +217,7 @@ export class Mender extends Block {
     })
   }
 }
-export class MendProjector extends Block {
+export class MendProjector extends DefenseBlock {
   constructor() {
     super({
       name: 'mend-projector',
@@ -213,7 +227,7 @@ export class MendProjector extends Block {
     })
   }
 }
-export class OverdriveProjector extends Block {
+export class OverdriveProjector extends DefenseBlock {
   constructor() {
     super({
       name: 'overdrive-projector',
@@ -223,7 +237,7 @@ export class OverdriveProjector extends Block {
     })
   }
 }
-export class OverdriveDome extends Block {
+export class OverdriveDome extends DefenseBlock {
   constructor() {
     super({
       name: 'overdrive-dome',
@@ -239,7 +253,7 @@ export class OverdriveDome extends Block {
     })
   }
 }
-export class ForceProjector extends Block {
+export class ForceProjector extends DefenseBlock {
   constructor() {
     super({
       name: 'force-projector',
@@ -249,7 +263,7 @@ export class ForceProjector extends Block {
     })
   }
 }
-export class ShockMine extends Block {
+export class ShockMine extends DefenseBlock {
   constructor() {
     super({
       name: 'shock-mine',

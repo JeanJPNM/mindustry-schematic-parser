@@ -1,6 +1,21 @@
 import { Block } from './block'
+import { Canvas } from 'canvas'
+import { SchematicTile } from '../../schematic'
 
-export class GraphitePress extends Block {
+const category = 'crafting'
+abstract class GenericCrafter extends Block {
+  output = { item: true, liquid: false }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: [this.name],
+    })
+  }
+}
+export class GraphitePress extends GenericCrafter {
   constructor() {
     super({
       name: 'graphite-press',
@@ -9,7 +24,7 @@ export class GraphitePress extends Block {
     })
   }
 }
-export class MultiPress extends Block {
+export class MultiPress extends GenericCrafter {
   constructor() {
     super({
       name: 'multi-press',
@@ -19,7 +34,7 @@ export class MultiPress extends Block {
     })
   }
 }
-export class SiliconSmelter extends Block {
+export class SiliconSmelter extends GenericCrafter {
   constructor() {
     super({
       name: 'silicon-smelter',
@@ -29,7 +44,7 @@ export class SiliconSmelter extends Block {
     })
   }
 }
-export class SiliconCrucible extends Block {
+export class SiliconCrucible extends GenericCrafter {
   constructor() {
     super({
       name: 'silicon-crucible',
@@ -44,7 +59,7 @@ export class SiliconCrucible extends Block {
     })
   }
 }
-export class Kiln extends Block {
+export class Kiln extends GenericCrafter {
   constructor() {
     super({
       name: 'kiln',
@@ -54,7 +69,7 @@ export class Kiln extends Block {
     })
   }
 }
-export class PlastaniumCompressor extends Block {
+export class PlastaniumCompressor extends GenericCrafter {
   constructor() {
     super({
       name: 'plastanium-compressor',
@@ -64,7 +79,7 @@ export class PlastaniumCompressor extends Block {
     })
   }
 }
-export class PhaseWeaver extends Block {
+export class PhaseWeaver extends GenericCrafter {
   constructor() {
     super({
       name: 'phase-weaver',
@@ -73,8 +88,17 @@ export class PhaseWeaver extends Block {
       powerConsumption: 5.0,
     })
   }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      canvas,
+      category,
+      tile,
+      layers: [this.name + '-bottom', this.name, this.name + '-weave'],
+    })
+  }
 }
-export class SurgeSmelter extends Block {
+export class SurgeSmelter extends GenericCrafter {
   constructor() {
     super({
       name: 'alloy-smelter',
@@ -84,17 +108,32 @@ export class SurgeSmelter extends Block {
     })
   }
 }
-export class CryofluidMixer extends Block {
+export class CryofluidMixer extends GenericCrafter {
   constructor() {
     super({
       name: 'cryofluid-mixer',
       requirements: { lead: 65, silicon: 40, titanium: 60 },
       size: 2,
       powerConsumption: 1.0,
+      output: { item: false, liquid: true },
+    })
+  }
+
+  output = {
+    item: false,
+    liquid: true,
+  }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      canvas,
+      category,
+      tile,
+      layers: [this.name, this.name + '-top'],
     })
   }
 }
-export class PyratiteMixer extends Block {
+export class PyratiteMixer extends GenericCrafter {
   constructor() {
     super({
       name: 'pyratite-mixer',
@@ -104,7 +143,7 @@ export class PyratiteMixer extends Block {
     })
   }
 }
-export class BlastMixer extends Block {
+export class BlastMixer extends GenericCrafter {
   constructor() {
     super({
       name: 'blast-mixer',
@@ -114,23 +153,38 @@ export class BlastMixer extends Block {
     })
   }
 }
-export class Melter extends Block {
+export class Melter extends GenericCrafter {
   constructor() {
     super({
       name: 'melter',
       requirements: { copper: 30, lead: 35, graphite: 45 },
       size: 1,
       powerConsumption: 1.0,
+      output: { item: false, liquid: true },
     })
   }
+
+  output = {
+    item: false,
+    liquid: true,
+  }
 }
-export class Separator extends Block {
+export class Separator extends GenericCrafter {
   constructor() {
     super({
       name: 'separator',
       requirements: { copper: 30, titanium: 25 },
       size: 2,
       powerConsumption: 1.0,
+    })
+  }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      canvas,
+      category,
+      tile,
+      layers: [this.name, this.name + '-spinner'],
     })
   }
 }
@@ -148,17 +202,32 @@ export class Disassembler extends Separator {
     this.powerConsumption = 4
   }
 }
-export class SporePress extends Block {
+export class SporePress extends GenericCrafter {
   constructor() {
     super({
       name: 'spore-press',
       requirements: { lead: 35, silicon: 30 },
       size: 2,
       powerConsumption: 0.7,
+      output: { item: false, liquid: true },
+    })
+  }
+
+  output = {
+    item: false,
+    liquid: true,
+  }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      canvas,
+      category,
+      tile,
+      layers: [this.name, this.name + '-top'],
     })
   }
 }
-export class Pulverizer extends Block {
+export class Pulverizer extends GenericCrafter {
   constructor() {
     super({
       name: 'pulverizer',
@@ -167,8 +236,17 @@ export class Pulverizer extends Block {
       powerConsumption: 0.5,
     })
   }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      canvas,
+      category,
+      tile,
+      layers: [this.name, this.name + '-rotator'],
+    })
+  }
 }
-export class CoalCentrifuge extends Block {
+export class CoalCentrifuge extends GenericCrafter {
   constructor() {
     super({
       name: 'coal-centrifuge',
@@ -178,13 +256,19 @@ export class CoalCentrifuge extends Block {
     })
   }
 }
-export class Incinerator extends Block {
+export class Incinerator extends GenericCrafter {
   constructor() {
     super({
       name: 'incinerator',
       requirements: { graphite: 5, lead: 15 },
       size: 1,
       powerConsumption: 0.5,
+      output: { item: false },
     })
+  }
+
+  output = {
+    item: false,
+    liquid: false,
   }
 }

@@ -1,5 +1,22 @@
 import { Block } from './block'
-class Drill extends Block {}
+import { Canvas } from 'canvas'
+import { SchematicTile } from '../../schematic'
+const category = 'production'
+class Drill extends Block {
+  output = {
+    item: true,
+    liquid: false,
+  }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: [this.name, this.name + '-rotator', this.name + '-top'],
+    })
+  }
+}
 export class MechanicalDrill extends Drill {
   constructor() {
     super({
@@ -47,6 +64,11 @@ export class WaterExtractor extends Drill {
       powerConsumption: 1.5,
     })
   }
+
+  output = {
+    item: false,
+    liquid: true,
+  }
 }
 export class Cultivator extends Block {
   constructor() {
@@ -57,8 +79,17 @@ export class Cultivator extends Block {
       powerConsumption: 0.9,
     })
   }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: [this.name, this.name + '-top'],
+    })
+  }
 }
-export class OilExtractor extends Block {
+export class OilExtractor extends Drill {
   constructor() {
     super({
       name: 'oil-extractor',

@@ -1,6 +1,17 @@
-import { Block } from './block'
+import { Block, blockAsset } from './block'
+import { Canvas } from 'canvas'
+import { Item } from '../item'
+import { Liquid } from '../liquid'
+import { SchematicTile } from '../../schematic'
+import { tintImage } from '../../util'
 
-export class PowerSource extends Block {
+const category = 'sandbox'
+abstract class SandBoxBlock extends Block {
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({ tile, canvas, category, layers: [this.name] })
+  }
+}
+export class PowerSource extends SandBoxBlock {
   constructor() {
     super({
       name: 'power-source',
@@ -9,7 +20,7 @@ export class PowerSource extends Block {
     })
   }
 }
-export class PowerVoid extends Block {
+export class PowerVoid extends SandBoxBlock {
   constructor() {
     super({
       name: 'power-void',
@@ -18,7 +29,7 @@ export class PowerVoid extends Block {
     })
   }
 }
-export class ItemSource extends Block {
+export class ItemSource extends SandBoxBlock {
   constructor() {
     super({
       name: 'item-source',
@@ -26,8 +37,20 @@ export class ItemSource extends Block {
       size: 1,
     })
   }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({ tile, canvas, category, layers: [this.name] })
+    const config = tile.config as Item
+    const imgName = config ? 'center' : 'cross'
+    const image = await blockAsset(category, imgName)
+    this.renderImage({
+      canvas,
+      tile,
+      image: config ? tintImage(image, config.color, 1) : image,
+    })
+  }
 }
-export class ItemVoid extends Block {
+export class ItemVoid extends SandBoxBlock {
   constructor() {
     super({
       name: 'item-void',
@@ -36,7 +59,8 @@ export class ItemVoid extends Block {
     })
   }
 }
-export class LiquidSource extends Block {
+
+export class LiquidSource extends SandBoxBlock {
   constructor() {
     super({
       name: 'liquid-source',
@@ -44,8 +68,20 @@ export class LiquidSource extends Block {
       size: 1,
     })
   }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({ tile, canvas, category, layers: [this.name] })
+    const config = tile.config as Liquid
+    const imgName = config ? 'center' : 'cross'
+    const image = await blockAsset(category, imgName)
+    this.renderImage({
+      canvas,
+      tile,
+      image: config ? tintImage(image, config.color, 1) : image,
+    })
+  }
 }
-export class LiquidVoid extends Block {
+export class LiquidVoid extends SandBoxBlock {
   constructor() {
     super({
       name: 'liquid-void',
@@ -54,7 +90,7 @@ export class LiquidVoid extends Block {
     })
   }
 }
-export class LightBlock extends Block {}
+export class LightBlock extends SandBoxBlock {}
 export class Illuminator extends LightBlock {
   constructor() {
     super({

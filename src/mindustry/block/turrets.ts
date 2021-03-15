@@ -1,6 +1,44 @@
-import { Block } from './block'
+import { Block, blockAsset } from './block'
+import { Canvas, createCanvas } from 'canvas'
+import { SchematicTile } from '../../schematic'
 
-export class Duo extends Block {
+const category = 'turrets'
+abstract class Turret extends Block {
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: ['bases/block-' + this.size],
+    })
+    const tcanvas = createCanvas(this.size * 32, this.size * 32)
+    const context = tcanvas.getContext('2d')
+    const image = await blockAsset(category, this.name)
+    const dArr = [-1, -1, 0, -1, 1, -1, -1, 0, 1, 0, -1, 1, 0, 1, 1, 1], // offset array
+      s = 3, // thickness scale
+      x = 0, // final position
+      y = 0
+    let i = 0
+    // draw images at offsets from the array scaled by s
+    for (; i < dArr.length; i += 2)
+      context.drawImage(image, x + dArr[i] * s, y + dArr[i + 1] * s)
+
+    // fill with color
+    context.globalCompositeOperation = 'source-in'
+    context.fillStyle = '#353535'
+    context.fillRect(0, 0, canvas.width, canvas.height)
+
+    // draw original image in normal mode
+    context.globalCompositeOperation = 'source-over'
+    context.drawImage(image, x, y)
+    this.renderImage({
+      canvas,
+      image: tcanvas,
+      tile,
+    })
+  }
+}
+export class Duo extends Turret {
   constructor() {
     super({
       name: 'duo',
@@ -9,7 +47,7 @@ export class Duo extends Block {
     })
   }
 }
-export class Scatter extends Block {
+export class Scatter extends Turret {
   constructor() {
     super({
       name: 'scatter',
@@ -18,7 +56,7 @@ export class Scatter extends Block {
     })
   }
 }
-export class Scorch extends Block {
+export class Scorch extends Turret {
   constructor() {
     super({
       name: 'scorch',
@@ -27,7 +65,7 @@ export class Scorch extends Block {
     })
   }
 }
-export class Hail extends Block {
+export class Hail extends Turret {
   constructor() {
     super({
       name: 'hail',
@@ -36,7 +74,7 @@ export class Hail extends Block {
     })
   }
 }
-export class Wave extends Block {
+export class Wave extends Turret {
   constructor() {
     super({
       name: 'wave',
@@ -45,7 +83,7 @@ export class Wave extends Block {
     })
   }
 }
-export class Lancer extends Block {
+export class Lancer extends Turret {
   constructor() {
     super({
       name: 'lancer',
@@ -54,7 +92,7 @@ export class Lancer extends Block {
     })
   }
 }
-export class Arc extends Block {
+export class Arc extends Turret {
   constructor() {
     super({
       name: 'arc',
@@ -63,7 +101,7 @@ export class Arc extends Block {
     })
   }
 }
-export class Parallax extends Block {
+export class Parallax extends Turret {
   constructor() {
     super({
       name: 'parallax',
@@ -72,7 +110,7 @@ export class Parallax extends Block {
     })
   }
 }
-export class Swarmer extends Block {
+export class Swarmer extends Turret {
   constructor() {
     super({
       name: 'swarmer',
@@ -81,7 +119,7 @@ export class Swarmer extends Block {
     })
   }
 }
-export class Salvo extends Block {
+export class Salvo extends Turret {
   constructor() {
     super({
       name: 'salvo',
@@ -90,7 +128,7 @@ export class Salvo extends Block {
     })
   }
 }
-export class Segment extends Block {
+export class Segment extends Turret {
   constructor() {
     super({
       name: 'segment',
@@ -99,7 +137,7 @@ export class Segment extends Block {
     })
   }
 }
-export class Tsunami extends Block {
+export class Tsunami extends Turret {
   constructor() {
     super({
       name: 'tsunami',
@@ -108,7 +146,7 @@ export class Tsunami extends Block {
     })
   }
 }
-export class Fuse extends Block {
+export class Fuse extends Turret {
   constructor() {
     super({
       name: 'fuse',
@@ -117,7 +155,7 @@ export class Fuse extends Block {
     })
   }
 }
-export class Ripple extends Block {
+export class Ripple extends Turret {
   constructor() {
     super({
       name: 'ripple',
@@ -126,7 +164,7 @@ export class Ripple extends Block {
     })
   }
 }
-export class Cyclone extends Block {
+export class Cyclone extends Turret {
   constructor() {
     super({
       name: 'cyclone',
@@ -135,7 +173,7 @@ export class Cyclone extends Block {
     })
   }
 }
-export class Foreshadow extends Block {
+export class Foreshadow extends Turret {
   constructor() {
     super({
       name: 'foreshadow',
@@ -146,11 +184,11 @@ export class Foreshadow extends Block {
         plastanium: 200,
         silicon: 600,
       },
-      size: 1,
+      size: 4,
     })
   }
 }
-export class Spectre extends Block {
+export class Spectre extends Turret {
   constructor() {
     super({
       name: 'spectre',
@@ -165,7 +203,7 @@ export class Spectre extends Block {
     })
   }
 }
-export class Meltdown extends Block {
+export class Meltdown extends Turret {
   constructor() {
     super({
       name: 'meltdown',

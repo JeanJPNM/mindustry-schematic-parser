@@ -1,6 +1,19 @@
-import { Block } from './block'
-
-export class LaunchPad extends Block {
+import { Block, blockAsset } from './block'
+import { Canvas } from 'canvas'
+import { SchematicTile } from '../..'
+import { tintImage } from '../../util'
+const category = 'campaign'
+abstract class Pad extends Block {
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: [this.name],
+    })
+  }
+}
+export class LaunchPad extends Pad {
   constructor() {
     super({
       name: 'launch-pad',
@@ -38,6 +51,22 @@ export class InterplanetaryAccelerator extends Block {
       },
       size: 7,
       powerConsumption: 10.0,
+    })
+  }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: [this.name, this.name + '-team'],
+    })
+    await this.render({ tile, canvas, category, layers: [this.name] })
+    const image = await blockAsset(category, this.name + '-team')
+    this.renderImage({
+      canvas,
+      tile,
+      image: tintImage(image, '#ffa600'),
     })
   }
 }

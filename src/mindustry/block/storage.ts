@@ -1,6 +1,28 @@
-import { Block } from './block'
+import { Block, blockAsset } from './block'
+import { Canvas } from 'canvas'
+import { Item } from '../item'
+import { SchematicTile } from '../../schematic'
+import { tintImage } from '../../util'
 
-export class CoreShard extends Block {
+const category = 'storage'
+
+abstract class StorageBlock extends Block {
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: [this.name],
+    })
+    const image = await blockAsset(category, this.name + '-team')
+    this.renderImage({
+      canvas,
+      image: tintImage(image, '#ffa600'),
+      tile,
+    })
+  }
+}
+export class CoreShard extends StorageBlock {
   constructor() {
     super({
       name: 'core-shard',
@@ -9,7 +31,7 @@ export class CoreShard extends Block {
     })
   }
 }
-export class CoreFoundation extends Block {
+export class CoreFoundation extends StorageBlock {
   constructor() {
     super({
       name: 'core-foundation',
@@ -18,7 +40,7 @@ export class CoreFoundation extends Block {
     })
   }
 }
-export class CoreNucleus extends Block {
+export class CoreNucleus extends StorageBlock {
   constructor() {
     super({
       name: 'core-nucleus',
@@ -27,7 +49,7 @@ export class CoreNucleus extends Block {
     })
   }
 }
-export class Container extends Block {
+export class Container extends StorageBlock {
   constructor() {
     super({
       name: 'container',
@@ -52,5 +74,23 @@ export class Unloader extends Block {
       requirements: { titanium: 25, silicon: 30 },
       size: 1,
     })
+  }
+
+  output = {
+    item: true,
+    liquid: false,
+  }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({ tile, canvas, category, layers: [this.name] })
+    const config = tile.config as Item
+    if (config) {
+      const image = await blockAsset(category, this.name + '-center')
+      this.renderImage({
+        canvas,
+        image: tintImage(image, config.color, 1),
+        tile,
+      })
+    }
   }
 }

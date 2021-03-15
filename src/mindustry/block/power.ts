@@ -1,6 +1,13 @@
 import { Block, BlockProperties } from './block'
-
-export class PowerNode extends Block {
+import { Canvas } from 'canvas'
+import { SchematicTile } from '../../schematic'
+const category = 'power'
+abstract class PowerBlock extends Block {
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({ tile, canvas, category, layers: [this.name] })
+  }
+}
+export class PowerNode extends PowerBlock {
   constructor() {
     super({
       name: 'power-node',
@@ -12,7 +19,7 @@ export class PowerNode extends Block {
     })
   }
 }
-export class PowerNodeLarge extends Block {
+export class PowerNodeLarge extends PowerBlock {
   constructor() {
     super({
       name: 'power-node-large',
@@ -25,7 +32,7 @@ export class PowerNodeLarge extends Block {
     })
   }
 }
-export class SurgeTower extends Block {
+export class SurgeTower extends PowerBlock {
   constructor() {
     super({
       name: 'surge-tower',
@@ -39,7 +46,7 @@ export class SurgeTower extends Block {
     })
   }
 }
-export class Diode extends Block {
+export class Diode extends PowerBlock {
   constructor() {
     super({
       name: 'diode',
@@ -51,8 +58,17 @@ export class Diode extends Block {
       size: 1,
     })
   }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: [this.name + '-bottom', this.name],
+    })
+  }
 }
-export class Battery extends Block {
+export class Battery extends PowerBlock {
   constructor() {
     super({
       name: 'battery',
@@ -64,7 +80,7 @@ export class Battery extends Block {
     })
   }
 }
-export class BatteryLarge extends Block {
+export class BatteryLarge extends PowerBlock {
   constructor() {
     super({
       name: 'battery-large',
@@ -80,7 +96,7 @@ export class BatteryLarge extends Block {
 interface PowerGeneratorProperties extends BlockProperties {
   powerGeneration: number
 }
-export class PowerGenerator extends Block {
+export class PowerGenerator extends PowerBlock {
   constructor(properties: PowerGeneratorProperties) {
     super(properties)
     /// gets the actual amount consumed per second
@@ -130,6 +146,20 @@ export class SteamGenerator extends PowerGenerator {
       },
       size: 2,
       powerGeneration: 5.5,
+    })
+  }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: [
+        this.name,
+        this.name + '-turbine0',
+        this.name + '-turbine1',
+        this.name + '-cap',
+      ],
     })
   }
 }

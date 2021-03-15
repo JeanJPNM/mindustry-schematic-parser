@@ -1,6 +1,14 @@
 import { Block } from './block'
+import { Canvas } from 'canvas'
+import { SchematicTile } from '../../schematic'
 
-export class BlockForge extends Block {
+const category = 'experimental'
+abstract class ExperimentalBlock extends Block {
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({ tile, canvas, category, layers: [this.name] })
+  }
+}
+export class BlockForge extends ExperimentalBlock {
   constructor() {
     super({
       name: 'block-forge',
@@ -10,7 +18,7 @@ export class BlockForge extends Block {
     })
   }
 }
-export class BlockLoader extends Block {
+export class BlockLoader extends ExperimentalBlock {
   constructor() {
     super({
       name: 'block-loader',
@@ -20,7 +28,7 @@ export class BlockLoader extends Block {
     })
   }
 }
-export class BlockUnloader extends Block {
+export class BlockUnloader extends ExperimentalBlock {
   constructor() {
     super({
       name: 'block-unloader',

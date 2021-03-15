@@ -1,5 +1,65 @@
-import { Block } from './block'
+import { Block, blockAsset, translatePos } from './block'
+import { Canvas } from 'canvas'
+import { SchematicTile } from '../../schematic'
 
+const category = 'units'
+const degrees = [0, -90, 180, 90]
+
+abstract class Factory extends Block {
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: [this.name],
+    })
+    const context = canvas.getContext('2d')
+    const { x, y } = translatePos(tile, canvas)
+    const out = await blockAsset(category, 'factory-out-' + this.size)
+    const offset = this.size * 16
+    context.save()
+    context.translate(x + offset, y + offset)
+    context.rotate((degrees[tile.rotation % 4] * Math.PI) / 180)
+    context.translate(-offset, -offset)
+    context.drawImage(out, 0, 0)
+    context.restore()
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: ['factory-top-' + this.size],
+    })
+  }
+}
+abstract class Reconstructor extends Block {
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: [this.name],
+    })
+    const context = canvas.getContext('2d')
+    const { x, y } = translatePos(tile, canvas)
+    const input = await blockAsset(category, 'factory-in-' + this.size)
+    const output = await blockAsset(category, 'factory-out-' + this.size)
+    const offset = this.size * 16
+    const angle = degrees[tile.rotation % 4]
+    context.save()
+    context.translate(x + offset, y + offset)
+    context.rotate((angle * Math.PI) / 180)
+    context.translate(-offset, -offset)
+    context.drawImage(input, 0, 0)
+    context.drawImage(output, 0, 0)
+    context.restore()
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: [this.name + '-top'],
+    })
+  }
+}
 export class CommandCenter extends Block {
   constructor() {
     super({
@@ -8,8 +68,17 @@ export class CommandCenter extends Block {
       size: 2,
     })
   }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: [this.name, this.name + '-team'],
+    })
+  }
 }
-export class GroundFactory extends Block {
+export class GroundFactory extends Factory {
   constructor() {
     super({
       name: 'ground-factory',
@@ -19,7 +88,7 @@ export class GroundFactory extends Block {
     })
   }
 }
-export class AirFactory extends Block {
+export class AirFactory extends Factory {
   constructor() {
     super({
       name: 'air-factory',
@@ -29,7 +98,7 @@ export class AirFactory extends Block {
     })
   }
 }
-export class NavalFactory extends Block {
+export class NavalFactory extends Factory {
   constructor() {
     super({
       name: 'naval-factory',
@@ -39,7 +108,7 @@ export class NavalFactory extends Block {
     })
   }
 }
-export class AdditiveReconstructor extends Block {
+export class AdditiveReconstructor extends Reconstructor {
   constructor() {
     super({
       name: 'additive-reconstructor',
@@ -49,7 +118,7 @@ export class AdditiveReconstructor extends Block {
     })
   }
 }
-export class MultiplicativeReconstructor extends Block {
+export class MultiplicativeReconstructor extends Reconstructor {
   constructor() {
     super({
       name: 'multiplicative-reconstructor',
@@ -59,7 +128,7 @@ export class MultiplicativeReconstructor extends Block {
     })
   }
 }
-export class ExponentialReconstructor extends Block {
+export class ExponentialReconstructor extends Reconstructor {
   constructor() {
     super({
       name: 'exponential-reconstructor',
@@ -76,7 +145,7 @@ export class ExponentialReconstructor extends Block {
     })
   }
 }
-export class TetrativeReconstructor extends Block {
+export class TetrativeReconstructor extends Reconstructor {
   constructor() {
     super({
       name: 'tetrative-reconstructor',
@@ -101,6 +170,15 @@ export class RepairPoint extends Block {
       size: 1,
     })
   }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: [this.name + '-base', this.name],
+    })
+  }
 }
 export class ResupplyPoint extends Block {
   constructor() {
@@ -109,5 +187,9 @@ export class ResupplyPoint extends Block {
       requirements: { lead: 20, copper: 15, silicon: 15 },
       size: 2,
     })
+  }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({ tile, canvas, category, layers: [this.name] })
   }
 }

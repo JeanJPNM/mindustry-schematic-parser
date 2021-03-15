@@ -1,6 +1,13 @@
 import { Block } from './block'
-
-export class Message extends Block {
+import { Canvas } from 'canvas'
+import { SchematicTile } from '../../schematic'
+const category = 'logic'
+abstract class LogicBlock extends Block {
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({ tile, canvas, category, layers: [this.name] })
+  }
+}
+export class Message extends LogicBlock {
   constructor() {
     super({
       name: 'message',
@@ -9,7 +16,7 @@ export class Message extends Block {
     })
   }
 }
-export class SwitchBlock extends Block {
+export class SwitchBlock extends LogicBlock {
   constructor() {
     super({
       name: 'switch',
@@ -18,7 +25,7 @@ export class SwitchBlock extends Block {
     })
   }
 }
-export class MicroProcessor extends Block {
+export class MicroProcessor extends LogicBlock {
   constructor() {
     super({
       name: 'micro-processor',
@@ -27,7 +34,7 @@ export class MicroProcessor extends Block {
     })
   }
 }
-export class LogicProcessor extends Block {
+export class LogicProcessor extends LogicBlock {
   constructor() {
     super({
       name: 'logic-processor',
@@ -36,7 +43,7 @@ export class LogicProcessor extends Block {
     })
   }
 }
-export class HyperProcessor extends Block {
+export class HyperProcessor extends LogicBlock {
   constructor() {
     super({
       name: 'hyper-processor',
@@ -45,7 +52,7 @@ export class HyperProcessor extends Block {
     })
   }
 }
-export class MemoryCell extends Block {
+export class MemoryCell extends LogicBlock {
   constructor() {
     super({
       name: 'memory-cell',
@@ -62,7 +69,7 @@ export class MemoryBank extends MemoryCell {
     this.size = 2
   }
 }
-export class LogicDisplay extends Block {
+export class LogicDisplay extends LogicBlock {
   constructor() {
     super({
       name: 'logic-display',

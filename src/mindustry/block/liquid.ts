@@ -1,5 +1,18 @@
 import { Block } from './block'
-class Pump extends Block {}
+import { Canvas } from 'canvas'
+import { SchematicTile } from '../../schematic'
+const category = 'liquid'
+class Pump extends Block {
+  output = {
+    item: false,
+    liquid: true,
+  }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({ tile, canvas, category, layers: [this.name] })
+  }
+}
+
 export class MechanicalPump extends Pump {
   constructor() {
     super({
@@ -43,6 +56,10 @@ export class Conduit extends Block {
       size: 1,
     })
   }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({ tile, canvas, category, layers: [this.name] })
+  }
 }
 export class PulseConduit extends Conduit {
   constructor() {
@@ -66,6 +83,20 @@ export class LiquidRouter extends Block {
       size: 1,
     })
   }
+
+  output = {
+    item: false,
+    liquid: true,
+  }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: [this.name + '-bottom', this.name + '-top'],
+    })
+  }
 }
 export class LiquidTank extends LiquidRouter {
   constructor() {
@@ -83,6 +114,15 @@ export class LiquidJunction extends Block {
       size: 1,
     })
   }
+
+  output = {
+    item: false,
+    liquid: true,
+  }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({ tile, canvas, category, layers: [this.name] })
+  }
 }
 export class BridgeConduit extends Block {
   constructor() {
@@ -91,6 +131,15 @@ export class BridgeConduit extends Block {
       requirements: { graphite: 4, metaglass: 8 },
       size: 1,
     })
+  }
+
+  output = {
+    item: false,
+    liquid: true,
+  }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({ tile, canvas, category, layers: [this.name] })
   }
 }
 export class PhaseConduit extends BridgeConduit {

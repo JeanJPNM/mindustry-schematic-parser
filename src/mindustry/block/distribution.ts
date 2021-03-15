@@ -1,12 +1,37 @@
-import { Block } from './block'
+import { Block, blockAsset } from './block'
+import { Canvas, createCanvas } from 'canvas'
+import { Item } from '../item'
+import { SchematicTile } from '../../schematic'
+import { tintImage } from '../../util'
+const category = 'distribution'
 
-export class Conveyor extends Block {
+abstract class TransportBlock extends Block {
+  output = {
+    item: true,
+    liquid: false,
+  }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: [this.name],
+    })
+  }
+}
+export class Conveyor extends TransportBlock {
   constructor() {
     super({
       name: 'conveyor',
       requirements: { copper: 1 },
       size: 1,
     })
+  }
+
+  output = {
+    item: false,
+    liquid: false,
   }
 }
 export class TitaniumConveyor extends Conveyor {
@@ -16,13 +41,18 @@ export class TitaniumConveyor extends Conveyor {
     this.requirements = { copper: 1, lead: 1, titanium: 1 }
   }
 }
-export class PlastaniumConveyor extends Block {
+export class PlastaniumConveyor extends TransportBlock {
   constructor() {
     super({
       name: 'plastanium-conveyor',
       requirements: { plastanium: 1, silicon: 1, graphite: 1 },
       size: 1,
     })
+  }
+
+  output = {
+    item: false,
+    liquid: false,
   }
 }
 export class ArmoredConveyor extends Conveyor {
@@ -32,7 +62,7 @@ export class ArmoredConveyor extends Conveyor {
     this.requirements = { plastanium: 1, thorium: 1, metaglass: 1 }
   }
 }
-export class Junction extends Block {
+export class Junction extends TransportBlock {
   constructor() {
     super({
       name: 'junction',
@@ -41,7 +71,7 @@ export class Junction extends Block {
     })
   }
 }
-export class ItemBridge extends Block {
+export class ItemBridge extends TransportBlock {
   constructor() {
     super({
       name: 'bridge-conveyor',
@@ -63,12 +93,24 @@ export class PhaseConveyor extends ItemBridge {
     this.powerConsumption = 0.3
   }
 }
-export class Sorter extends Block {
+export class Sorter extends TransportBlock {
   constructor() {
     super({
       name: 'sorter',
       requirements: { lead: 2, copper: 2 },
       size: 1,
+    })
+  }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({ tile, canvas, category, layers: [this.name] })
+    const config = tile.config as Item
+    const imgName = config ? 'center' : 'cross'
+    const image = await blockAsset(category, imgName)
+    this.renderImage({
+      canvas,
+      tile,
+      image: config ? tintImage(image, config.color, 1) : image,
     })
   }
 }
@@ -78,7 +120,7 @@ export class InvertedSorter extends Sorter {
     this.name = `inverted-${this.name}`
   }
 }
-export class Router extends Block {
+export class Router extends TransportBlock {
   constructor() {
     super({
       name: 'router',
@@ -87,7 +129,7 @@ export class Router extends Block {
     })
   }
 }
-export class Distributor extends Block {
+export class Distributor extends TransportBlock {
   constructor() {
     super({
       name: 'distributor',
@@ -96,7 +138,7 @@ export class Distributor extends Block {
     })
   }
 }
-export class OverflowGate extends Block {
+export class OverflowGate extends TransportBlock {
   constructor() {
     super({
       name: 'overflow-gate',
@@ -105,7 +147,7 @@ export class OverflowGate extends Block {
     })
   }
 }
-export class UnderflowGate extends Block {
+export class UnderflowGate extends TransportBlock {
   constructor() {
     super({
       name: 'underflow-gate',
@@ -114,7 +156,7 @@ export class UnderflowGate extends Block {
     })
   }
 }
-export class MassDriver extends Block {
+export class MassDriver extends TransportBlock {
   constructor() {
     super({
       name: 'mass-driver',
@@ -123,22 +165,104 @@ export class MassDriver extends Block {
       powerConsumption: 1.75,
     })
   }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      canvas,
+      category,
+      tile,
+      layers: [this.name + '-base'],
+    })
+    const tcanvas = createCanvas(this.size * 32, this.size * 32)
+    const context = tcanvas.getContext('2d')
+    const image = await blockAsset(category, this.name)
+    const dArr = [-1, -1, 0, -1, 1, -1, -1, 0, 1, 0, -1, 1, 0, 1, 1, 1], // offset array
+      s = 3, // thickness scale
+      x = 0, // final position
+      y = 0
+    let i = 0
+    // draw images at offsets from the array scaled by s
+    for (; i < dArr.length; i += 2)
+      context.drawImage(image, x + dArr[i] * s, y + dArr[i + 1] * s)
+
+    // fill with color
+    context.globalCompositeOperation = 'source-in'
+    context.fillStyle = '#353535'
+    context.fillRect(0, 0, tcanvas.width, tcanvas.height)
+
+    // draw original image in normal mode
+    context.globalCompositeOperation = 'source-over'
+    context.drawImage(image, x, y)
+    this.renderImage({
+      canvas,
+      image: tcanvas,
+      tile,
+    })
+  }
 }
-export class PayloadConveyor extends Block {
+export class PayloadConveyor extends TransportBlock {
   constructor() {
     super({
       name: 'payload-conveyor',
       requirements: { graphite: 10, copper: 20 },
-      size: 1,
+      size: 3,
+    })
+  }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    const size = this.size * 32
+    const image = await blockAsset(category, this.name + '-icon')
+    const tcanvas = createCanvas(size, size)
+    const context = tcanvas.getContext('2d')
+    let { rotation } = tile
+    if (rotation % 2) {
+      rotation += 2
+    }
+    context.save()
+    context.translate(size / 2, size / 2)
+    context.rotate((rotation * Math.PI) / 2)
+    context.drawImage(image, -size / 2, -size / 2)
+    context.restore()
+    this.renderImage({
+      canvas,
+      tile,
+      image: tcanvas,
     })
   }
 }
-export class PayloadRouter extends Block {
+export class PayloadRouter extends TransportBlock {
   constructor() {
     super({
       name: 'payload-router',
       requirements: { graphite: 15, copper: 20 },
-      size: 1,
+      size: 3,
+    })
+  }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: [this.name, this.name + '-over'],
+    })
+    const size = this.size * 32
+    const image = await blockAsset(category, this.name + '-top')
+    const tcanvas = createCanvas(size, size)
+    const context = tcanvas.getContext('2d')
+    let { rotation } = tile
+    if (rotation % 2) {
+      rotation += 2
+    }
+    context.save()
+    context.translate(size / 2, size / 2)
+    context.rotate((rotation * Math.PI) / 2)
+    context.drawImage(image, -size / 2, -size / 2)
+    context.restore()
+    this.renderImage({
+      canvas,
+      tile,
+      image: tcanvas,
     })
   }
 }

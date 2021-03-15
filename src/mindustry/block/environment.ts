@@ -8,4 +8,7 @@ export class AirBlock extends Block {
       size: 1,
     })
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  async draw(): Promise<void> {}
 }
