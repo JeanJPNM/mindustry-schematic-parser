@@ -77,6 +77,12 @@ export abstract class Block
     }
   }
 
+  /** Renders this block's sprite on the `canvas` using the info contained in the `tile`
+   *
+   * DO NOT call this method directly, as it was made for internal use
+   * @package
+   * @internal
+   */
   abstract draw(tile: SchematicTile, canvas: Canvas): Promise<void>
 }
 export function translatePos(
