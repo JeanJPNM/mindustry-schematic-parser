@@ -1,6 +1,16 @@
-import { ItemCost, ItemName, PowerGenerator } from '../mindustry'
+import {
+  Conduit,
+  Conveyor,
+  ItemCost,
+  ItemName,
+  PlastaniumConveyor,
+  PowerGenerator,
+} from '../mindustry'
+import { drawBridges, drawConveyors } from './renderer'
 import { SchematicIO } from './io'
 import { SchematicTile } from './tile'
+import { blockAsset } from '../mindustry/block/block'
+import { createCanvas } from 'canvas'
 /**
  * A simple representation for a mindustry schematic
  */
@@ -131,5 +141,43 @@ export class Schematic {
         'by now, the schematic needs to be generated from a SchematicDecoder'
       )
     return SchematicIO.encodeTags(this)
+  }
+
+  /**
+   * Creates an image that represents this schematic's preview
+   */
+  async toImageBuffer(): Promise<Buffer> {
+    const canvas = createCanvas(this.width * 32, this.height * 32)
+    const size = (Math.max(this.width, this.height) + 2) * 32
+    const background = createCanvas(size, size)
+    const bcontext = background.getContext('2d')
+    const floor = await blockAsset('environment', 'metal-floor')
+    for (let x = 0; x < size; x += 32) {
+      for (let y = 0; y < size; y += 32) {
+        bcontext.drawImage(floor, x, y)
+      }
+    }
+    for (const tile of this.tiles) {
+      const { block } = tile
+      if (
+        block instanceof Conveyor ||
+        block instanceof PlastaniumConveyor ||
+        block instanceof Conduit
+      )
+        continue
+      await block.draw(tile, canvas)
+    }
+    await drawConveyors(this, canvas)
+    await drawBridges(this, canvas)
+    bcontext.shadowColor = 'black'
+    bcontext.shadowBlur = 20
+    bcontext.shadowOffsetX = 0
+    bcontext.shadowOffsetY = 0
+    bcontext.drawImage(
+      canvas,
+      (size - canvas.width) / 2,
+      (size - canvas.height) / 2
+    )
+    return background.toBuffer()
   }
 }
