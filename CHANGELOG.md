@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## [2.0.0] - 2021-03-15
+### Added
+- schematic generation version
+### Changed
+- Schematics now use named constructor parameters
+### Fixed 
+- Fixed block sprite rendering
 ## [1.2.2] - 2021-03-15
 ### Fixed
 - Assets not delivered with package
@@ -50,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
   - First release
 
+[2.0.0]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v1.2.2...v2.0.0
 [1.2.2]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v1.1.2...v1.2.0
