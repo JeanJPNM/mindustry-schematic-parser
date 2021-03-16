@@ -57,9 +57,9 @@ export class Conduit extends Block {
     })
   }
 
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
-    await this.render({ tile, canvas, category, layers: [this.name] })
-  }
+  // this block cannot be rendered individually
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  async draw(): Promise<void> {}
 }
 export class PulseConduit extends Conduit {
   constructor() {
