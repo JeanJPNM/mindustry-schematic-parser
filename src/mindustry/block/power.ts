@@ -255,4 +255,13 @@ export class ImpactReactor extends PowerGenerator {
       powerConsumption: 25,
     })
   }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      canvas,
+      category,
+      tile,
+      layers: [this.name + '-bottom', this.name],
+    })
+  }
 }
