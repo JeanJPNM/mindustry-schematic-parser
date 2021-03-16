@@ -24,7 +24,7 @@ abstract class DefenseBlock extends Block {
   }
 }
 interface WallProperties extends BlockProperties {
-  name: ItemName
+  name: string
 }
 export abstract class Wall extends DefenseBlock {
   constructor(properties: WallProperties) {
@@ -116,7 +116,7 @@ export class ThoriumWallLarge extends ThoriumWall {
 export class PhaseWall extends Wall {
   constructor() {
     super({
-      name: 'phase-fabric',
+      name: 'phase',
       requirements: {
         'phase-fabric': 6,
       },
@@ -135,7 +135,7 @@ export class PhaseWallLarge extends PhaseWall {
 export class SurgeWall extends Wall {
   constructor() {
     super({
-      name: 'surge-alloy',
+      name: 'surge',
       requirements: {
         'surge-alloy': 6,
       },
