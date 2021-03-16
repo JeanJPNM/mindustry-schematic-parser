@@ -1,3 +1,4 @@
+import { StringParsingError } from './errors'
 /**
  * Similar to a DataView, but it has an auto incrementing offset.
  * A mix of `DataView` and the `DataInputStream` java class
@@ -177,26 +178,41 @@ export class StreamedDataReader {
           /* 110x xxxx   10xx xxxx*/
           start += 2
           if (start > end)
-            throw new Error('malformed input: partial character at end')
+            throw new StringParsingError(
+              'malformed input: partial character at end',
+              result
+            )
           c2 = bytearr[start - 1]
           if ((c2 & 0xc0) !== 0x80)
-            throw new Error('malformed input around byte ' + start)
+            throw new StringParsingError(
+              'malformed input around byte ' + start,
+              result
+            )
           result += ((c & 0x1f) << 6) | (c2 & 0x3f)
           break
         case 14:
           /* 1110 xxxx  10xx xxxx  10xx xxxx */
           start += 3
           if (start > end)
-            throw new Error('malformed input: partial character at end')
+            throw new StringParsingError(
+              'malformed input: partial character at end',
+              result
+            )
           c2 = bytearr[start - 2]
           c3 = bytearr[start - 1]
           if ((c2 & 0xc0) !== 0x80 || (c3 & 0xc0) !== 0x80)
-            throw new Error('malformed input around byte ' + (start - 1))
+            throw new StringParsingError(
+              'malformed input around byte ' + (start - 1),
+              result
+            )
           result += ((c & 0x0f) << 12) | ((c2 & 0x3f) << 6) | ((c3 & 0x3f) << 0)
           break
         default:
           /* 10xx xxxx,  1111 xxxx */
-          throw new Error('malformed input around byte ' + start)
+          throw new StringParsingError(
+            'malformed input around byte ' + start,
+            result
+          )
       }
     }
     // The number of chars produced may be less than utflen
