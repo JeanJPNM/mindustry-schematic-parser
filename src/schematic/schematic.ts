@@ -7,6 +7,7 @@ import {
   PowerGenerator,
 } from '../mindustry'
 import { drawBridges, drawConveyors } from './renderer'
+import { MindustryVersion } from './version'
 import { SchematicIO } from './io'
 import { SchematicTile } from './tile'
 import { blockAsset } from '../mindustry/block/block'
@@ -17,19 +18,17 @@ interface SchematicProperties {
    * The tiles that compose this schematic
    */
   tiles: SchematicTile[]
-  /**
-   * These tags contain the schematic metadata (like its name and description)
-   */
+
+  /** These tags contain the schematic metadata (like its name and description) */
   tags: Map<string, string>
-  /**
-   * With of the schematic in tiles
-   */
+
+  /** With of the schematic in tiles */
   width: number
-  /**
-   * Height of the schematic in tiles
-   */
+
+  /** Height of the schematic in tiles */
   height: number
 
+  /** The base64 code that generated this schematic */
   base64?: string
 
   /** The version of mindustry that encoded this schematic */
@@ -42,14 +41,16 @@ interface SchematicProperties {
 export class Schematic implements SchematicProperties {
   constructor(properties: SchematicProperties) {
     // this prevents the user for assignin any property through the constructor
+    let version: MindustryVersion
     ;({
       tiles: this.tiles,
       height: this.height,
       tags: this.tags,
       width: this.width,
       base64: this.base64,
-      version: this.version,
+      version = 'v6',
     } = properties)
+    this.version = version
     if (!this.description) {
       this.description = ''
     }
@@ -65,7 +66,7 @@ export class Schematic implements SchematicProperties {
 
   base64?: string
 
-  readonly version?: MindustryVersion
+  version: MindustryVersion
 
   static decode(base64: string): Schematic {
     return SchematicIO.decode(base64)
