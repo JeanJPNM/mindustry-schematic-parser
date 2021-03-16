@@ -64,7 +64,7 @@ export class Diode extends PowerBlock {
       tile,
       canvas,
       category,
-      layers: [this.name + '-bottom', this.name],
+      layers: [this.name],
     })
   }
 }
