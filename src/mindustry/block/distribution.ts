@@ -33,6 +33,10 @@ export class Conveyor extends TransportBlock {
     item: false,
     liquid: false,
   }
+
+  // the rendering of this block cannot be done individually
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  async draw(): Promise<void> {}
 }
 export class TitaniumConveyor extends Conveyor {
   constructor() {
@@ -54,6 +58,10 @@ export class PlastaniumConveyor extends TransportBlock {
     item: false,
     liquid: false,
   }
+
+  // the rendering of this block cannot be done individually
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  async draw(): Promise<void> {}
 }
 export class ArmoredConveyor extends Conveyor {
   constructor() {
