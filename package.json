@@ -41,9 +41,6 @@
     "src/",
     "!*.test.*"
   ],
-  "directories": {
-    "example": "example"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JeanJPNM/mindustry-schematic-parser.git"
