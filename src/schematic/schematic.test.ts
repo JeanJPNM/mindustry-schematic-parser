@@ -1,28 +1,28 @@
 import { Schematic } from './schematic'
 import { readFileSync } from 'fs'
 test('schematic getters functioning correctly', () => {
-  const schematic = new Schematic(
-    [],
-    new Map([
+  const schematic = new Schematic({
+    height: 0,
+    width: 0,
+    tiles: [],
+    tags: new Map([
       ['name', 'foo'],
       ['description', 'something'],
     ]),
-    0,
-    0
-  )
+  })
   expect(schematic.name).toBe(schematic.tags.get('name'))
   expect(schematic.description).toBe(schematic.tags.get('description'))
 })
 test('schematic setters functioning correctly', () => {
-  const schematic = new Schematic(
-    [],
-    new Map([
+  const schematic = new Schematic({
+    height: 0,
+    width: 0,
+    tiles: [],
+    tags: new Map([
       ['name', 'foo'],
       ['description', 'something'],
     ]),
-    0,
-    0
-  )
+  })
   const name = 'new name'
   const description = 'my custom description'
   schematic.name = name

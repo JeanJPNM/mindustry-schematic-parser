@@ -11,34 +11,55 @@ import { SchematicIO } from './io'
 import { SchematicTile } from './tile'
 import { blockAsset } from '../mindustry/block/block'
 import { createCanvas } from 'canvas'
+
+interface SchematicProperties {
+  /**
+   * The tiles that compose this schematic
+   */
+  tiles: SchematicTile[]
+  /**
+   * These tags contain the schematic metadata (like its name and description)
+   */
+  tags: Map<string, string>
+  /**
+   * With of the schematic in tiles
+   */
+  width: number
+  /**
+   * Height of the schematic in tiles
+   */
+  height: number
+
+  base64?: string
+}
+
 /**
  * A simple representation for a mindustry schematic
  */
-export class Schematic {
-  constructor(
-    /**
-     * The tiles that compose this schematic
-     */
-    public tiles: SchematicTile[],
-    /**
-     * These tags contain the schematic metadata (like its name and description)
-     */
-    public tags: Map<string, string>,
-    /**
-     * With of the schematic in tiles
-     */
-    public width: number,
-    /**
-     * Height of the schematic in tiles
-     */
-    public height: number,
-
-    public base64?: string
-  ) {
+export class Schematic implements SchematicProperties {
+  constructor(properties: SchematicProperties) {
+    // this prevents the user for assignin any property through the constructor
+    ;({
+      tiles: this.tiles,
+      height: this.height,
+      tags: this.tags,
+      width: this.width,
+      base64: this.base64,
+    } = properties)
     if (!this.description) {
       this.description = ''
     }
   }
+
+  readonly tiles: SchematicTile[]
+
+  readonly tags: Map<string, string>
+
+  readonly width: number
+
+  readonly height: number
+
+  base64?: string
 
   static decode(base64: string): Schematic {
     return SchematicIO.decode(base64)

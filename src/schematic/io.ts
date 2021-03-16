@@ -272,7 +272,13 @@ export abstract class SchematicIO {
     const tags = this.tags(cData)
     const blocks = this.blocks(cData)
     const tiles = this.tiles(cData, blocks, version)
-    return new Schematic(tiles, tags, width, height, base64)
+    return new Schematic({
+      height,
+      tags,
+      tiles,
+      width,
+      base64,
+    })
   }
 
   /** Takes a decoded schematic and saves its new tags
