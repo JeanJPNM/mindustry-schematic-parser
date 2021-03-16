@@ -12,7 +12,11 @@ import {
   Unloader,
 } from '../mindustry/block'
 import { Liquid, UnitCommand } from '../mindustry'
-import { StreamedDataReader, StreamedDataWriter } from '../streamed_data'
+import {
+  StreamedDataReader,
+  StreamedDataWriter,
+  StringParsingError,
+} from '../streamed_data'
 import { BlockfromCode } from '../mindustry/block/blocks'
 // import { Content } from './mindustry/ctype/content'
 import { Item } from '../mindustry/item'
@@ -112,7 +116,14 @@ export abstract class SchematicIO {
       case 4: {
         const exists = cData.getInt8()
         if (exists !== 0) {
-          return cData.getString()
+          try {
+            return cData.getString()
+          } catch (e) {
+            if (e instanceof StringParsingError) {
+              return e.parsedText
+            }
+            throw e
+          }
         }
         return null
       }
