@@ -10,6 +10,7 @@ npm install mindustry-schematic-parser
 ## Usage
 
 ```javascript
+import * as fs from 'fs'
 import { Schematic } from 'mindustry-schematic-parser'
 
 const base64 =
@@ -21,5 +22,9 @@ console.log('description: ', schematic.description)
 console.log('power balance: ', schematic.powerBalance)
 console.log('item cost:', schematic.requirements)
 
+// save a preview of the schematic
+schematic
+  .toImageBuffer()
+  .then(buffer => fs.writeFileSync('my_file.png', buffer))
 
 ```
