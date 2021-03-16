@@ -143,17 +143,22 @@ export class StreamedDataReader {
     let c = 0,
       c2 = 0,
       c3 = 0
-    let start = this.currentOffset
-    const end = utflen + this.currentOffset
+    const bytearr = new Uint8Array(
+      this.buffer.slice(this.currentOffset, this.currentOffset + utflen)
+    )
+    this.currentOffset += utflen
+
+    let start = 0
+    const end = utflen
     let result = ''
     while (start < end) {
-      c = this.getUint8()
+      c = bytearr[start]
       if (c > 127) break
       start++
       result += String.fromCodePoint(c)
     }
     while (start < end) {
-      c = this.getUint8()
+      c = bytearr[start]
       switch (c >> 4) {
         case 0:
         case 1:
@@ -173,7 +178,7 @@ export class StreamedDataReader {
           start += 2
           if (start > end)
             throw new Error('malformed input: partial character at end')
-          c2 = this.data.getUint8(this.currentOffset - 1)
+          c2 = bytearr[start - 1]
           if ((c2 & 0xc0) !== 0x80)
             throw new Error('malformed input around byte ' + start)
           result += ((c & 0x1f) << 6) | (c2 & 0x3f)
@@ -183,8 +188,8 @@ export class StreamedDataReader {
           start += 3
           if (start > end)
             throw new Error('malformed input: partial character at end')
-          c2 = this.data.getUint8(start - 2)
-          c3 = this.data.getUint8(start - 1)
+          c2 = bytearr[start - 2]
+          c3 = bytearr[start - 1]
           if ((c2 & 0xc0) !== 0x80 || (c3 & 0xc0) !== 0x80)
             throw new Error('malformed input around byte ' + (start - 1))
           result += ((c & 0x0f) << 12) | ((c2 & 0x3f) << 6) | ((c3 & 0x3f) << 0)
