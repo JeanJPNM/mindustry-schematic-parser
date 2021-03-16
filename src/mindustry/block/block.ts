@@ -92,18 +92,11 @@ export function translatePos(
   let { x, y } = tile
   y++
   const { size } = tile.block
-  if (size > 2) {
-    if (size === 4) {
-      x -= 1
-      y += 2
-    } else {
-      const dif = Math.floor(size / 2)
-      x -= dif
-      y += dif
-    }
-  } else if (size > 1) {
-    y++
-  }
+
+  // "fix" coordinates
+  x -= Math.floor(size / 2 - 0.1)
+  y += Math.floor(size / 2)
+
   y *= 32
   x *= 32
   y = canvas.height - y
