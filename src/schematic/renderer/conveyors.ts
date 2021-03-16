@@ -11,6 +11,14 @@ import { Canvas } from 'canvas'
 import { Schematic } from '../schematic'
 import { SchematicTile } from '../tile'
 
+function handlePlacement(tile: SchematicTile) {
+  let { x, y } = tile
+  const { size } = tile.block
+  x -= Math.floor(size / 2 - 0.1)
+  y -= Math.floor(size / 2 - 0.1)
+  return { x, y }
+}
+
 function mapTiles(schematic: Schematic): SchematicTile[][] {
   const { width } = schematic
   const result: SchematicTile[][] = []
@@ -19,8 +27,13 @@ function mapTiles(schematic: Schematic): SchematicTile[][] {
   }
   for (const tile of schematic.tiles) {
     const { size } = tile.block
-    for (let { x } = tile; x < tile.x + size && x < schematic.width; x++) {
-      for (let { y } = tile; y < tile.y + size && y < schematic.height; y++) {
+    const start = handlePlacement(tile)
+    const end = {
+      x: start.x + size,
+      y: start.y + size,
+    }
+    for (let { x } = start; x < end.x && x < schematic.width; x++) {
+      for (let { y } = start; y < end.y && y < schematic.height; y++) {
         result[x][y] = tile
       }
     }
@@ -64,14 +77,23 @@ function getConnections(
     case 'conveyor':
     case 'conduit':
       {
+        const { rotation } = tile
+
+        const mappedTile = mappedTiles[x]?.[y]
+        const key = BlockRotation[rotation] as keyof typeof result
+        result[key] ||= mappedTile?.block instanceof PlastaniumConveyor
         const content = mode === 'conveyor' ? 'item' : 'liquid'
         for (const k in tiles) {
+          let { x, y } = tile
+          const moves = [() => x++, () => y++, () => x--, () => y--]
+          moves[rotation]()
+          const target = mappedTiles[x]?.[y]
           const key = k as keyof typeof tiles
-          const tile = tiles[key]
+          const t = tiles[key]
           result[key] ||=
-            (tile?.block instanceof blockType &&
-              tile?.rotation === (BlockRotation[key] + 2) % 4) ||
-            tile?.block.output[content]
+            (t?.block instanceof blockType &&
+              t?.rotation === (BlockRotation[key] + 2) % 4) ||
+            (t?.block.output[content] && t !== target)
         }
       }
       break
