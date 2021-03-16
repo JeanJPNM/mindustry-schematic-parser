@@ -278,6 +278,7 @@ export abstract class SchematicIO {
       tiles,
       width,
       base64,
+      version: version === 0 ? 'v5' : 'v6',
     })
   }
 

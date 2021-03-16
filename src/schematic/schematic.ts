@@ -31,6 +31,9 @@ interface SchematicProperties {
   height: number
 
   base64?: string
+
+  /** The version of mindustry that encoded this schematic */
+  version?: MindustryVersion
 }
 
 /**
@@ -45,6 +48,7 @@ export class Schematic implements SchematicProperties {
       tags: this.tags,
       width: this.width,
       base64: this.base64,
+      version: this.version,
     } = properties)
     if (!this.description) {
       this.description = ''
@@ -60,6 +64,8 @@ export class Schematic implements SchematicProperties {
   readonly height: number
 
   base64?: string
+
+  readonly version?: MindustryVersion
 
   static decode(base64: string): Schematic {
     return SchematicIO.decode(base64)
