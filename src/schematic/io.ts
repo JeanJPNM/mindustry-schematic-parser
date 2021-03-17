@@ -253,15 +253,8 @@ export abstract class SchematicIO {
    *  @param base64 The base64 code of the schematic
    */
   static decode(base64: string): Schematic {
-    const decoded = Buffer.from(base64.trim(), 'base64').toString('binary')
-
-    const arr = new Uint8Array(decoded.length)
-    for (let i = 0; i < decoded.length; i++) {
-      const char = decoded.codePointAt(i)
-      if (char === null || char === undefined)
-        throw new Error('unknown character at: ' + i)
-      arr[i] = char
-    }
+    const decoded = Buffer.from(base64.trim(), 'base64')
+    const arr = new Uint8Array(decoded)
     const data = new StreamedDataReader(arr.buffer)
     if (!this.isValid(data, true)) {
       throw new Error('Parsing error: this is not a valid schematic')
