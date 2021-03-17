@@ -57,11 +57,9 @@ test('schematic tag editing', () => {
   const name = longText.slice(0, Math.floor(longText.length / 2))
   schematic.name = name
   const description = longText.slice(Math.floor(longText.length / 2))
-  console.log(longText.length)
   schematic.description = description
   const reencoded = Schematic.encode(schematic)
   const redecoded = Schematic.decode(reencoded)
-  console.log(reencoded)
   expect(redecoded.name).toBe(name)
   expect(redecoded.description).toBe(description)
 })
