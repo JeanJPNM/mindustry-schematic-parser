@@ -65,3 +65,10 @@ test('schematic tag editing', () => {
   expect(redecoded.name).toBe(name)
   expect(redecoded.description).toBe(description)
 })
+test('schematic image generation', async () => {
+  const base64 = JSON.parse(
+    readFileSync('src/schematic/schematic.test.json', 'utf-8')
+  )['encodedSchematic'] as string
+  const schematic = Schematic.decode(base64)
+  await schematic.toImageBuffer()
+})
