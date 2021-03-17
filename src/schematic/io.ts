@@ -281,11 +281,8 @@ export abstract class SchematicIO {
   static encodeTags(schematic: Schematic): string {
     if (!schematic.base64)
       throw new Error('cannot save the tags of a non parsed schematic')
-    const decoded = Buffer.from(schematic.base64, 'base64').toString('binary')
-    const arr = new Uint8Array(decoded.length)
-    for (let i = 0; i < decoded.length; i++) {
-      arr[i] = decoded.codePointAt(i) ?? 0
-    }
+    const decoded = Buffer.from(schematic.base64, 'base64')
+    const arr = new Uint8Array(decoded)
     const data = new StreamedDataReader(arr.buffer)
     // read header
     this.isValid(data, true)
@@ -323,7 +320,7 @@ export abstract class SchematicIO {
     resultWriter.setChar('s')
     resultWriter.setChar('c')
     resultWriter.setChar('h')
-    resultWriter.setInt8(1)
+    resultWriter.setInt8(schematic.version === 'v5' ? 0 : 1)
     for (let i = 0; i < bytes.byteLength; i++) {
       resultWriter.setUint8(bytes[i])
     }
