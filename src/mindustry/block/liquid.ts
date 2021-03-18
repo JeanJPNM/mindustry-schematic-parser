@@ -152,6 +152,6 @@ export class PhaseConduit extends BridgeConduit {
       metaglass: 20,
       titanium: 10,
     }
-    this.powerConsumption = 0.3
+    this.powerConsumption = 0.3 * 60
   }
 }

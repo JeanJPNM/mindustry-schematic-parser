@@ -98,7 +98,7 @@ export class PhaseConveyor extends ItemBridge {
       lead: 10,
       graphite: 10,
     }
-    this.powerConsumption = 0.3
+    this.powerConsumption = 0.3 * 60
   }
 }
 export class Sorter extends TransportBlock {
