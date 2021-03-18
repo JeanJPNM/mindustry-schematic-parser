@@ -21,6 +21,7 @@ export async function drawBridges(
     const category = block instanceof ItemBridge ? 'distribution' : 'liquid'
     const config = tile.config as Point2
     const degrees = [0, -90, 180, 90]
+    const distance = Math.abs(config.x === 0 ? config.y : config.x)
     if (
       config.x < -12 ||
       config.y < -12 ||
@@ -29,12 +30,12 @@ export async function drawBridges(
       tile.x + config.x < 0 ||
       tile.x + config.x > schematic.width ||
       tile.y + config.y < 0 ||
-      tile.y + config.y > schematic.height
+      tile.y + config.y > schematic.height ||
+      distance < 1
     )
       continue
     const bridge = await blockAsset(category, block.name + '-bridge')
     const arrow = await blockAsset(category, block.name + '-arrow')
-    const distance = Math.abs(config.x === 0 ? config.y : config.x)
     const context = canvas.getContext('2d')
     const tcanvas = createCanvas((distance - 1) * 32, 32)
     const tcontext = tcanvas.getContext('2d')
