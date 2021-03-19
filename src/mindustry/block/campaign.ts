@@ -55,12 +55,6 @@ export class InterplanetaryAccelerator extends Block {
   }
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
-    await this.render({
-      tile,
-      canvas,
-      category,
-      layers: [this.name, this.name + '-team'],
-    })
     await this.render({ tile, canvas, category, layers: [this.name] })
     const image = await blockAsset(category, this.name + '-team')
     this.renderImage({
