@@ -12,6 +12,7 @@ import { SchematicIO } from './io'
 import { SchematicTile } from './tile'
 import { blockAsset } from '../mindustry/block/block'
 import { createCanvas } from 'canvas'
+import { mapTiles } from './renderer/util'
 
 interface SchematicProperties {
   /**
@@ -180,6 +181,7 @@ export class Schematic implements SchematicProperties {
     const background = createCanvas(size, size)
     const bcontext = background.getContext('2d')
     const floor = await blockAsset('environment', 'metal-floor')
+    const mappedTiles = mapTiles(this)
     for (let x = 0; x < size; x += 32) {
       for (let y = 0; y < size; y += 32) {
         bcontext.drawImage(floor, x, y)
@@ -195,8 +197,8 @@ export class Schematic implements SchematicProperties {
         continue
       await block.draw(tile, canvas)
     }
-    await drawConveyors(this, canvas)
-    await drawBridges(this, canvas)
+    await drawConveyors(this, canvas, mappedTiles)
+    await drawBridges(this, canvas, mappedTiles)
     bcontext.shadowColor = 'black'
     bcontext.shadowBlur = 20
     bcontext.shadowOffsetX = 0
