@@ -8,8 +8,8 @@ export function handlePlacement(tile: SchematicTile): { x: number; y: number } {
   y -= Math.floor(size / 2 - 0.1)
   return { x, y }
 }
-
-export function mapTiles(schematic: Schematic): SchematicTile[][] {
+export type SchematicTileMap = ((SchematicTile | undefined)[] | undefined)[]
+export function mapTiles(schematic: Schematic): SchematicTileMap {
   const { width } = schematic
   const result: SchematicTile[][] = []
   for (let x = 0; x < width; x++) {
