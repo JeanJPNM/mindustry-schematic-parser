@@ -9,10 +9,12 @@ import { blockAsset, translatePos } from '../../mindustry/block/block'
 import { BlockRotation } from './rotation'
 import { Point2 } from '../../arc'
 import { Schematic } from '../schematic'
+import { SchematicTileMap } from './util'
 
 export async function drawBridges(
   schematic: Schematic,
-  canvas: Canvas
+  canvas: Canvas,
+  mappedTiles: SchematicTileMap
 ): Promise<void> {
   for (const tile of schematic.tiles) {
     const { block } = tile
@@ -20,20 +22,11 @@ export async function drawBridges(
       continue
     const category = block instanceof ItemBridge ? 'distribution' : 'liquid'
     const config = tile.config as Point2
+    const targetPos = config.cpy().add(tile.x, tile.y)
+    const target = mappedTiles[targetPos.x]?.[targetPos.y]
     const degrees = [0, -90, 180, 90]
     const distance = Math.abs(config.x === 0 ? config.y : config.x)
-    if (
-      config.x < -12 ||
-      config.y < -12 ||
-      config.x > 12 ||
-      config.y > 12 ||
-      tile.x + config.x < 0 ||
-      tile.x + config.x > schematic.width ||
-      tile.y + config.y < 0 ||
-      tile.y + config.y > schematic.height ||
-      distance < 1
-    )
-      continue
+    if (target?.block.name !== block.name || distance < 1) continue
     const bridge = await blockAsset(category, block.name + '-bridge')
     const arrow = await blockAsset(category, block.name + '-arrow')
     const context = canvas.getContext('2d')

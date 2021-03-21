@@ -10,36 +10,8 @@ import { BlockRotation } from './rotation'
 import { Canvas } from 'canvas'
 import { Schematic } from '../schematic'
 import { SchematicTile } from '../tile'
+import { SchematicTileMap } from './util'
 
-function handlePlacement(tile: SchematicTile) {
-  let { x, y } = tile
-  const { size } = tile.block
-  x -= Math.floor(size / 2 - 0.1)
-  y -= Math.floor(size / 2 - 0.1)
-  return { x, y }
-}
-
-function mapTiles(schematic: Schematic): SchematicTile[][] {
-  const { width } = schematic
-  const result: SchematicTile[][] = []
-  for (let x = 0; x < width; x++) {
-    result[x] = []
-  }
-  for (const tile of schematic.tiles) {
-    const { size } = tile.block
-    const start = handlePlacement(tile)
-    const end = {
-      x: start.x + size,
-      y: start.y + size,
-    }
-    for (let { x } = start; x < end.x && x < schematic.width; x++) {
-      for (let { y } = start; y < end.y && y < schematic.height; y++) {
-        result[x][y] = tile
-      }
-    }
-  }
-  return result
-}
 type ConnectionMode =
   | 'conveyor'
   | 'armored-conveyor'
@@ -48,7 +20,7 @@ type ConnectionMode =
   | 'plastanium-conveyor'
 function getConnections(
   tile: SchematicTile,
-  mappedTiles: SchematicTile[][],
+  mappedTiles: SchematicTileMap,
   mode: ConnectionMode
 ) {
   const blockType = {
@@ -91,9 +63,10 @@ function getConnections(
           const key = k as keyof typeof tiles
           const t = tiles[key]
           result[key] ||=
-            (t?.block instanceof blockType &&
+            ((t?.block instanceof blockType &&
               t?.rotation === (BlockRotation[key] + 2) % 4) ||
-            (t?.block.output[content] && t !== target)
+              (t?.block.output[content] && t !== target)) ??
+            false
         }
       }
       break
@@ -134,9 +107,9 @@ function getConnections(
 }
 export async function drawConveyors(
   schematic: Schematic,
-  canvas: Canvas
+  canvas: Canvas,
+  mappedTiles: SchematicTileMap
 ): Promise<void> {
-  const mappedTiles = mapTiles(schematic)
   const context = canvas.getContext('2d')
   const degrees = [0, -90, 180, 90]
   for (const tile of schematic.tiles) {
