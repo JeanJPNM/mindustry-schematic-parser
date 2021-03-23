@@ -3,8 +3,7 @@ import { blockAsset } from '../../mindustry/block/block'
 
 export async function drawBackground(
   backgroundCanvas: Canvas,
-  size: number,
-  schematicCanvas: Canvas
+  size: number
 ): Promise<void> {
   const context = backgroundCanvas.getContext('2d')
   const floor = await blockAsset('environment', 'metal-floor')
@@ -17,9 +16,4 @@ export async function drawBackground(
   context.shadowBlur = 20
   context.shadowOffsetX = 0
   context.shadowOffsetY = 0
-  context.drawImage(
-    schematicCanvas,
-    (size - schematicCanvas.width) / 2,
-    (size - schematicCanvas.height) / 2
-  )
 }

@@ -55,6 +55,11 @@ export interface SchematicRenderingOptions {
   }
   /** The max size in pixels for this image */
   maxSize?: number
+  /**
+   * The size the preview must have.
+   * Using this option overshadows `maxSize`
+   */
+  size?: number
   /** Whether the image should have a background */
   background?: boolean
 }
@@ -210,7 +215,13 @@ export class Schematic implements SchematicProperties {
     options.phaseBridges.render ??= true
 
     const canvas = createCanvas(this.width * 32, this.height * 32)
-    const size = (Math.max(this.width, this.height) + 2) * 32
+    let size = Math.max(this.width, this.height) * 32
+    if (options.background) size += 64
+    if (options.size) {
+      ;({ size } = options)
+    } else if (options.maxSize) {
+      size = Math.min(options.maxSize, size)
+    }
     const mappedTiles = mapTiles(this)
     for (const tile of this.tiles) {
       const { block } = tile
@@ -226,11 +237,22 @@ export class Schematic implements SchematicProperties {
       await renderer.drawChained(this, canvas, mappedTiles, options)
     if (options.bridges.render)
       await renderer.drawBridges(this, canvas, mappedTiles, options)
+    const background = createCanvas(size, size)
     if (options.background) {
-      const background = createCanvas(size, size)
-      await renderer.drawBackground(background, size, canvas)
-      return background.toBuffer()
+      await renderer.drawBackground(background, size)
     }
-    return canvas.toBuffer()
+    const bcontext = background.getContext('2d')
+    const border = options.background ? 64 : 0
+    const scale = (size - border) / Math.max(canvas.height, canvas.width)
+    const width = canvas.width * scale,
+      height = canvas.height * scale
+    bcontext.drawImage(
+      canvas,
+      (size - width) / 2,
+      (size - height) / 2,
+      width,
+      height
+    )
+    return background.toBuffer()
   }
 }
