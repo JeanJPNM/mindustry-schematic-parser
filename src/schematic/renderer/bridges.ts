@@ -5,16 +5,17 @@ import {
   PhaseConveyor,
 } from '../../mindustry'
 import { Canvas, createCanvas } from 'canvas'
+import { Schematic, SchematicRenderingOptions } from '../schematic'
 import { blockAsset, translatePos } from '../../mindustry/block/block'
 import { BlockRotation } from './rotation'
 import { Point2 } from '../../arc'
-import { Schematic } from '../schematic'
 import { SchematicTileMap } from './util'
 
 export async function drawBridges(
   schematic: Schematic,
   canvas: Canvas,
-  mappedTiles: SchematicTileMap
+  mappedTiles: SchematicTileMap,
+  options: SchematicRenderingOptions
 ): Promise<void> {
   for (const tile of schematic.tiles) {
     const { block } = tile
@@ -48,9 +49,11 @@ export async function drawBridges(
     }
     tcontext.drawImage(arrow, (tcanvas.width - arrow.width) / 2, 0)
     context.save()
-    if (!(block instanceof PhaseConveyor || block instanceof PhaseConduit)) {
-      context.globalAlpha = 0.7
-    }
+    const opacity =
+      block instanceof PhaseConduit || block instanceof PhaseConveyor
+        ? options.phaseBridges?.opacity
+        : options.bridges?.opacity
+    context.globalAlpha = opacity ?? 1
     context.translate(x + 16, y + 16)
     context.rotate((degrees[rotation] * Math.PI) / 180)
     context.translate(offset.x, offset.y)
