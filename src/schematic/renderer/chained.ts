@@ -5,10 +5,10 @@ import {
   PlastaniumConveyor,
   PlatedConduit,
 } from '../../mindustry'
+import { Schematic, SchematicRenderingOptions } from '../schematic'
 import { blockAsset, translatePos } from '../../mindustry/block/block'
 import { BlockRotation } from './rotation'
 import { Canvas } from 'canvas'
-import { Schematic } from '../schematic'
 import { SchematicTile } from '../tile'
 import { SchematicTileMap } from './util'
 
@@ -108,13 +108,26 @@ function getConnections(
 export async function drawChained(
   schematic: Schematic,
   canvas: Canvas,
-  mappedTiles: SchematicTileMap
+  mappedTiles: SchematicTileMap,
+  options: SchematicRenderingOptions
 ): Promise<void> {
   const context = canvas.getContext('2d')
   const degrees = [0, -90, 180, 90]
+
+  const allowed = {
+    conveyor: options.conveyors?.render,
+    'titanium-conveyor': options.conveyors?.render,
+    'plastanium-conveyor': options.conveyors?.render,
+    'armored-conveyor': options.conveyors?.render,
+    conduit: options.conduits?.render,
+    'pulse-conduit': options.conduits?.render,
+    'plated-conduit': options.conduits?.render,
+  }
   for (const tile of schematic.tiles) {
     const { block } = tile
     const { x, y } = translatePos(tile, canvas)
+    if (!(block.name in allowed && allowed[block.name as keyof typeof allowed]))
+      continue
     if (block instanceof PlastaniumConveyor) {
       const base = await blockAsset('distribution/conveyors', block.name + '-0')
       const edge = await blockAsset(

@@ -220,7 +220,8 @@ export class Schematic implements SchematicProperties {
         continue
       await block.draw(tile, canvas)
     }
-    await renderer.drawChained(this, canvas, mappedTiles)
+    if (options.conveyors.render || options.conduits.render)
+      await renderer.drawChained(this, canvas, mappedTiles, options)
     await renderer.drawBridges(this, canvas, mappedTiles)
     if (options.background) {
       const background = createCanvas(size, size)
