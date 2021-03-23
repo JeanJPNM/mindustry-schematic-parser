@@ -1,3 +1,4 @@
+import * as renderer from './renderer'
 import {
   Conduit,
   Conveyor,
@@ -6,11 +7,9 @@ import {
   PlastaniumConveyor,
   PowerGenerator,
 } from '../mindustry'
-import { drawBridges, drawConveyors } from './renderer'
 import { MindustryVersion } from './version'
 import { SchematicIO } from './io'
 import { SchematicTile } from './tile'
-import { blockAsset } from '../mindustry/block/block'
 import { createCanvas } from 'canvas'
 import { mapTiles } from './renderer/util'
 
@@ -35,7 +34,30 @@ interface SchematicProperties {
   /** The version of mindustry that encoded this schematic */
   version?: MindustryVersion
 }
-
+interface SchematicRenderingOptions {
+  /** Options for rendering coveyors */
+  conveyors?: {
+    render: boolean
+  }
+  /** Options for rendering conduits */
+  conduits?: {
+    render: boolean
+  }
+  /** Options for rendering normal bridges */
+  bridges?: {
+    render: boolean
+    opacity: number
+  }
+  /** Options for rendering phase bridges */
+  phaseBridges?: {
+    render: boolean
+    opacity: number
+  }
+  /** The max size in pixels for this image */
+  maxSize?: number
+  /** Whether the image should have a background */
+  background?: boolean
+}
 /**
  * A simple representation for a mindustry schematic
  */
@@ -175,7 +197,16 @@ export class Schematic implements SchematicProperties {
   /**
    * Creates an image that represents this schematic's preview
    */
-  async toImageBuffer(): Promise<Buffer> {
+  async toImageBuffer(
+    options: SchematicRenderingOptions = {}
+  ): Promise<Buffer> {
+    // default options
+    options.background ??= true
+    options.bridges ??= { opacity: 0.7, render: true }
+    options.conduits ??= { render: true }
+    options.conveyors ??= { render: true }
+    options.phaseBridges ??= { opacity: 1, render: true }
+
     const canvas = createCanvas(this.width * 32, this.height * 32)
     const size = (Math.max(this.width, this.height) + 2) * 32
     const mappedTiles = mapTiles(this)
