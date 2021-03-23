@@ -13,7 +13,7 @@ import { SchematicTile } from './tile'
 import { createCanvas } from 'canvas'
 import { mapTiles } from './renderer/util'
 
-interface SchematicProperties {
+export interface SchematicProperties {
   /**
    * The tiles that compose this schematic
    */
@@ -34,7 +34,7 @@ interface SchematicProperties {
   /** The version of mindustry that encoded this schematic */
   version?: MindustryVersion
 }
-interface SchematicRenderingOptions {
+export interface SchematicRenderingOptions {
   /** Options for rendering coveyors */
   conveyors?: {
     render: boolean
