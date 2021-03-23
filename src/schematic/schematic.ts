@@ -178,15 +178,7 @@ export class Schematic implements SchematicProperties {
   async toImageBuffer(): Promise<Buffer> {
     const canvas = createCanvas(this.width * 32, this.height * 32)
     const size = (Math.max(this.width, this.height) + 2) * 32
-    const background = createCanvas(size, size)
-    const bcontext = background.getContext('2d')
-    const floor = await blockAsset('environment', 'metal-floor')
     const mappedTiles = mapTiles(this)
-    for (let x = 0; x < size; x += 32) {
-      for (let y = 0; y < size; y += 32) {
-        bcontext.drawImage(floor, x, y)
-      }
-    }
     for (const tile of this.tiles) {
       const { block } = tile
       if (
@@ -197,17 +189,10 @@ export class Schematic implements SchematicProperties {
         continue
       await block.draw(tile, canvas)
     }
-    await drawConveyors(this, canvas, mappedTiles)
-    await drawBridges(this, canvas, mappedTiles)
-    bcontext.shadowColor = 'black'
-    bcontext.shadowBlur = 20
-    bcontext.shadowOffsetX = 0
-    bcontext.shadowOffsetY = 0
-    bcontext.drawImage(
-      canvas,
-      (size - canvas.width) / 2,
-      (size - canvas.height) / 2
-    )
+    await renderer.drawConveyors(this, canvas, mappedTiles)
+    await renderer.drawBridges(this, canvas, mappedTiles)
+    const background = createCanvas(size, size)
+    await renderer.drawBackground(background, size, canvas)
     return background.toBuffer()
   }
 }
