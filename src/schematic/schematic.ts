@@ -1,3 +1,4 @@
+import * as renderer from './renderer'
 import {
   Conduit,
   Conveyor,
@@ -6,15 +7,13 @@ import {
   PlastaniumConveyor,
   PowerGenerator,
 } from '../mindustry'
-import { drawBridges, drawConveyors } from './renderer'
 import { MindustryVersion } from './version'
 import { SchematicIO } from './io'
 import { SchematicTile } from './tile'
-import { blockAsset } from '../mindustry/block/block'
 import { createCanvas } from 'canvas'
 import { mapTiles } from './renderer/util'
 
-interface SchematicProperties {
+export interface SchematicProperties {
   /**
    * The tiles that compose this schematic
    */
@@ -35,7 +34,35 @@ interface SchematicProperties {
   /** The version of mindustry that encoded this schematic */
   version?: MindustryVersion
 }
-
+export interface SchematicRenderingOptions {
+  /** Options for rendering coveyors */
+  conveyors?: {
+    render: boolean
+  }
+  /** Options for rendering conduits */
+  conduits?: {
+    render: boolean
+  }
+  /** Options for rendering normal bridges */
+  bridges?: {
+    render?: boolean
+    opacity: number
+  }
+  /** Options for rendering phase bridges */
+  phaseBridges?: {
+    render?: boolean
+    opacity: number
+  }
+  /** The max size in pixels for this image */
+  maxSize?: number
+  /**
+   * The size the preview must have.
+   * Using this option overshadows `maxSize`
+   */
+  size?: number
+  /** Whether the image should have a background */
+  background?: boolean
+}
 /**
  * A simple representation for a mindustry schematic
  */
@@ -175,18 +202,27 @@ export class Schematic implements SchematicProperties {
   /**
    * Creates an image that represents this schematic's preview
    */
-  async toImageBuffer(): Promise<Buffer> {
+  async toImageBuffer(
+    options: SchematicRenderingOptions = {}
+  ): Promise<Buffer> {
+    // default options
+    options.background ??= true
+    options.bridges ??= { opacity: 0.7, render: true }
+    options.bridges.render ??= true
+    options.conduits ??= { render: true }
+    options.conveyors ??= { render: true }
+    options.phaseBridges ??= { opacity: 1, render: true }
+    options.phaseBridges.render ??= true
+
     const canvas = createCanvas(this.width * 32, this.height * 32)
-    const size = (Math.max(this.width, this.height) + 2) * 32
-    const background = createCanvas(size, size)
-    const bcontext = background.getContext('2d')
-    const floor = await blockAsset('environment', 'metal-floor')
-    const mappedTiles = mapTiles(this)
-    for (let x = 0; x < size; x += 32) {
-      for (let y = 0; y < size; y += 32) {
-        bcontext.drawImage(floor, x, y)
-      }
+    let size = Math.max(this.width, this.height) * 32
+    if (options.background) size += 64
+    if (options.size) {
+      ;({ size } = options)
+    } else if (options.maxSize) {
+      size = Math.min(options.maxSize, size)
     }
+    const mappedTiles = mapTiles(this)
     for (const tile of this.tiles) {
       const { block } = tile
       if (
@@ -197,16 +233,25 @@ export class Schematic implements SchematicProperties {
         continue
       await block.draw(tile, canvas)
     }
-    await drawConveyors(this, canvas, mappedTiles)
-    await drawBridges(this, canvas, mappedTiles)
-    bcontext.shadowColor = 'black'
-    bcontext.shadowBlur = 20
-    bcontext.shadowOffsetX = 0
-    bcontext.shadowOffsetY = 0
+    if (options.conveyors.render || options.conduits.render)
+      await renderer.drawChained(this, canvas, mappedTiles, options)
+    if (options.bridges.render)
+      await renderer.drawBridges(this, canvas, mappedTiles, options)
+    const background = createCanvas(size, size)
+    if (options.background) {
+      await renderer.drawBackground(background, size)
+    }
+    const bcontext = background.getContext('2d')
+    const border = options.background ? 64 : 0
+    const scale = (size - border) / Math.max(canvas.height, canvas.width)
+    const width = canvas.width * scale,
+      height = canvas.height * scale
     bcontext.drawImage(
       canvas,
-      (size - canvas.width) / 2,
-      (size - canvas.height) / 2
+      (size - width) / 2,
+      (size - height) / 2,
+      width,
+      height
     )
     return background.toBuffer()
   }
