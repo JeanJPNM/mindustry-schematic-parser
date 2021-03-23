@@ -45,12 +45,12 @@ export interface SchematicRenderingOptions {
   }
   /** Options for rendering normal bridges */
   bridges?: {
-    render: boolean
+    render?: boolean
     opacity: number
   }
   /** Options for rendering phase bridges */
   phaseBridges?: {
-    render: boolean
+    render?: boolean
     opacity: number
   }
   /** The max size in pixels for this image */
@@ -203,9 +203,11 @@ export class Schematic implements SchematicProperties {
     // default options
     options.background ??= true
     options.bridges ??= { opacity: 0.7, render: true }
+    options.bridges.render ??= true
     options.conduits ??= { render: true }
     options.conveyors ??= { render: true }
     options.phaseBridges ??= { opacity: 1, render: true }
+    options.phaseBridges.render ??= true
 
     const canvas = createCanvas(this.width * 32, this.height * 32)
     const size = (Math.max(this.width, this.height) + 2) * 32
