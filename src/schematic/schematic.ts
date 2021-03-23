@@ -222,8 +222,11 @@ export class Schematic implements SchematicProperties {
     }
     await renderer.drawConveyors(this, canvas, mappedTiles)
     await renderer.drawBridges(this, canvas, mappedTiles)
-    const background = createCanvas(size, size)
-    await renderer.drawBackground(background, size, canvas)
-    return background.toBuffer()
+    if (options.background) {
+      const background = createCanvas(size, size)
+      await renderer.drawBackground(background, size, canvas)
+      return background.toBuffer()
+    }
+    return canvas.toBuffer()
   }
 }
