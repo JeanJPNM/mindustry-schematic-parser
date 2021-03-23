@@ -1,4 +1,4 @@
 export * from './bridges'
-export * from './conveyors'
+export * from './chained'
 export * from './util'
 export * from './background'

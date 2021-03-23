@@ -105,7 +105,7 @@ function getConnections(
   }
   return result
 }
-export async function drawConveyors(
+export async function drawChained(
   schematic: Schematic,
   canvas: Canvas,
   mappedTiles: SchematicTileMap
