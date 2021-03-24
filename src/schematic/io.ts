@@ -150,30 +150,28 @@ export abstract class SchematicIO {
       // )
       // original code:
       // return content.getByID(ContentType.all[read.b()], read.s());
-      case 6:
-        return (() => {
-          const length = cData.getInt16()
-          const arr = []
-          for (let i = 0; i < length; i++) {
-            arr.push(cData.getInt32())
-          }
-          return arr
-        })()
+      case 6: {
+        const length = cData.getInt16()
+        const arr = []
+        for (let i = 0; i < length; i++) {
+          arr.push(cData.getInt32())
+        }
+        return arr
+      }
 
       // original code
       // short length = read.s(); IntSeq arr = new IntSeq(); for (int i = 0; i < length; i++) arr.add(read.i()); return arr;
       case 7:
         return new Point2(cData.getInt32(), cData.getInt32())
-      case 8:
-        return (() => {
-          const len = cData.getInt8()
-          const out = []
-          for (let i = 0; i < len; i++) {
-            out.push(Point2.unpack(cData.getInt32()))
-          }
-          // byte len = read.b(); Point2[] out = new Point2[len]; for (int i = 0; i < len; i++) out[i] = Point2.unpack(read.i());
-          return out
-        })()
+      case 8: {
+        const len = cData.getInt8()
+        const out = []
+        for (let i = 0; i < len; i++) {
+          out.push(Point2.unpack(cData.getInt32()))
+        }
+        // byte len = read.b(); Point2[] out = new Point2[len]; for (int i = 0; i < len; i++) out[i] = Point2.unpack(read.i());
+        return out
+      }
 
       // TODO: somehow implement java code bellow
       case 9:
@@ -196,13 +194,12 @@ export abstract class SchematicIO {
         cData.getInt16()
         return
       // return LAccess.all[read.s()];
-      case 14:
-        return (() => {
-          const blen = cData.getInt32()
-          const bytes = []
-          for (let i = 0; i < blen; i++) bytes.push(cData.getInt8())
-          return bytes
-        })()
+      case 14: {
+        const blen = cData.getInt32()
+        const bytes = []
+        for (let i = 0; i < blen; i++) bytes.push(cData.getInt8())
+        return bytes
+      }
       // int blen = read.i(); byte[] bytes = new byte[blen]; read.b(bytes); return bytes;
       case 15:
         return UnitCommand[cData.getInt8()]
