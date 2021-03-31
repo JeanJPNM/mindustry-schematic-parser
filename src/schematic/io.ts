@@ -246,11 +246,14 @@ export abstract class SchematicIO {
   }
 
   /**
-   * Parses the text and returns a schematic
-   *  @param base64 The base64 code of the schematic
+   * Parses the data and returns a schematic
+   *  @param encoded The encoded schematic data
    */
-  static decode(base64: string): Schematic {
-    const decoded = Buffer.from(base64.trim(), 'base64')
+  static decode(encoded: string | Buffer): Schematic {
+    const decoded =
+      typeof encoded === 'string'
+        ? Buffer.from(encoded.trim(), 'base64')
+        : encoded
     const arr = new Uint8Array(decoded)
     const data = new StreamedDataReader(arr.buffer)
     if (!this.isValid(data, true)) {
@@ -262,6 +265,8 @@ export abstract class SchematicIO {
     const tags = this.tags(cData)
     const blocks = this.blocks(cData)
     const tiles = this.tiles(cData, blocks, version)
+    const base64 =
+      typeof encoded === 'string' ? encoded : encoded.toString('base64')
     return new Schematic({
       height,
       tags,

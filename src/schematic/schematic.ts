@@ -96,8 +96,8 @@ export class Schematic implements SchematicProperties {
 
   version: MindustryVersion
 
-  static decode(base64: string): Schematic {
-    return SchematicIO.decode(base64)
+  static decode(data: string | Buffer): Schematic {
+    return SchematicIO.decode(data)
   }
 
   static encode(schematic: Schematic): string {
