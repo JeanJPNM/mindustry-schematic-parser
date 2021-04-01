@@ -1,8 +1,8 @@
-import { Block, blockAsset } from './block'
 import { Canvas, createCanvas } from 'canvas'
+import { blockAsset, tintImage } from '../../util'
+import { Block } from './block'
 import { Item } from '../item'
 import { SchematicTile } from '../../schematic'
-import { tintImage } from '../../util'
 const category = 'distribution'
 
 abstract class TransportBlock extends Block {

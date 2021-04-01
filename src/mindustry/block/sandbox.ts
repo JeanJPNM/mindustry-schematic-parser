@@ -1,9 +1,9 @@
-import { Block, blockAsset } from './block'
+import { blockAsset, tintImage } from '../../util'
+import { Block } from './block'
 import { Canvas } from 'canvas'
 import { Item } from '../item'
 import { Liquid } from '../liquid'
 import { SchematicTile } from '../../schematic'
-import { tintImage } from '../../util'
 
 const category = 'sandbox'
 abstract class SandBoxBlock extends Block {
@@ -90,7 +90,7 @@ export class LiquidVoid extends SandBoxBlock {
     })
   }
 }
-export class LightBlock extends SandBoxBlock {}
+export abstract class LightBlock extends SandBoxBlock {}
 export class Illuminator extends LightBlock {
   constructor() {
     super({

@@ -1,6 +1,7 @@
-import { Block, blockAsset } from './block'
 import { Canvas, createCanvas } from 'canvas'
+import { Block } from './block'
 import { SchematicTile } from '../../schematic'
+import { blockAsset } from '../../util'
 
 const category = 'turrets'
 abstract class Turret extends Block {

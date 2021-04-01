@@ -1,7 +1,7 @@
-import { Block, blockAsset } from './block'
+import { blockAsset, tintImage } from '../../util'
+import { Block } from './block'
 import { Canvas } from 'canvas'
 import { SchematicTile } from '../..'
-import { tintImage } from '../../util'
 const category = 'campaign'
 abstract class Pad extends Block {
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {

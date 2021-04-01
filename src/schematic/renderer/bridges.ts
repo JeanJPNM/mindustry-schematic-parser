@@ -1,16 +1,12 @@
-import {
-  BridgeConduit,
-  ItemBridge,
-  PhaseConduit,
-  PhaseConveyor,
-} from '../../mindustry'
 import { Canvas, Image, createCanvas } from 'canvas'
 import { Schematic, SchematicRenderingOptions } from '../schematic'
-import { blockAsset, translatePos } from '../../mindustry/block/block'
+import { blockAsset, translatePos } from '../../util'
 import { BlockRotation } from './rotation'
+import { Blocks } from '../../mindustry'
 import { Point2 } from '../../arc'
 import { SchematicTileMap } from './util'
 
+const { ItemBridge, BridgeConduit, PhaseConduit, PhaseConveyor } = Blocks
 export async function drawBridges(
   schematic: Schematic,
   canvas: Canvas,

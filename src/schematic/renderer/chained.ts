@@ -1,16 +1,18 @@
-import {
+import { Schematic, SchematicRenderingOptions } from '../schematic'
+import { blockAsset, translatePos } from '../../util'
+import { BlockRotation } from './rotation'
+import { Blocks } from '../../mindustry'
+import { Canvas } from 'canvas'
+import { SchematicTile } from '../tile'
+import { SchematicTileMap } from './util'
+
+const {
   ArmoredConveyor,
   Conduit,
   Conveyor,
   PlastaniumConveyor,
   PlatedConduit,
-} from '../../mindustry'
-import { Schematic, SchematicRenderingOptions } from '../schematic'
-import { blockAsset, translatePos } from '../../mindustry/block/block'
-import { BlockRotation } from './rotation'
-import { Canvas } from 'canvas'
-import { SchematicTile } from '../tile'
-import { SchematicTileMap } from './util'
+} = Blocks
 
 type ConnectionMode =
   | 'conveyor'
