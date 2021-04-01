@@ -1,18 +1,12 @@
 import * as renderer from './renderer'
-import {
-  Conduit,
-  Conveyor,
-  ItemCost,
-  ItemName,
-  PlastaniumConveyor,
-  PowerGenerator,
-} from '../mindustry'
+import { Blocks, ItemCost, ItemName } from '../mindustry'
 import { MindustryVersion } from './version'
 import { SchematicIO } from './io'
 import { SchematicTile } from './tile'
 import { createCanvas } from 'canvas'
 import { mapTiles } from './renderer/util'
 
+const { Conduit, Conveyor, PlastaniumConveyor, PowerGenerator } = Blocks
 export interface SchematicProperties {
   /**
    * The tiles that compose this schematic

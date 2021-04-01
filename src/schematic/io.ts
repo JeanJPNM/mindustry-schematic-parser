@@ -1,30 +1,27 @@
-import {
-  Block,
-  Blocks,
-  InvertedSorter,
-  ItemBridge,
-  ItemSource,
-  LightBlock,
-  LiquidSource,
-  MassDriver,
-  PhaseConveyor,
-  Sorter,
-  Unloader,
-} from '../mindustry/block'
-import { Liquid, UnitCommand } from '../mindustry'
+import { Block, Blocks, Liquid, UnitCommand } from '../mindustry'
 import {
   StreamedDataReader,
   StreamedDataWriter,
   StringParsingError,
 } from '../streamed_data'
-import { BlockfromCode } from '../mindustry/block/blocks'
-// import { Content } from './mindustry/ctype/content'
 import { Item } from '../mindustry/item'
 import Pako from 'pako'
 import { Point2 } from '../arc'
 import { Schematic } from './schematic'
 import { SchematicTile } from './tile'
 
+const {
+  Sorter,
+  InvertedSorter,
+  Unloader,
+  ItemSource,
+  LiquidSource,
+  MassDriver,
+  ItemBridge,
+  PhaseConveyor,
+  LightBlock,
+  AirBlock,
+} = Blocks
 export abstract class SchematicIO {
   static readonly header = 'msch'
 
@@ -71,7 +68,7 @@ export abstract class SchematicIO {
     const length = cData.getInt8()
     const blocks: Block[] = []
     for (let i = 0; i < length; i++) {
-      const block = BlockfromCode(cData.getString())
+      const block = Block.fromCode(cData.getString())
       blocks.push(block)
     }
     return blocks
@@ -224,17 +221,16 @@ export abstract class SchematicIO {
           ? this.mapConfig(block, cData.getInt32(), position)
           : this.readConfigObject(cData)
       const rotation = cData.getInt8()
-      if (block !== Blocks.air) {
-        tiles.push(
-          new SchematicTile(
-            block,
-            Point2.x(position),
-            Point2.y(position),
-            config,
-            rotation
-          )
+      if (block instanceof AirBlock) continue
+      tiles.push(
+        new SchematicTile(
+          block,
+          Point2.x(position),
+          Point2.y(position),
+          config,
+          rotation
         )
-      }
+      )
     }
     return tiles
   }

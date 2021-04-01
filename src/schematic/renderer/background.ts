@@ -1,5 +1,5 @@
 import { Canvas } from 'canvas'
-import { blockAsset } from '../../mindustry/block/block'
+import { blockAsset } from '../../util'
 
 export async function drawBackground(
   backgroundCanvas: Canvas,

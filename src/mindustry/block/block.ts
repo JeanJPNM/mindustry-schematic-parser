@@ -1,10 +1,10 @@
-import { Canvas, Image, loadImage } from 'canvas'
+import { Canvas, Image } from 'canvas'
+import { blockAsset, translatePos } from '../../util'
 import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
 import { UnlockableContent } from '../content'
 import path from 'path'
 import { sync as pkgDir } from 'pkg-dir'
-
 export type BlockOutput = {
   item?: boolean
   liquid?: boolean
@@ -38,6 +38,19 @@ export abstract class Block
     Object.assign(this, properties)
     // converts the consumption in ticks to seconds
     this.powerConsumption *= 60
+  }
+
+  /**
+   * @internal
+   */
+  static readonly codes = new Map<string, Block>()
+
+  static fromCode(code: string): Block {
+    const block = this.codes.get(code)
+    if (block) {
+      return block
+    }
+    throw new Error('the block is not registered not exist')
   }
 
   requirements!: ItemCost
@@ -85,27 +98,8 @@ export abstract class Block
    */
   abstract draw(tile: SchematicTile, canvas: Canvas): Promise<void>
 }
-export function translatePos(
-  tile: SchematicTile,
-  canvas: Canvas
-): { x: number; y: number } {
-  let { x, y } = tile
-  y++
-  const { size } = tile.block
 
-  // "fix" coordinates
-  x -= Math.floor(size / 2 - 0.1)
-  y += Math.floor(size / 2)
-
-  y *= 32
-  x *= 32
-  y = canvas.height - y
-  return { x, y }
-}
 export const blocksFolder = path.join(
   pkgDir(__dirname) as string,
   'assets/sprites/blocks'
 )
-export function blockAsset(category: string, name: string): Promise<Image> {
-  return loadImage(path.join(blocksFolder, category, name + '.png'))
-}

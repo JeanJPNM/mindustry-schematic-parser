@@ -1,4 +1,5 @@
-import { Block, blockAsset, translatePos } from './block'
+import { blockAsset, translatePos } from '../../util'
+import { Block } from './block'
 import { Canvas } from 'canvas'
 import { SchematicTile } from '../../schematic'
 
