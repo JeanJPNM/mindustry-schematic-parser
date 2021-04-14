@@ -37,10 +37,11 @@
     "typescript": "^4.2.3"
   },
   "files": [
-    "dist/",
     "src/",
     "!*.test.*",
-    "assets/"
+    "assets/",
+    "CHANGELOG.md",
+    "tsconfig.json"
   ],
   "repository": {
     "type": "git",
