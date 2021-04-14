@@ -13,7 +13,8 @@
     "moduleResolution": "Node",
     "declaration": true,
     "sourceMap": true,
-    "stripInternal": true
+    "stripInternal": true,
+    "downlevelIteration": true
   },
   "include": ["src/*"],
   "exclude": ["**/*.(spec|test).ts", "node_modules"]
