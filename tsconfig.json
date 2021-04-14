@@ -1,21 +1,21 @@
 {
   "compilerOptions": {
     "alwaysStrict": true,
-    "lib": ["ES2020", "DOM"],
-    "target": "ES5",
     "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "downlevelIteration": true,
     "esModuleInterop": true,
-    "outDir": "dist",
-    "isolatedModules": true,
     "importHelpers": true,
-    "strict": true,
+    "isolatedModules": true,
+    "lib": ["ES2020", "DOM"],
     "module": "CommonJS",
     "moduleResolution": "Node",
-    "declaration": true,
+    "outDir": "dist",
     "sourceMap": true,
+    "strict": true,
     "stripInternal": true,
-    "downlevelIteration": true
+    "target": "ES5"
   },
-  "include": ["src/*"],
-  "exclude": ["**/*.(spec|test).ts", "node_modules"]
+  "exclude": ["**/*.(spec|test).ts", "node_modules"],
+  "include": ["src/*"]
 }
