@@ -83,6 +83,16 @@ export class Wave extends Turret {
       size: 2,
     })
   }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await super.draw(tile, canvas)
+    await this.render({
+      canvas,
+      category,
+      layers: [this.name + '-top'],
+      tile,
+    })
+  }
 }
 export class Lancer extends Turret {
   constructor() {
@@ -144,6 +154,16 @@ export class Tsunami extends Turret {
       name: 'tsunami',
       requirements: { metaglass: 100, lead: 400, titanium: 250, thorium: 100 },
       size: 3,
+    })
+  }
+
+  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await super.draw(tile, canvas)
+    await this.render({
+      canvas,
+      category,
+      layers: [this.name + '-top'],
+      tile,
     })
   }
 }
