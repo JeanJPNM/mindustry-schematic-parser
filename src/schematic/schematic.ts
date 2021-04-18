@@ -5,8 +5,11 @@ import { SchematicIO } from './io'
 import { SchematicTile } from './tile'
 import { createCanvas } from 'canvas'
 import { mapTiles } from './renderer/util'
-
-const { Conduit, Conveyor, PlastaniumConveyor, PowerGenerator } = Blocks
+const {
+  distribution: { Conveyor, PlastaniumConveyor },
+  liquid: { Conduit },
+  power: { PowerGenerator },
+} = Blocks
 export interface SchematicProperties {
   /**
    * The tiles that compose this schematic

@@ -6,7 +6,10 @@ import { Blocks } from '../../mindustry'
 import { Point2 } from '../../arc'
 import { SchematicTileMap } from './util'
 
-const { ItemBridge, BridgeConduit, PhaseConduit, PhaseConveyor } = Blocks
+const {
+  distribution: { ItemBridge, PhaseConveyor },
+  liquid: { BridgeConduit, PhaseConduit },
+} = Blocks
 export async function drawBridges(
   schematic: Schematic,
   canvas: Canvas,

@@ -7,11 +7,8 @@ import { SchematicTile } from '../tile'
 import { SchematicTileMap } from './util'
 
 const {
-  ArmoredConveyor,
-  Conduit,
-  Conveyor,
-  PlastaniumConveyor,
-  PlatedConduit,
+  distribution: { ArmoredConveyor, Conveyor, PlastaniumConveyor },
+  liquid: { Conduit, PlatedConduit },
 } = Blocks
 
 type ConnectionMode =

@@ -11,16 +11,16 @@ import { Schematic } from './schematic'
 import { SchematicTile } from './tile'
 
 const {
-  Sorter,
-  InvertedSorter,
-  Unloader,
-  ItemSource,
-  LiquidSource,
-  MassDriver,
-  ItemBridge,
-  PhaseConveyor,
-  LightBlock,
-  AirBlock,
+  distribution: {
+    Sorter,
+    InvertedSorter,
+    MassDriver,
+    ItemBridge,
+    PhaseConveyor,
+  },
+  storage: { Unloader },
+  sandbox: { ItemSource, LiquidSource, LightBlock },
+  environment: { AirBlock },
 } = Blocks
 export abstract class SchematicIO {
   static readonly header = 'msch'
