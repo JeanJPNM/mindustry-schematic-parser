@@ -40,7 +40,7 @@ export class ItemSource extends SandBoxBlock {
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
-    const config = tile.config as Item
+    const config = tile.config as Item | null
     const imgName = config ? 'center' : 'cross'
     const image = await blockAsset(category, imgName)
     this.renderImage({
@@ -71,7 +71,7 @@ export class LiquidSource extends SandBoxBlock {
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
-    const config = tile.config as Liquid
+    const config = tile.config as Liquid | null
     const imgName = config ? 'center' : 'cross'
     const image = await blockAsset(category, imgName)
     this.renderImage({

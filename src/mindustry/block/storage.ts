@@ -83,7 +83,7 @@ export class Unloader extends Block {
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
-    const config = tile.config as Item
+    const config = tile.config as Item | null
     if (config) {
       const image = await blockAsset(category, this.name + '-center')
       this.renderImage({

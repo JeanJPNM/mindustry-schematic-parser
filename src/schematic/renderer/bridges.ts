@@ -21,7 +21,8 @@ export async function drawBridges(
     if (!(block instanceof ItemBridge || block instanceof BridgeConduit))
       continue
     const category = block instanceof ItemBridge ? 'distribution' : 'liquid'
-    const config = tile.config as Point2
+    const config = tile.config as Point2 | null
+    if (!config) continue
     const targetPos = config.cpy().add(tile.x, tile.y)
     const target = mappedTiles[targetPos.x]?.[targetPos.y]
     const degrees = [0, -90, 180, 90]
