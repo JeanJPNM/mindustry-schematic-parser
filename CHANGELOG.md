@@ -3,6 +3,36 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [3.0.0] - 2021-05-03
+### Added
+- Start and end of rendered bridges
+- Option to read a raw schematic buffer
+- Top details of water turrets
+- A `Block.fromCode` method to get a block by its id
+
+### Fixed
+- Error when rendering bridges with a `null` config
+### Changed
+- Blocks are now namespaced under their respective functions
+- Blocks are now exposed as classes instead of singletons
+- The `mindustry` namespace no longer contains the classes of blocks
+
+Example of use: 
+
+```typescript
+// old
+import { Conduit, BridgeConduit, Conveyor } from "mindustry-schematic-parser";
+
+// new
+import { Blocks } from "mindustry-schematic-parser"
+
+const {
+liquid: { Conduit, BridgeConduit },
+distribution: { Conveyor },
+} = Blocks
+
+```
 ## [2.1.0] - 2021-03-23
 ### Added
 - Added schematic rendering options
@@ -65,6 +95,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
   - First release
 
+[3.0.0]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v2.1.0...v3.0.0
 [2.0.1]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v1.2.2...v2.0.0
