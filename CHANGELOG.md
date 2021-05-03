@@ -3,7 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
+## [3.0.1] - 2021-05-03
+### Fixed
+- dist directory not included on package, causing it to fail
+### Fixed
+- Package contents not updated on previous version
 ## [3.0.0] - 2021-05-03
 ### Added
 - Start and end of rendered bridges
@@ -95,6 +99,8 @@ distribution: { Conveyor },
 ### Added
   - First release
 
+[3.0.2]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v3.0.1...v3.0.2
+[3.0.1]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v2.1.0...v3.0.0
 [2.0.1]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v2.0.0...v2.0.1
