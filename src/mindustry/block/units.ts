@@ -1,4 +1,4 @@
-import { blockAsset, translatePos } from '../../util'
+import { blockAsset, tintImage, translatePos } from '../../util'
 import { Block } from './block'
 import { Canvas } from 'canvas'
 import { SchematicTile } from '../../schematic'
@@ -75,7 +75,13 @@ export class CommandCenter extends Block {
       tile,
       canvas,
       category,
-      layers: [this.name, this.name + '-team'],
+      layers: [this.name],
+    })
+    const detail = await blockAsset(category, this.name + '-team')
+    this.renderImage({
+      canvas,
+      image: tintImage(detail, '#ffa600'),
+      tile,
     })
   }
 }
