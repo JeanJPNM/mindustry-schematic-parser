@@ -7,14 +7,14 @@
     "esModuleInterop": true,
     "importHelpers": true,
     "isolatedModules": true,
-    "lib": ["ES2020", "DOM"],
+    "lib": ["ES2020", "DOM.Iterable"],
     "module": "CommonJS",
     "moduleResolution": "Node",
     "outDir": "dist",
     "sourceMap": true,
     "strict": true,
     "stripInternal": true,
-    "target": "ES5"
+    "target": "ES2019"
   },
   "exclude": ["**/*.(spec|test).ts", "node_modules"],
   "include": ["src/*"]
