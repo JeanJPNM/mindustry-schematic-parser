@@ -5,16 +5,14 @@ import { SchematicTile } from '../../schematic'
 import { UnlockableContent } from '../content'
 import path from 'path'
 import { sync as pkgDir } from 'pkg-dir'
-export type BlockOutput = {
-  item?: boolean
-  liquid?: boolean
-}
+
 export interface BlockProperties {
   name: string
   requirements: ItemCost
   size: number
   powerConsumption?: number
-  output?: BlockOutput
+  outputsItems?: boolean
+  outputsLiquids?: boolean
 }
 export interface BlockRenderingOptions {
   tile: SchematicTile
@@ -59,10 +57,9 @@ export abstract class Block
 
   powerConsumption = 0
 
-  output = {
-    item: false,
-    liquid: false,
-  }
+  outputsLiquids = false
+
+  outputsItems = false
 
   protected renderImage({
     canvas,

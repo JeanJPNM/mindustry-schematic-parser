@@ -53,7 +53,7 @@ function getConnections(
         const mappedTile = mappedTiles[x]?.[y]
         const key = BlockRotation[rotation] as keyof typeof result
         result[key] ||= mappedTile?.block instanceof PlastaniumConveyor
-        const content = mode === 'conveyor' ? 'item' : 'liquid'
+        const content = mode === 'conveyor' ? 'outputsItems' : 'outputsLiquids'
         for (const k in tiles) {
           let { x, y } = tile
           const moves = [() => x++, () => y++, () => x--, () => y--]
@@ -64,7 +64,7 @@ function getConnections(
           result[key] ||=
             ((t?.block instanceof blockType &&
               t?.rotation === (BlockRotation[key] + 2) % 4) ||
-              (t?.block.output[content] && t !== target)) ??
+              (t?.block[content] && t !== target)) ??
             false
         }
       }
