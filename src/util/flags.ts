@@ -23,6 +23,14 @@ export class Flags<T extends number> {
     return (this.value & value) === value
   }
 
+  static has(target: number, value: number): boolean {
+    return (target & value) === value
+  }
+
+  static subtract(target: number, value: number): number {
+    return target & ~value
+  }
+
   valueOf(): number {
     return this.value
   }
