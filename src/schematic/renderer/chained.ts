@@ -1,5 +1,6 @@
 import { Schematic, SchematicRenderingOptions } from '../schematic'
 import { blockAsset, translatePos } from '../../util'
+import { BlockOutput } from '../../mindustry/block/block'
 import { BlockRotation } from './rotation'
 import { Blocks } from '../../mindustry'
 import { Canvas } from 'canvas'
@@ -17,6 +18,7 @@ type ConnectionMode =
   | 'conduit'
   | 'plated-conduit'
   | 'plastanium-conveyor'
+
 function getConnections(
   tile: SchematicTile,
   mappedTiles: SchematicTileMap,
@@ -46,29 +48,24 @@ function getConnections(
   }
   switch (mode) {
     case 'conveyor':
-    case 'conduit':
-      {
-        const { rotation } = tile
+    case 'conduit': {
+      const { rotation } = tile
 
-        const mappedTile = mappedTiles[x]?.[y]
-        const key = BlockRotation[rotation] as keyof typeof result
-        result[key] ||= mappedTile?.block instanceof PlastaniumConveyor
-        const content = mode === 'conveyor' ? 'outputsItems' : 'outputsLiquids'
-        for (const k in tiles) {
-          let { x, y } = tile
-          const moves = [() => x++, () => y++, () => x--, () => y--]
-          moves[rotation]()
-          const target = mappedTiles[x]?.[y]
-          const key = k as keyof typeof tiles
-          const t = tiles[key]
-          result[key] ||=
-            ((t?.block instanceof blockType &&
-              t?.rotation === (BlockRotation[key] + 2) % 4) ||
-              (t?.block[content] && t !== target)) ??
-            false
-        }
+      const key = BlockRotation[rotation] as keyof typeof result
+      result[key] ||= tile.block instanceof PlastaniumConveyor
+      const content =
+        mode === 'conveyor' ? BlockOutput.item : BlockOutput.liquid
+      for (const k in tiles) {
+        const key = k as keyof typeof tiles
+        const t = tiles[key]
+        result[key] ||=
+          ((t?.block instanceof blockType &&
+            t?.rotation === (BlockRotation[key] + 2) % 4) ||
+            (t?.block.output.has(content) && t !== tile)) ??
+          false
       }
       break
+    }
     case 'armored-conveyor':
     case 'plated-conduit':
     case 'plastanium-conveyor':
@@ -104,6 +101,7 @@ function getConnections(
   }
   return result
 }
+
 export async function drawChained(
   schematic: Schematic,
   canvas: Canvas,
@@ -121,6 +119,7 @@ export async function drawChained(
     conduit: options.conduits?.render,
     'pulse-conduit': options.conduits?.render,
     'plated-conduit': options.conduits?.render,
+    'payload-conveyor': options.conveyors?.render,
   }
   for (const tile of schematic.tiles) {
     const { block } = tile

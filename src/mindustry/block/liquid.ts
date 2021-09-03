@@ -1,12 +1,11 @@
-import { Block } from './block'
+import { Block, BlockOutput } from './block'
 import { Canvas } from 'canvas'
+import { Flags } from '../../util'
+import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
 const category = 'liquid'
-class Pump extends Block {
-  output = {
-    item: false,
-    liquid: true,
-  }
+abstract class Pump extends Block {
+  override output = new Flags(BlockOutput.liquid)
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
@@ -14,80 +13,65 @@ class Pump extends Block {
 }
 
 export class MechanicalPump extends Pump {
-  constructor() {
-    super({
-      name: 'mechanical-pump',
-      requirements: { copper: 15, metaglass: 10 },
-      size: 1,
-    })
-  }
+  name = 'mechanical-pump'
+
+  requirements = { copper: 15, metaglass: 10 }
+
+  size = 1
 }
 export class RotaryPump extends Pump {
-  constructor() {
-    super({
-      name: 'rotary-pump',
-      requirements: { copper: 70, metaglass: 50, silicon: 20, titanium: 35 },
-      size: 2,
-      powerConsumption: 0.3,
-    })
-  }
+  name = 'rotary-pump'
+
+  requirements = { copper: 70, metaglass: 50, silicon: 20, titanium: 35 }
+
+  size = 2
+
+  override powerConsumption = 0.3
 }
 export class ThermalPump extends Pump {
-  constructor() {
-    super({
-      name: 'thermal-pump',
-      requirements: {
-        copper: 80,
-        metaglass: 90,
-        silicon: 30,
-        titanium: 40,
-        thorium: 35,
-      },
-      size: 3,
-      powerConsumption: 1.3,
-    })
+  name = 'thermal-pump'
+
+  requirements = {
+    copper: 80,
+    metaglass: 90,
+    silicon: 30,
+    titanium: 40,
+    thorium: 35,
   }
+
+  size = 3
+
+  override powerConsumption = 1.3
 }
 export class Conduit extends Block {
-  constructor() {
-    super({
-      name: 'conduit',
-      requirements: { metaglass: 1 },
-      size: 1,
-    })
-  }
+  name = 'conduit'
+
+  requirements = { metaglass: 1 }
+
+  size = 1
 
   // this block cannot be rendered individually
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   async draw(): Promise<void> {}
 }
 export class PulseConduit extends Conduit {
-  constructor() {
-    super()
-    this.name = `pulse-${this.name}`
-    this.requirements = { titanium: 2, metaglass: 1 }
-  }
+  override name = 'pulse-conduit'
+
+  override requirements = { titanium: 2, metaglass: 1 }
 }
 export class PlatedConduit extends Conduit {
-  constructor() {
-    super()
-    this.name = `plated-${this.name}`
-    this.requirements = { thorium: 2, metaglass: 1, plastanium: 1 }
-  }
+  override name = 'plated-conduit'
+
+  override requirements = { thorium: 2, metaglass: 1, plastanium: 1 }
 }
 export class LiquidRouter extends Block {
-  constructor() {
-    super({
-      name: 'liquid-router',
-      requirements: { graphite: 4, metaglass: 2 },
-      size: 1,
-    })
-  }
+  name = 'liquid-router'
 
-  output = {
-    item: false,
-    liquid: true,
-  }
+  requirements: ItemCost = { graphite: 4, metaglass: 2 }
+
+  size = 1
+
+  override output = new Flags(BlockOutput.liquid)
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({
@@ -99,44 +83,33 @@ export class LiquidRouter extends Block {
   }
 }
 export class LiquidTank extends LiquidRouter {
-  constructor() {
-    super()
-    this.name = 'liquid-tank'
-    this.requirements = { titanium: 25, metaglass: 25 }
-    this.size = 3
-  }
+  override name = 'liquid-tank'
+
+  override requirements = { titanium: 25, metaglass: 25 }
+
+  override size = 3
 }
 export class LiquidJunction extends Block {
-  constructor() {
-    super({
-      name: 'liquid-junction',
-      requirements: { graphite: 2, metaglass: 2 },
-      size: 1,
-    })
-  }
+  name = 'liquid-junction'
 
-  output = {
-    item: false,
-    liquid: true,
-  }
+  requirements = { graphite: 2, metaglass: 2 }
+
+  size = 1
+
+  override output = new Flags(BlockOutput.liquid)
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
   }
 }
 export class BridgeConduit extends Block {
-  constructor() {
-    super({
-      name: 'bridge-conduit',
-      requirements: { graphite: 4, metaglass: 8 },
-      size: 1,
-    })
-  }
+  name = 'bridge-conduit'
 
-  output = {
-    item: false,
-    liquid: true,
-  }
+  requirements: ItemCost = { graphite: 4, metaglass: 8 }
+
+  size = 1
+
+  override output = new Flags(BlockOutput.liquid)
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
