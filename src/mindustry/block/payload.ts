@@ -1,6 +1,6 @@
 import { Block, BlockOutput } from './block'
 import { Canvas, createCanvas } from 'canvas'
-import { Flags, blockAsset, outlineImage } from '../../util'
+import { blockAsset, outlineImage } from '../../util'
 import { SchematicTile } from '../../schematic'
 
 const category = 'payload'
@@ -12,7 +12,7 @@ export class PayloadConveyor extends Block {
 
   size = 3
 
-  override output = new Flags(BlockOutput.payload)
+  override output = BlockOutput.payload
 
   override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     const size = this.size * 32
@@ -42,7 +42,7 @@ export class PayloadRouter extends Block {
 
   size = 3
 
-  override output = new Flags(BlockOutput.payload)
+  override output = BlockOutput.payload
 
   override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({
@@ -85,7 +85,7 @@ export class PayloadPropulsionTower extends Block {
 
   override powerConsumption = 6
 
-  override output = new Flags(BlockOutput.payload)
+  override output = BlockOutput.payload
 
   override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({

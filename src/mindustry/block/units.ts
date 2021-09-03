@@ -1,12 +1,6 @@
 import { Block, BlockOutput } from './block'
 import { Canvas, createCanvas } from 'canvas'
-import {
-  Flags,
-  blockAsset,
-  outlineImage,
-  tintImage,
-  translatePos,
-} from '../../util'
+import { blockAsset, outlineImage, tintImage, translatePos } from '../../util'
 import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
 
@@ -14,7 +8,7 @@ const category = 'units'
 const degrees = [0, -90, 180, 90]
 
 abstract class Factory extends Block {
-  override output = new Flags(BlockOutput.payload)
+  override output = BlockOutput.payload
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({
@@ -42,7 +36,7 @@ abstract class Factory extends Block {
   }
 }
 abstract class Reconstructor extends Block {
-  override output = new Flags(BlockOutput.payload)
+  override output = BlockOutput.payload
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({

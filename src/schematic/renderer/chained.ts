@@ -1,5 +1,5 @@
+import { Flags, blockAsset, translatePos } from '../../util'
 import { Schematic, SchematicRenderingOptions } from '../schematic'
-import { blockAsset, translatePos } from '../../util'
 import { BlockOutput } from '../../mindustry/block/block'
 import { BlockRotation } from './rotation'
 import { Blocks } from '../../mindustry'
@@ -61,7 +61,7 @@ function getConnections(
         result[key] ||=
           ((t?.block instanceof blockType &&
             t?.rotation === (BlockRotation[key] + 2) % 4) ||
-            (t?.block.output.has(content) && t !== tile)) ??
+            (t && Flags.has(t.block.output, content) && t !== tile)) ??
           false
       }
       break

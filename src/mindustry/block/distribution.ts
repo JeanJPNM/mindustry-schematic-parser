@@ -1,12 +1,12 @@
 import { Block, BlockOutput } from './block'
 import { Canvas, createCanvas } from 'canvas'
-import { Flags, blockAsset, outlineImage, tintImage } from '../../util'
 import { Item, ItemCost } from '../item'
+import { blockAsset, outlineImage, tintImage } from '../../util'
 import { SchematicTile } from '../../schematic'
 const category = 'distribution'
 
 abstract class TransportBlock extends Block {
-  override output = new Flags(BlockOutput.item)
+  override output = BlockOutput.item
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({
@@ -159,7 +159,7 @@ export class MassDriver extends TransportBlock {
 export class Duct extends TransportBlock {
   name = 'duct'
 
-  override output = new Flags()
+  override output = BlockOutput.none
 
   override requirements = {
     graphite: 5,

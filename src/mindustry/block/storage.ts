@@ -1,5 +1,5 @@
 import { Block, BlockOutput } from './block'
-import { Flags, blockAsset, tintImage } from '../../util'
+import { blockAsset, tintImage } from '../../util'
 import { Canvas } from 'canvas'
 import { Item } from '../item'
 import { SchematicTile } from '../../schematic'
@@ -65,7 +65,7 @@ export class Unloader extends Block {
 
   size = 1
 
-  override output = new Flags(BlockOutput.item)
+  override output = BlockOutput.item
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })

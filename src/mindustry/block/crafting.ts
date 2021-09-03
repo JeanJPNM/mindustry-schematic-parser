@@ -1,12 +1,11 @@
 import { Block, BlockOutput } from './block'
 import { Canvas } from 'canvas'
-import { Flags } from '../../util'
 import { ItemCost } from '../item/item_cost'
 import { SchematicTile } from '../../schematic'
 
 const category = 'crafting'
 abstract class GenericCrafter extends Block {
-  override output = new Flags(BlockOutput.item)
+  override output = BlockOutput.item
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({
@@ -122,7 +121,7 @@ export class CryofluidMixer extends GenericCrafter {
 
   override powerConsumption = 1.0
 
-  override output = new Flags(BlockOutput.liquid)
+  override output = BlockOutput.liquid
 
   override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({
@@ -160,7 +159,7 @@ export class Melter extends GenericCrafter {
 
   override powerConsumption = 1.0
 
-  override output = new Flags(BlockOutput.liquid)
+  override output = BlockOutput.liquid
 }
 export class Separator extends GenericCrafter {
   name = 'separator'
@@ -203,7 +202,7 @@ export class SporePress extends GenericCrafter {
 
   override powerConsumption = 0.7
 
-  override output = new Flags(BlockOutput.liquid)
+  override output = BlockOutput.liquid
 
   override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({
@@ -250,5 +249,5 @@ export class Incinerator extends GenericCrafter {
 
   override powerConsumption = 0.5
 
-  override output = new Flags()
+  override output = BlockOutput.none
 }

@@ -1,10 +1,9 @@
 import { Block, BlockOutput } from './block'
 import { Canvas } from 'canvas'
-import { Flags } from '../../util'
 import { SchematicTile } from '../../schematic'
 const category = 'production'
 abstract class Drill extends Block {
-  override output = new Flags(BlockOutput.item)
+  override output = BlockOutput.item
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({
@@ -56,7 +55,7 @@ export class WaterExtractor extends Drill {
 
   override powerConsumption = 1.5
 
-  override output = new Flags(BlockOutput.liquid)
+  override output = BlockOutput.liquid
 }
 export class Cultivator extends Block {
   name = 'cultivator'
