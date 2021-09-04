@@ -62,7 +62,7 @@ function getConnections(
         result[key] ||=
           (t.block instanceof blockType &&
             t.rotation === (TileRotation[key] + 2) % 4) ||
-          (t && Flags.has(t.block.output, content) && t !== tile)
+          (Flags.has(t.block.output, content) && t !== tile)
       }
       break
     }
@@ -166,7 +166,11 @@ export async function drawChained(
         context.drawImage(edge, 0, 0)
         context.restore()
       }
-    } else if (block instanceof Conveyor || block instanceof Conduit) {
+    } else if (
+      block instanceof Conveyor ||
+      block instanceof Conduit ||
+      block instanceof Duct
+    ) {
       let mode: ConnectionMode
       if (block instanceof ArmoredConveyor) {
         mode = 'armored-conveyor'
@@ -174,13 +178,19 @@ export async function drawChained(
         mode = 'conveyor'
       } else if (block instanceof PlatedConduit) {
         mode = 'plated-conduit'
+      } else if (block instanceof Duct) {
+        mode = 'duct'
       } else {
         mode = 'conduit'
       }
       const category =
-        block instanceof Conveyor ? 'distribution/conveyors' : 'liquid'
+        block instanceof Conveyor
+          ? 'distribution/conveyors'
+          : block instanceof Duct
+          ? 'distribution/ducts'
+          : 'liquid'
       const connections = getConnections(tile, mappedTiles, mode)
-      const rotation = tile.rotation as TileRotation
+      const { rotation } = tile
       type ckey = keyof typeof connections
       const right = TileRotation[rotation % 4] as ckey
       const top = TileRotation[(rotation + 1) % 4] as ckey
