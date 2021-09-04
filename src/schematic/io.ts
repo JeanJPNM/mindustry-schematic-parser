@@ -5,6 +5,7 @@ import {
   StringParsingError,
 } from '../streamed_data'
 import { Item } from '../mindustry/item'
+import { MindustryVersion } from './version'
 import Pako from 'pako'
 import { Point2 } from '../arc'
 import { Schematic } from './schematic'
@@ -269,7 +270,7 @@ export abstract class SchematicIO {
       tiles,
       width,
       base64,
-      version: version === 0 ? 'v5' : 'v6',
+      version: `v${version + 5}` as MindustryVersion,
     })
   }
 
