@@ -95,16 +95,16 @@ function getConnections(
     const { rotation } = tile
     let { x, y } = tile
     switch (rotation) {
-      case 0:
+      case TileRotation.right:
         x++
         break
-      case 1:
+      case TileRotation.top:
         y++
         break
-      case 2:
+      case TileRotation.left:
         x--
         break
-      case 3:
+      case TileRotation.bottom:
         y--
         break
     }
