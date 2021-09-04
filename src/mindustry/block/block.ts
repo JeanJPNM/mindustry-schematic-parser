@@ -1,5 +1,5 @@
 import { Canvas, Image } from 'canvas'
-import { Flags, blockAsset, translatePos } from '../../util'
+import { blockAsset, translatePos } from '../../util'
 import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
 import { UnlockableContent } from '../content'
