@@ -7,7 +7,7 @@ import { Canvas } from 'canvas'
 import { SchematicTileMap } from './util'
 
 const {
-  distribution: { ArmoredConveyor, Conveyor, PlastaniumConveyor },
+  distribution: { ArmoredConveyor, Conveyor, PlastaniumConveyor, Duct },
   liquid: { Conduit, PlatedConduit },
 } = Blocks
 
@@ -17,7 +17,7 @@ type ConnectionMode =
   | 'conduit'
   | 'plated-conduit'
   | 'plastanium-conveyor'
-
+  | 'duct'
 function getConnections(
   tile: SchematicTile,
   mappedTiles: SchematicTileMap,
@@ -29,6 +29,7 @@ function getConnections(
     conduit: Conduit,
     'plated-conduit': Conduit,
     'plastanium-conveyor': PlastaniumConveyor,
+    duct: Duct,
   }[mode]
   const result = {
     top: false,
@@ -57,11 +58,11 @@ function getConnections(
       for (const k in tiles) {
         const key = k as keyof typeof tiles
         const t = tiles[key]
+        if (!t) continue
         result[key] ||=
-          ((t?.block instanceof blockType &&
-            t?.rotation === (TileRotation[key] + 2) % 4) ||
-            (t && Flags.has(t.block.output, content) && t !== tile)) ??
-          false
+          (t.block instanceof blockType &&
+            t.rotation === (TileRotation[key] + 2) % 4) ||
+          (t && Flags.has(t.block.output, content) && t !== tile)
       }
       break
     }
@@ -71,9 +72,22 @@ function getConnections(
       for (const k in tiles) {
         const key = k as keyof typeof tiles
         const tile = tiles[key]
+        if (!tile) continue
         result[key] ||=
-          tile?.block instanceof blockType &&
-          tile?.rotation === (TileRotation[key] + 2) % 4
+          tile.block instanceof blockType &&
+          tile.rotation === (TileRotation[key] + 2) % 4
+      }
+      break
+    case 'duct':
+      for (const k in tiles) {
+        const key = k as keyof typeof tiles
+        const t = tiles[key]
+        if (!t) continue
+        result[key] ||=
+          (Flags.has(t.block.output, BlockOutput.item) &&
+            key === TileRotation[(tile.rotation + 2) % 4]) ||
+          (t.block instanceof blockType &&
+            t.rotation === (TileRotation[key] + 2) % 4)
       }
       break
   }
