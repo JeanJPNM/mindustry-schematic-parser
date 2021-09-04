@@ -1,4 +1,4 @@
-import { Block } from './block'
+import { Block, BlockOutput, BlockOutputDirection } from './block'
 import { Canvas } from 'canvas'
 import { SchematicTile } from '../../schematic'
 
@@ -9,32 +9,33 @@ abstract class ExperimentalBlock extends Block {
   }
 }
 export class BlockForge extends ExperimentalBlock {
-  constructor() {
-    super({
-      name: 'block-forge',
-      requirements: { thorium: 100 },
-      size: 3,
-      powerConsumption: 2.0,
-    })
-  }
+  name = 'block-forge'
+
+  requirements = { thorium: 100 }
+
+  size = 3
+
+  override powerConsumption = 2.0
 }
 export class BlockLoader extends ExperimentalBlock {
-  constructor() {
-    super({
-      name: 'block-loader',
-      requirements: { thorium: 100 },
-      size: 3,
-      powerConsumption: 2.0,
-    })
-  }
+  name = 'block-loader'
+
+  requirements = { thorium: 100 }
+
+  size = 3
+
+  override powerConsumption = 2.0
 }
 export class BlockUnloader extends ExperimentalBlock {
-  constructor() {
-    super({
-      name: 'block-unloader',
-      requirements: { thorium: 100 },
-      size: 3,
-      powerConsumption: 2.0,
-    })
-  }
+  name = 'block-unloader'
+
+  requirements = { thorium: 100 }
+
+  size = 3
+
+  override powerConsumption = 2.0
+
+  override output = BlockOutput.item
+
+  override outputDirection = BlockOutputDirection.all
 }

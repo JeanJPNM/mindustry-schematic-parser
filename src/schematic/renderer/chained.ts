@@ -1,13 +1,19 @@
+import {
+  Flags,
+  blockAsset,
+  drawRotated,
+  tileRotationToAngle,
+  translatePos,
+} from '../../util'
 import { Schematic, SchematicRenderingOptions } from '../schematic'
-import { blockAsset, translatePos } from '../../util'
-import { BlockRotation } from './rotation'
+import { SchematicTile, TileRotation } from '../tile'
+import { BlockOutput } from '../../mindustry/block/block'
 import { Blocks } from '../../mindustry'
 import { Canvas } from 'canvas'
-import { SchematicTile } from '../tile'
 import { SchematicTileMap } from './util'
 
 const {
-  distribution: { ArmoredConveyor, Conveyor, PlastaniumConveyor },
+  distribution: { ArmoredConveyor, Conveyor, PlastaniumConveyor, Duct },
   liquid: { Conduit, PlatedConduit },
 } = Blocks
 
@@ -17,6 +23,7 @@ type ConnectionMode =
   | 'conduit'
   | 'plated-conduit'
   | 'plastanium-conveyor'
+  | 'duct'
 function getConnections(
   tile: SchematicTile,
   mappedTiles: SchematicTileMap,
@@ -28,6 +35,7 @@ function getConnections(
     conduit: Conduit,
     'plated-conduit': Conduit,
     'plastanium-conveyor': PlastaniumConveyor,
+    duct: Duct,
   }[mode]
   const result = {
     top: false,
@@ -46,38 +54,46 @@ function getConnections(
   }
   switch (mode) {
     case 'conveyor':
-    case 'conduit':
-      {
-        const { rotation } = tile
+    case 'conduit': {
+      const { rotation } = tile
 
-        const mappedTile = mappedTiles[x]?.[y]
-        const key = BlockRotation[rotation] as keyof typeof result
-        result[key] ||= mappedTile?.block instanceof PlastaniumConveyor
-        const content = mode === 'conveyor' ? 'item' : 'liquid'
-        for (const k in tiles) {
-          let { x, y } = tile
-          const moves = [() => x++, () => y++, () => x--, () => y--]
-          moves[rotation]()
-          const target = mappedTiles[x]?.[y]
-          const key = k as keyof typeof tiles
-          const t = tiles[key]
-          result[key] ||=
-            ((t?.block instanceof blockType &&
-              t?.rotation === (BlockRotation[key] + 2) % 4) ||
-              (t?.block.output[content] && t !== target)) ??
-            false
-        }
+      const key = TileRotation[rotation] as keyof typeof result
+      result[key] ||= tile.block instanceof PlastaniumConveyor
+      const content =
+        mode === 'conveyor' ? BlockOutput.item : BlockOutput.liquid
+      for (const k in tiles) {
+        const key = k as keyof typeof tiles
+        const t = tiles[key]
+        if (!t) continue
+        result[key] ||=
+          (t.block instanceof blockType &&
+            t.rotation === (TileRotation[key] + 2) % 4) ||
+          (Flags.has(t.block.output, content) && t !== tile)
       }
       break
+    }
     case 'armored-conveyor':
     case 'plated-conduit':
     case 'plastanium-conveyor':
       for (const k in tiles) {
         const key = k as keyof typeof tiles
         const tile = tiles[key]
+        if (!tile) continue
         result[key] ||=
-          tile?.block instanceof blockType &&
-          tile?.rotation === (BlockRotation[key] + 2) % 4
+          tile.block instanceof blockType &&
+          tile.rotation === (TileRotation[key] + 2) % 4
+      }
+      break
+    case 'duct':
+      for (const k in tiles) {
+        const key = k as keyof typeof tiles
+        const t = tiles[key]
+        if (!t) continue
+        result[key] ||=
+          (Flags.has(t.block.output, BlockOutput.item) &&
+            key === TileRotation[(tile.rotation + 2) % 4]) ||
+          (t.block instanceof blockType &&
+            t.rotation === (TileRotation[key] + 2) % 4)
       }
       break
   }
@@ -85,25 +101,26 @@ function getConnections(
     const { rotation } = tile
     let { x, y } = tile
     switch (rotation) {
-      case 0:
+      case TileRotation.right:
         x++
         break
-      case 1:
+      case TileRotation.top:
         y++
         break
-      case 2:
+      case TileRotation.left:
         x--
         break
-      case 3:
+      case TileRotation.bottom:
         y--
         break
     }
     const mappedTile = mappedTiles[x]?.[y]
-    const key = BlockRotation[rotation] as keyof typeof result
+    const key = TileRotation[rotation] as keyof typeof result
     result[key] ||= mappedTile?.block instanceof PlastaniumConveyor
   }
   return result
 }
+
 export async function drawChained(
   schematic: Schematic,
   canvas: Canvas,
@@ -111,7 +128,6 @@ export async function drawChained(
   options: SchematicRenderingOptions
 ): Promise<void> {
   const context = canvas.getContext('2d')
-  const degrees = [0, -90, 180, 90]
 
   const allowed = {
     conveyor: options.conveyors?.render,
@@ -121,6 +137,7 @@ export async function drawChained(
     conduit: options.conduits?.render,
     'pulse-conduit': options.conduits?.render,
     'plated-conduit': options.conduits?.render,
+    'payload-conveyor': options.conveyors?.render,
   }
   for (const tile of schematic.tiles) {
     const { block } = tile
@@ -138,23 +155,31 @@ export async function drawChained(
         mappedTiles,
         'plastanium-conveyor'
       )
-      context.save()
-      context.translate(x + 16, y + 16)
-      context.rotate((degrees[tile.rotation % 4] * Math.PI) / 180)
-      context.translate(-16, -16)
-      context.drawImage(base, 0, 0)
-      context.restore()
+      drawRotated({
+        canvas,
+        image: base,
+        x,
+        y,
+        offset: 16,
+        angle: tileRotationToAngle(tile.rotation),
+      })
       for (const k in connections) {
         const key = k as keyof typeof connections
         if (connections[key]) continue
-        context.save()
-        context.translate(x + 16, y + 16)
-        context.rotate((degrees[BlockRotation[key] % 4] * Math.PI) / 180)
-        context.translate(-16, -16)
-        context.drawImage(edge, 0, 0)
-        context.restore()
+        drawRotated({
+          canvas,
+          image: edge,
+          x,
+          y,
+          offset: 16,
+          angle: tileRotationToAngle(TileRotation[key]),
+        })
       }
-    } else if (block instanceof Conveyor || block instanceof Conduit) {
+    } else if (
+      block instanceof Conveyor ||
+      block instanceof Conduit ||
+      block instanceof Duct
+    ) {
       let mode: ConnectionMode
       if (block instanceof ArmoredConveyor) {
         mode = 'armored-conveyor'
@@ -162,25 +187,31 @@ export async function drawChained(
         mode = 'conveyor'
       } else if (block instanceof PlatedConduit) {
         mode = 'plated-conduit'
+      } else if (block instanceof Duct) {
+        mode = 'duct'
       } else {
         mode = 'conduit'
       }
       const category =
-        block instanceof Conveyor ? 'distribution/conveyors' : 'liquid'
+        block instanceof Conveyor
+          ? 'distribution/conveyors'
+          : block instanceof Duct
+          ? 'distribution/ducts'
+          : 'liquid'
       const connections = getConnections(tile, mappedTiles, mode)
-      const rotation = tile.rotation as BlockRotation
+      const { rotation } = tile
       type ckey = keyof typeof connections
-      const right = BlockRotation[rotation % 4] as ckey
-      const top = BlockRotation[(rotation + 1) % 4] as ckey
-      const left = BlockRotation[(rotation + 2) % 4] as ckey
-      const bottom = BlockRotation[(rotation + 3) % 4] as ckey
+      const right = TileRotation[rotation % 4] as ckey
+      const top = TileRotation[(rotation + 1) % 4] as ckey
+      const left = TileRotation[(rotation + 2) % 4] as ckey
+      const bottom = TileRotation[(rotation + 3) % 4] as ckey
       let scaleX = 1,
         scaleY = 1
       const c = connections
       let activeConnections = 0
       for (const k in connections) {
         const key = k as keyof typeof connections
-        if (rotation === BlockRotation[key]) continue
+        if (rotation === TileRotation[key]) continue
         if (connections[key]) activeConnections++
       }
       let imgIndex = 0
@@ -190,13 +221,13 @@ export async function drawChained(
             imgIndex = 1
           } else if (c[bottom]) {
             if (
-              rotation === BlockRotation.bottom ||
-              rotation === BlockRotation.top
+              rotation === TileRotation.bottom ||
+              rotation === TileRotation.top
             )
               scaleX = -1
             else if (
-              rotation === BlockRotation.left ||
-              rotation === BlockRotation.right
+              rotation === TileRotation.left ||
+              rotation === TileRotation.right
             )
               scaleY = -1
             imgIndex = 1
@@ -210,13 +241,13 @@ export async function drawChained(
           } else if (c[left] && c[top]) {
             imgIndex = 2
             if (
-              rotation === BlockRotation.bottom ||
-              rotation === BlockRotation.top
+              rotation === TileRotation.bottom ||
+              rotation === TileRotation.top
             )
               scaleX = -1
             else if (
-              rotation === BlockRotation.right ||
-              rotation === BlockRotation.left
+              rotation === TileRotation.right ||
+              rotation === TileRotation.left
             )
               scaleY = -1
           } else if (c[right] && c[bottom]) {
@@ -238,7 +269,7 @@ export async function drawChained(
       context.save()
       context.translate(x + 16, y + 16)
       context.scale(scaleX, scaleY)
-      context.rotate((degrees[tile.rotation % 4] * Math.PI) / 180)
+      context.rotate(tileRotationToAngle(tile.rotation))
       context.translate(-16, -16)
       context.drawImage(image, 0, 0)
       context.restore()

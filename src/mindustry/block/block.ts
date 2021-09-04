@@ -5,17 +5,7 @@ import { SchematicTile } from '../../schematic'
 import { UnlockableContent } from '../content'
 import path from 'path'
 import { sync as pkgDir } from 'pkg-dir'
-export type BlockOutput = {
-  item?: boolean
-  liquid?: boolean
-}
-export interface BlockProperties {
-  name: string
-  requirements: ItemCost
-  size: number
-  powerConsumption?: number
-  output?: BlockOutput
-}
+
 export interface BlockRenderingOptions {
   tile: SchematicTile
   canvas: Canvas
@@ -27,17 +17,51 @@ export interface BlockImageRenderingOptions {
   canvas: Canvas
   image: Image | Canvas
 }
+
+/**
+ * Flagged enum with the different output types that a block can have
+ *
+ * Because this enum is flagged, it can hold more than one value at a time.
+ *
+ * You can use the `Flags` class to make value checking easier
+ *
+ * @example
+ *    // check if the value has both item and liquid
+ *    Flags.has(myValue, BlockOutput.item | BlockOutput.liquid)
+ */
+export enum BlockOutput {
+  none = 0,
+  item = 2 << 0,
+  liquid = 2 << 1,
+  payload = 2 << 2,
+  duct = 2 << 3,
+}
+export enum BlockOutputDirection {
+  none = 0,
+  front = 2 << 0,
+  back = 2 << 1,
+  left = 2 << 2,
+  right = 2 << 3,
+  all = front | back | left | right,
+}
 /**
  * A generic way to represent a block
  */
-export abstract class Block
-  extends UnlockableContent
-  implements BlockProperties {
-  constructor(properties: BlockProperties) {
-    super(properties.name)
-    Object.assign(this, properties)
-    // converts the consumption in ticks to seconds
-    this.powerConsumption *= 60
+export abstract class Block extends UnlockableContent {
+  abstract override readonly name: string
+
+  abstract requirements: ItemCost
+
+  abstract size: number
+
+  output = BlockOutput.none
+
+  outputDirection = BlockOutputDirection.none
+
+  powerConsumption = 0
+
+  get energyUsage(): number {
+    return this.powerConsumption * 60
   }
 
   /**
@@ -51,17 +75,6 @@ export abstract class Block
       return block
     }
     throw new Error('the block is not registered not exist')
-  }
-
-  requirements!: ItemCost
-
-  size!: number
-
-  powerConsumption = 0
-
-  output = {
-    item: false,
-    liquid: false,
   }
 
   protected renderImage({

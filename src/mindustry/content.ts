@@ -9,11 +9,9 @@ export abstract class Content {}
  * This class should not be instantiated
  */
 export abstract class MappableContent extends Content {
-  constructor(public name: string) {
-    super()
-  }
+  abstract name: string
 
-  toString(): string {
+  override toString(): string {
     return this.name
   }
 }

@@ -6,6 +6,7 @@ import * as environment from './environment'
 import * as experimental from './experimental'
 import * as liquid from './liquid'
 import * as logic from './logic'
+import * as payload from './payload'
 import * as power from './power'
 import * as production from './production'
 import * as sandbox from './sandbox'
@@ -36,6 +37,7 @@ registerBlocks(environment)
 registerBlocks(experimental)
 registerBlocks(liquid)
 registerBlocks(logic)
+registerBlocks(payload)
 registerBlocks({
   ...power,
   PowerGenerator: undefined,
@@ -58,6 +60,7 @@ export const Blocks = {
   experimental,
   liquid,
   logic,
+  payload,
   power,
   production,
   sandbox,

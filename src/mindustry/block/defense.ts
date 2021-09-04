@@ -1,5 +1,5 @@
-import { Block, BlockProperties } from './block'
 import { ItemCost, ItemName } from '../item'
+import { Block } from './block'
 import { Canvas } from 'canvas'
 import { SchematicTile } from '../../schematic'
 
@@ -23,252 +23,236 @@ abstract class DefenseBlock extends Block {
     })
   }
 }
-interface WallProperties extends BlockProperties {
-  name: string
-}
-export abstract class Wall extends DefenseBlock {
-  constructor(properties: WallProperties) {
-    const { requirements, size } = properties
-    super({
-      name: `${properties.name}-wall`,
-      requirements,
-      size,
-    })
-  }
-}
+export abstract class Wall extends DefenseBlock {}
 export class CopperWall extends Wall {
-  constructor() {
-    super({
-      name: 'copper',
-      requirements: {
-        copper: 6,
-      },
-      size: 1,
-    })
+  name = 'copper-wall'
+
+  requirements = {
+    copper: 6,
   }
+
+  size = 1
 }
 export class CopperWallLarge extends CopperWall {
+  override name = 'copper-wall-large'
+
+  override size = 2
+
   constructor() {
     super()
-    this.name += '-large'
-    this.size = 2
     multiplyRequirements(this.requirements)
   }
 }
 export class TitaniumWall extends Wall {
-  constructor() {
-    super({
-      name: 'titanium',
-      requirements: {
-        titanium: 6,
-      },
-      size: 1,
-    })
+  name = 'titanium-wall'
+
+  requirements = {
+    titanium: 6,
   }
+
+  size = 1
 }
 export class TitaniumWallLarge extends TitaniumWall {
+  override name = 'titanium-wall-large'
+
+  override size = 2
+
   constructor() {
     super()
-    this.name += '-large'
-    this.size = 2
     multiplyRequirements(this.requirements)
   }
 }
+
 export class PlastaniumWall extends Wall {
-  constructor() {
-    super({
-      name: 'plastanium',
-      requirements: {
-        plastanium: 5,
-        metaglass: 2,
-      },
-      size: 1,
-    })
+  name = 'plastanium-wall'
+
+  requirements = {
+    plastanium: 5,
+    metaglass: 2,
   }
+
+  size = 1
 }
 export class PlastaniumWallLarge extends PlastaniumWall {
+  override name = 'plastanium-wall-large'
+
+  override size = 2
+
   constructor() {
     super()
-    this.name += '-large'
-    this.size = 2
     multiplyRequirements(this.requirements)
   }
 }
 export class ThoriumWall extends Wall {
-  constructor() {
-    super({
-      name: 'thorium',
-      requirements: {
-        thorium: 6,
-      },
-      size: 1,
-    })
+  name = 'thorium-wall'
+
+  requirements = {
+    thorium: 6,
   }
+
+  size = 1
 }
 export class ThoriumWallLarge extends ThoriumWall {
+  override name = 'thorium-wall-large'
+
+  override size = 2
+
   constructor() {
     super()
-    this.name += '-large'
-    this.size = 2
     multiplyRequirements(this.requirements)
   }
 }
 export class PhaseWall extends Wall {
-  constructor() {
-    super({
-      name: 'phase',
-      requirements: {
-        'phase-fabric': 6,
-      },
-      size: 1,
-    })
+  name = 'phase-wall'
+
+  requirements = {
+    'phase-fabric': 6,
   }
+
+  size = 1
 }
 export class PhaseWallLarge extends PhaseWall {
+  override name = 'phase-wall-large'
+
+  override size = 2
+
   constructor() {
     super()
-    this.name += '-large'
-    this.size = 2
     multiplyRequirements(this.requirements)
   }
 }
 export class SurgeWall extends Wall {
-  constructor() {
-    super({
-      name: 'surge',
-      requirements: {
-        'surge-alloy': 6,
-      },
-      size: 1,
-    })
+  name = 'surge-wall'
+
+  requirements = {
+    'surge-alloy': 6,
   }
+
+  size = 1
 }
 export class SurgeWallLarge extends SurgeWall {
+  override name = 'surge-wall-large'
+
+  override size = 2
+
   constructor() {
     super()
-    this.name += '-large'
-    this.size = 2
     multiplyRequirements(this.requirements)
   }
 }
 export class Door extends DefenseBlock {
-  constructor() {
-    super({
-      name: 'door',
-      requirements: {
-        titanium: 6,
-        silicon: 4,
-      },
-      size: 1,
-    })
+  name = 'door'
+
+  requirements = {
+    titanium: 6,
+    silicon: 4,
   }
+
+  size = 1
 }
 export class DoorLarge extends Door {
+  override name = 'door-large'
+
+  override size = 2
+
   constructor() {
     super()
-    this.name += '-large'
-    this.size = 2
     multiplyRequirements(this.requirements)
   }
 }
 export class ScrapWall extends Wall {
-  constructor() {
-    super({
-      name: 'scrap',
-      requirements: {
-        scrap: 6,
-      },
-      size: 1,
-    })
-  }
+  name = 'scrap-wall'
+
+  requirements = { scrap: 6 }
+
+  size = 1
 }
 export class ScrapWallLarge extends ScrapWall {
+  override name = 'scrap-wall-large'
+
+  override size = 2
+
   constructor() {
     super()
-    this.name += '-large'
-    this.size = 2
     multiplyRequirements(this.requirements)
   }
 }
 export class ScrapWallHuge extends ScrapWall {
+  override name = 'scrap-wall-huge'
+
+  override size = 3
+
   constructor() {
     super()
-    this.name += '-huge'
-    this.size = 3
     multiplyRequirements(this.requirements, 9)
   }
 }
 export class ScrapWallGigantic extends ScrapWall {
+  override name = 'scrap-wall-gigantic'
+
+  override size = 4
+
   constructor() {
     super()
-    this.name += '-gigantic'
-    this.size = 4
     multiplyRequirements(this.requirements, 16)
   }
 }
 
 export class Mender extends DefenseBlock {
-  constructor() {
-    super({
-      name: 'mender',
-      requirements: { lead: 30, copper: 25 },
-      size: 1,
-      powerConsumption: 0.3,
-    })
-  }
+  name = 'mender'
+
+  requirements = { lead: 30, copper: 25 }
+
+  size = 1
+
+  override powerConsumption = 0.3
 }
 export class MendProjector extends DefenseBlock {
-  constructor() {
-    super({
-      name: 'mend-projector',
-      requirements: { lead: 100, titanium: 25, silicon: 40 },
-      size: 2,
-      powerConsumption: 1.5,
-    })
-  }
+  name = 'mend-projector'
+
+  requirements = { lead: 100, titanium: 25, silicon: 40 }
+
+  size = 2
+
+  override powerConsumption = 1.5
 }
 export class OverdriveProjector extends DefenseBlock {
-  constructor() {
-    super({
-      name: 'overdrive-projector',
-      requirements: { lead: 100, titanium: 75, silicon: 75, plastanium: 30 },
-      size: 2,
-      powerConsumption: 3.5,
-    })
-  }
+  name = 'overdrive-projector'
+
+  requirements = { lead: 100, titanium: 75, silicon: 75, plastanium: 30 }
+
+  size = 2
+
+  override powerConsumption = 3.5
 }
 export class OverdriveDome extends DefenseBlock {
-  constructor() {
-    super({
-      name: 'overdrive-dome',
-      requirements: {
-        lead: 200,
-        titanium: 130,
-        silicon: 130,
-        plastanium: 80,
-        'surge-alloy': 120,
-      },
-      size: 3,
-      powerConsumption: 10.0,
-    })
+  name = 'overdrive-dome'
+
+  requirements = {
+    lead: 200,
+    titanium: 130,
+    silicon: 130,
+    plastanium: 80,
+    'surge-alloy': 120,
   }
+
+  size = 3
+
+  override powerConsumption = 10.0
 }
 export class ForceProjector extends DefenseBlock {
-  constructor() {
-    super({
-      name: 'force-projector',
-      requirements: { lead: 100, titanium: 75, silicon: 125 },
-      size: 3,
-      powerConsumption: 4.0,
-    })
-  }
+  name = 'force-projector'
+
+  requirements = { lead: 100, titanium: 75, silicon: 125 }
+
+  size = 3
+
+  override powerConsumption = 4.0
 }
 export class ShockMine extends DefenseBlock {
-  constructor() {
-    super({
-      name: 'shock-mine',
-      requirements: { lead: 25, silicon: 12 },
-      size: 1,
-    })
-  }
+  name = 'shock-mine'
+
+  requirements = { lead: 25, silicon: 12 }
+
+  size = 1
 }

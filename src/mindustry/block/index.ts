@@ -1,2 +1,2 @@
-export { Block } from './block'
+export { Block, BlockOutput } from './block'
 export { Blocks } from './blocks'

@@ -1,5 +1,5 @@
+import { Block, BlockOutput, BlockOutputDirection } from './block'
 import { blockAsset, tintImage } from '../../util'
-import { Block } from './block'
 import { Canvas } from 'canvas'
 import { Item } from '../item'
 import { Liquid } from '../liquid'
@@ -12,33 +12,31 @@ abstract class SandBoxBlock extends Block {
   }
 }
 export class PowerSource extends SandBoxBlock {
-  constructor() {
-    super({
-      name: 'power-source',
-      requirements: {},
-      size: 1,
-    })
-  }
+  name = 'power-source'
+
+  requirements = {}
+
+  size = 1
 }
 export class PowerVoid extends SandBoxBlock {
-  constructor() {
-    super({
-      name: 'power-void',
-      requirements: {},
-      size: 1,
-    })
-  }
+  name = 'power-void'
+
+  requirements = {}
+
+  size = 1
 }
 export class ItemSource extends SandBoxBlock {
-  constructor() {
-    super({
-      name: 'item-source',
-      requirements: {},
-      size: 1,
-    })
-  }
+  name = 'item-source'
 
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  requirements = {}
+
+  size = 1
+
+  override output = BlockOutput.item
+
+  override outputDirection = BlockOutputDirection.all
+
+  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
     const config = tile.config as Item | null
     const imgName = config ? 'center' : 'cross'
@@ -51,25 +49,25 @@ export class ItemSource extends SandBoxBlock {
   }
 }
 export class ItemVoid extends SandBoxBlock {
-  constructor() {
-    super({
-      name: 'item-void',
-      requirements: {},
-      size: 1,
-    })
-  }
+  name = 'item-void'
+
+  requirements = {}
+
+  size = 1
 }
 
 export class LiquidSource extends SandBoxBlock {
-  constructor() {
-    super({
-      name: 'liquid-source',
-      requirements: {},
-      size: 1,
-    })
-  }
+  name = 'liquid-source'
 
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  requirements = {}
+
+  size = 1
+
+  override output = BlockOutput.liquid
+
+  override outputDirection = BlockOutputDirection.all
+
+  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
     const config = tile.config as Liquid | null
     const imgName = config ? 'center' : 'cross'
@@ -82,22 +80,55 @@ export class LiquidSource extends SandBoxBlock {
   }
 }
 export class LiquidVoid extends SandBoxBlock {
-  constructor() {
-    super({
-      name: 'liquid-void',
-      requirements: {},
-      size: 1,
-    })
-  }
+  name = 'liquid-void'
+
+  requirements = {}
+
+  size = 1
 }
 export abstract class LightBlock extends SandBoxBlock {}
 export class Illuminator extends LightBlock {
-  constructor() {
-    super({
-      name: 'illuminator',
-      requirements: { graphite: 12, silicon: 8 },
-      size: 1,
-      powerConsumption: 0.05,
+  name = 'illuminator'
+
+  requirements = { graphite: 12, silicon: 8 }
+
+  size = 1
+
+  override powerConsumption = 0.05
+}
+export class PayloadSource extends SandBoxBlock {
+  name = 'payload-source'
+
+  requirements = {}
+
+  size = 5
+
+  override output = BlockOutput.payload
+
+  override outputDirection = BlockOutputDirection.all
+
+  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: [this.name, `${this.name}-top`],
+    })
+  }
+}
+export class PayloadVoid extends SandBoxBlock {
+  name = 'payload-void'
+
+  requirements = {}
+
+  size = 5
+
+  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+    await this.render({
+      tile,
+      canvas,
+      category,
+      layers: [this.name, `${this.name}-top`],
     })
   }
 }
