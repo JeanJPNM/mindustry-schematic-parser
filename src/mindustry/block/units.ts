@@ -1,11 +1,15 @@
 import { Block, BlockOutput, BlockOutputDirection } from './block'
 import { Canvas, createCanvas } from 'canvas'
-import { blockAsset, outlineImage, tintImage, translatePos } from '../../util'
+import {
+  blockAsset,
+  drawRotatedTile,
+  outlineImage,
+  tintImage,
+} from '../../util'
 import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
 
 const category = 'units'
-const degrees = [0, -90, 180, 90]
 
 abstract class Factory extends Block {
   override output = BlockOutput.payload
@@ -19,16 +23,11 @@ abstract class Factory extends Block {
       category,
       layers: [this.name],
     })
-    const context = canvas.getContext('2d')
-    const { x, y } = translatePos(tile, canvas)
-    const out = await blockAsset(category, 'factory-out-' + this.size)
-    const offset = this.size * 16
-    context.save()
-    context.translate(x + offset, y + offset)
-    context.rotate((degrees[tile.rotation % 4] * Math.PI) / 180)
-    context.translate(-offset, -offset)
-    context.drawImage(out, 0, 0)
-    context.restore()
+    drawRotatedTile({
+      canvas,
+      image: await blockAsset(category, 'factory-out-' + this.size),
+      tile,
+    })
     await this.render({
       tile,
       canvas,
@@ -49,19 +48,20 @@ abstract class Reconstructor extends Block {
       category,
       layers: [this.name],
     })
-    const context = canvas.getContext('2d')
-    const { x, y } = translatePos(tile, canvas)
+
     const input = await blockAsset(category, 'factory-in-' + this.size)
     const output = await blockAsset(category, 'factory-out-' + this.size)
-    const offset = this.size * 16
-    const angle = degrees[tile.rotation % 4]
-    context.save()
-    context.translate(x + offset, y + offset)
-    context.rotate((angle * Math.PI) / 180)
-    context.translate(-offset, -offset)
-    context.drawImage(input, 0, 0)
-    context.drawImage(output, 0, 0)
-    context.restore()
+    drawRotatedTile({
+      canvas,
+      image: input,
+      tile,
+    })
+    drawRotatedTile({
+      canvas,
+      image: output,
+      tile,
+    })
+
     await this.render({
       tile,
       canvas,

@@ -1,4 +1,4 @@
-import { blockAsset, translatePos } from '../../util'
+import { blockAsset, drawRotatedTile } from '../../util'
 import { Block } from './block'
 import { Canvas } from 'canvas'
 import { SchematicTile } from '../../schematic'
@@ -54,21 +54,11 @@ export class Diode extends PowerBlock {
 
   override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await super.draw(tile, canvas)
-    const degrees = [0, -90, 180, 90]
-    const rotation = tile.rotation % 4
-    // avoid re rendering the arrow, because in this case its in the
-    // correct rotation
-    if (rotation === 2) return
-    const context = canvas.getContext('2d')
-    const { x, y } = translatePos(tile, canvas)
-    const arrow = await blockAsset(category, this.name + '-arrow')
-    const offset = this.size * 16
-    context.save()
-    context.translate(x + offset, y + offset)
-    context.rotate((degrees[rotation] * Math.PI) / 180)
-    context.translate(-offset, -offset)
-    context.drawImage(arrow, 0, 0)
-    context.restore()
+    drawRotatedTile({
+      canvas,
+      tile,
+      image: await blockAsset(category, this.name + '-arrow'),
+    })
   }
 }
 export class Battery extends PowerBlock {

@@ -1,6 +1,6 @@
 import { Block, BlockOutput, BlockOutputDirection } from './block'
 import { Canvas, createCanvas } from 'canvas'
-import { blockAsset, outlineImage } from '../../util'
+import { blockAsset, drawRotatedTile, outlineImage } from '../../util'
 import { SchematicTile } from '../../schematic'
 
 const category = 'payload'
@@ -17,23 +17,10 @@ export class PayloadConveyor extends Block {
   override outputDirection = BlockOutputDirection.all
 
   override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
-    const size = this.size * 32
-    const image = await blockAsset(category, this.name + '-icon')
-    const tcanvas = createCanvas(size, size)
-    const context = tcanvas.getContext('2d')
-    let { rotation } = tile
-    if (rotation % 2) {
-      rotation += 2
-    }
-    context.save()
-    context.translate(size / 2, size / 2)
-    context.rotate((rotation * Math.PI) / 2)
-    context.drawImage(image, -size / 2, -size / 2)
-    context.restore()
-    this.renderImage({
+    drawRotatedTile({
       canvas,
+      image: await blockAsset(category, this.name + '-icon'),
       tile,
-      image: tcanvas,
     })
   }
 }
@@ -55,23 +42,10 @@ export class PayloadRouter extends Block {
       category,
       layers: [this.name, this.name + '-over'],
     })
-    const size = this.size * 32
-    const image = await blockAsset(category, this.name + '-top')
-    const tcanvas = createCanvas(size, size)
-    const context = tcanvas.getContext('2d')
-    let { rotation } = tile
-    if (rotation % 2) {
-      rotation += 2
-    }
-    context.save()
-    context.translate(size / 2, size / 2)
-    context.rotate((rotation * Math.PI) / 2)
-    context.drawImage(image, -size / 2, -size / 2)
-    context.restore()
-    this.renderImage({
+    drawRotatedTile({
       canvas,
+      image: await blockAsset(category, this.name + '-top'),
       tile,
-      image: tcanvas,
     })
   }
 }

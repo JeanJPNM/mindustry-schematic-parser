@@ -1,4 +1,10 @@
-import { Flags, blockAsset, translatePos } from '../../util'
+import {
+  Flags,
+  blockAsset,
+  drawRotated,
+  tileRotationToAngle,
+  translatePos,
+} from '../../util'
 import { Schematic, SchematicRenderingOptions } from '../schematic'
 import { SchematicTile, TileRotation } from '../tile'
 import { BlockOutput } from '../../mindustry/block/block'
@@ -122,7 +128,6 @@ export async function drawChained(
   options: SchematicRenderingOptions
 ): Promise<void> {
   const context = canvas.getContext('2d')
-  const degrees = [0, -90, 180, 90]
 
   const allowed = {
     conveyor: options.conveyors?.render,
@@ -150,21 +155,18 @@ export async function drawChained(
         mappedTiles,
         'plastanium-conveyor'
       )
-      context.save()
-      context.translate(x + 16, y + 16)
-      context.rotate((degrees[tile.rotation % 4] * Math.PI) / 180)
-      context.translate(-16, -16)
-      context.drawImage(base, 0, 0)
-      context.restore()
+      drawRotated(canvas, base, x, y, 16, tileRotationToAngle(tile.rotation))
       for (const k in connections) {
         const key = k as keyof typeof connections
         if (connections[key]) continue
-        context.save()
-        context.translate(x + 16, y + 16)
-        context.rotate((degrees[TileRotation[key] % 4] * Math.PI) / 180)
-        context.translate(-16, -16)
-        context.drawImage(edge, 0, 0)
-        context.restore()
+        drawRotated(
+          canvas,
+          edge,
+          x,
+          y,
+          16,
+          tileRotationToAngle(TileRotation[key])
+        )
       }
     } else if (
       block instanceof Conveyor ||
@@ -260,7 +262,7 @@ export async function drawChained(
       context.save()
       context.translate(x + 16, y + 16)
       context.scale(scaleX, scaleY)
-      context.rotate((degrees[tile.rotation % 4] * Math.PI) / 180)
+      context.rotate(tileRotationToAngle(tile.rotation))
       context.translate(-16, -16)
       context.drawImage(image, 0, 0)
       context.restore()
