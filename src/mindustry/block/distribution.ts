@@ -198,7 +198,12 @@ export class DuctRouter extends TransportBlock {
       tile,
       canvas,
       category,
-      layers: [`ducts/${this.name}`, `ducts/${this.name}-top`],
+      layers: [`ducts/${this.name}`],
+    })
+    drawRotatedTile({
+      canvas,
+      tile,
+      image: await blockAsset(category, `ducts/${this.name}-top`),
     })
   }
 }
