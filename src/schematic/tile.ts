@@ -33,6 +33,12 @@ export class SchematicTile {
     /**
      * The rotation of this tile
      */
-    public rotation: number
+    public rotation: TileRotation
   ) {}
+}
+export enum TileRotation {
+  right,
+  top,
+  left,
+  bottom,
 }

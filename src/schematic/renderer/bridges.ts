@@ -1,10 +1,10 @@
 import { Canvas, Image, createCanvas } from 'canvas'
 import { Schematic, SchematicRenderingOptions } from '../schematic'
 import { blockAsset, translatePos } from '../../util'
-import { BlockRotation } from './rotation'
 import { Blocks } from '../../mindustry'
 import { Point2 } from '../../arc'
 import { SchematicTileMap } from './util'
+import { TileRotation } from '../tile'
 
 const {
   distribution: { ItemBridge, PhaseConveyor },
@@ -33,11 +33,11 @@ export async function drawBridges(
     const context = canvas.getContext('2d')
     const tcanvas = createCanvas((distance + 1) * 32, 32)
     const tcontext = tcanvas.getContext('2d')
-    let rotation: BlockRotation
+    let rotation: TileRotation
     if (config.x) {
-      rotation = config.x > 0 ? BlockRotation.right : BlockRotation.left
+      rotation = config.x > 0 ? TileRotation.right : TileRotation.left
     } else {
-      rotation = config.y > 0 ? BlockRotation.top : BlockRotation.bottom
+      rotation = config.y > 0 ? TileRotation.top : TileRotation.bottom
     }
 
     const end = await blockAsset(category, block.name + '-end')
