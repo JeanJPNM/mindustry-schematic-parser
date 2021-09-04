@@ -15,16 +15,13 @@ export function drawRotatedTile({
   tile,
   angle = tileRotationToAngle(tile.rotation),
 }: TileRotatedDrawOptions): void {
-  const context = canvas.getContext('2d')
-  const { x, y } = translatePos(tile, canvas)
-  const size = tile.block.size * 32
-  const offset = size / 2
-  context.save()
-  context.translate(x + offset, y + offset)
-  context.rotate(angle)
-  context.translate(-offset, -offset)
-  context.drawImage(image, 0, 0)
-  context.restore()
+  drawRotated({
+    canvas,
+    image,
+    ...translatePos(tile, canvas),
+    offset: tile.block.size * 16,
+    angle,
+  })
 }
 interface RotatedDrawOptions {
   canvas: Canvas
