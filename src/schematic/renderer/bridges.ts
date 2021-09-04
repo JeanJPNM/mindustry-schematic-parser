@@ -26,7 +26,12 @@ export async function drawBridges(
     const targetPos = config.cpy().add(tile.x, tile.y)
     const target = mappedTiles[targetPos.x]?.[targetPos.y]
     const degrees = [0, -90, 180, 90]
-    const distance = Math.abs(config.x === 0 ? config.y : config.x)
+    const category =
+      block instanceof ItemBridge
+        ? 'distribution'
+        : block instanceof DuctBridge
+        ? 'distribution/ducts'
+        : 'liquid'
     if (target?.block.name !== block.name) continue
     const bridge = await blockAsset(category, block.name + '-bridge')
     const arrow = await blockAsset(category, block.name + '-arrow')
