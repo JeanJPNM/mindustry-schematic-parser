@@ -1,4 +1,4 @@
-import { Block, BlockOutput } from './block'
+import { Block, BlockOutput, BlockOutputDirection } from './block'
 import { Canvas, createCanvas } from 'canvas'
 import { Item, ItemCost } from '../item'
 import { blockAsset, outlineImage, tintImage } from '../../util'
@@ -7,6 +7,8 @@ const category = 'distribution'
 
 abstract class TransportBlock extends Block {
   override output = BlockOutput.item
+
+  override outputDirection = BlockOutputDirection.all
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({
@@ -24,6 +26,8 @@ export class Conveyor extends TransportBlock {
 
   size = 1
 
+  override outputDirection = BlockOutputDirection.front
+
   // the rendering of this block cannot be done individually
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   override async draw(): Promise<void> {}
@@ -39,6 +43,9 @@ export class PlastaniumConveyor extends TransportBlock {
   requirements = { plastanium: 1, silicon: 1, graphite: 1 }
 
   size = 1
+
+  // only the end of a lane actually outputs something
+  override outputDirection = BlockOutputDirection.none
 
   // the rendering of this block cannot be done individually
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -159,7 +166,7 @@ export class MassDriver extends TransportBlock {
 export class Duct extends TransportBlock {
   name = 'duct'
 
-  override output = BlockOutput.none
+  override outputDirection = BlockOutputDirection.front
 
   override requirements = {
     graphite: 5,
@@ -199,6 +206,8 @@ export class DuctBridge extends TransportBlock {
   }
 
   size = 1
+
+  override outputDirection = BlockOutputDirection.front
 
   override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({

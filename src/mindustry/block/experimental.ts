@@ -1,4 +1,4 @@
-import { Block } from './block'
+import { Block, BlockOutput, BlockOutputDirection } from './block'
 import { Canvas } from 'canvas'
 import { SchematicTile } from '../../schematic'
 
@@ -34,4 +34,8 @@ export class BlockUnloader extends ExperimentalBlock {
   size = 3
 
   override powerConsumption = 2.0
+
+  override output = BlockOutput.item
+
+  override outputDirection = BlockOutputDirection.all
 }

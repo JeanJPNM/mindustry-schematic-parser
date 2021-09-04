@@ -36,6 +36,14 @@ export enum BlockOutput {
   payload = 2 << 2,
   duct = 2 << 3,
 }
+export enum BlockOutputDirection {
+  none = 0,
+  front = 2 << 0,
+  back = 2 << 1,
+  left = 2 << 2,
+  right = 2 << 3,
+  all = front | back | left | right,
+}
 /**
  * A generic way to represent a block
  */
@@ -47,6 +55,8 @@ export abstract class Block extends UnlockableContent {
   abstract size: number
 
   output = BlockOutput.none
+
+  outputDirection = BlockOutputDirection.none
 
   powerConsumption = 0
 

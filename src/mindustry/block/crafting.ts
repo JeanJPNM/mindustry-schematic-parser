@@ -1,4 +1,4 @@
-import { Block, BlockOutput } from './block'
+import { Block, BlockOutput, BlockOutputDirection } from './block'
 import { Canvas } from 'canvas'
 import { ItemCost } from '../item/item_cost'
 import { SchematicTile } from '../../schematic'
@@ -6,6 +6,8 @@ import { SchematicTile } from '../../schematic'
 const category = 'crafting'
 abstract class GenericCrafter extends Block {
   override output = BlockOutput.item
+
+  override outputDirection = BlockOutputDirection.all
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({
@@ -250,4 +252,6 @@ export class Incinerator extends GenericCrafter {
   override powerConsumption = 0.5
 
   override output = BlockOutput.none
+
+  override outputDirection = BlockOutputDirection.none
 }

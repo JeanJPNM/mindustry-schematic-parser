@@ -1,10 +1,12 @@
-import { Block, BlockOutput } from './block'
+import { Block, BlockOutput, BlockOutputDirection } from './block'
 import { Canvas } from 'canvas'
 import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
 const category = 'liquid'
 abstract class Pump extends Block {
   override output = BlockOutput.liquid
+
+  override outputDirection = BlockOutputDirection.all
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
@@ -72,6 +74,8 @@ export class LiquidRouter extends Block {
 
   override output = BlockOutput.liquid
 
+  override outputDirection = BlockOutputDirection.all
+
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({
       tile,
@@ -97,6 +101,8 @@ export class LiquidJunction extends Block {
 
   override output = BlockOutput.liquid
 
+  override outputDirection = BlockOutputDirection.all
+
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
   }
@@ -109,6 +115,8 @@ export class BridgeConduit extends Block {
   size = 1
 
   override output = BlockOutput.liquid
+
+  override outputDirection = BlockOutputDirection.all
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })

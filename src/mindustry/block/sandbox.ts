@@ -1,4 +1,4 @@
-import { Block, BlockOutput } from './block'
+import { Block, BlockOutput, BlockOutputDirection } from './block'
 import { blockAsset, tintImage } from '../../util'
 import { Canvas } from 'canvas'
 import { Item } from '../item'
@@ -34,6 +34,8 @@ export class ItemSource extends SandBoxBlock {
 
   override output = BlockOutput.item
 
+  override outputDirection = BlockOutputDirection.all
+
   override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
     const config = tile.config as Item | null
@@ -62,6 +64,8 @@ export class LiquidSource extends SandBoxBlock {
   size = 1
 
   override output = BlockOutput.liquid
+
+  override outputDirection = BlockOutputDirection.all
 
   override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
@@ -100,6 +104,8 @@ export class PayloadSource extends SandBoxBlock {
   size = 5
 
   override output = BlockOutput.payload
+
+  override outputDirection = BlockOutputDirection.all
 
   override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({

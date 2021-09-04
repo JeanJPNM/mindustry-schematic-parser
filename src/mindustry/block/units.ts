@@ -1,4 +1,4 @@
-import { Block, BlockOutput } from './block'
+import { Block, BlockOutput, BlockOutputDirection } from './block'
 import { Canvas, createCanvas } from 'canvas'
 import { blockAsset, outlineImage, tintImage, translatePos } from '../../util'
 import { ItemCost } from '../item'
@@ -9,6 +9,8 @@ const degrees = [0, -90, 180, 90]
 
 abstract class Factory extends Block {
   override output = BlockOutput.payload
+
+  override outputDirection = BlockOutputDirection.front
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({
@@ -37,6 +39,8 @@ abstract class Factory extends Block {
 }
 abstract class Reconstructor extends Block {
   override output = BlockOutput.payload
+
+  override outputDirection = BlockOutputDirection.front
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({

@@ -1,9 +1,11 @@
-import { Block, BlockOutput } from './block'
+import { Block, BlockOutput, BlockOutputDirection } from './block'
 import { Canvas } from 'canvas'
 import { SchematicTile } from '../../schematic'
 const category = 'production'
 abstract class Drill extends Block {
   override output = BlockOutput.item
+
+  override outputDirection = BlockOutputDirection.all
 
   async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({

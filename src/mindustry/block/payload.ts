@@ -1,4 +1,4 @@
-import { Block, BlockOutput } from './block'
+import { Block, BlockOutput, BlockOutputDirection } from './block'
 import { Canvas, createCanvas } from 'canvas'
 import { blockAsset, outlineImage } from '../../util'
 import { SchematicTile } from '../../schematic'
@@ -13,6 +13,8 @@ export class PayloadConveyor extends Block {
   size = 3
 
   override output = BlockOutput.payload
+
+  override outputDirection = BlockOutputDirection.all
 
   override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     const size = this.size * 32
@@ -43,6 +45,8 @@ export class PayloadRouter extends Block {
   size = 3
 
   override output = BlockOutput.payload
+
+  override outputDirection = BlockOutputDirection.all
 
   override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({
@@ -86,6 +90,8 @@ export class PayloadPropulsionTower extends Block {
   override powerConsumption = 6
 
   override output = BlockOutput.payload
+
+  override outputDirection = BlockOutputDirection.all
 
   override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
     await this.render({
