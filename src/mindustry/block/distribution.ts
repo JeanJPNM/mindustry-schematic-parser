@@ -1,7 +1,12 @@
 import { Block, BlockOutput, BlockOutputDirection } from './block'
 import { Canvas, createCanvas } from 'canvas'
 import { Item, ItemCost } from '../item'
-import { blockAsset, outlineImage, tintImage } from '../../util'
+import {
+  blockAsset,
+  drawRotatedTile,
+  outlineImage,
+  tintImage,
+} from '../../util'
 import { SchematicTile } from '../../schematic'
 const category = 'distribution'
 
@@ -215,6 +220,11 @@ export class DuctBridge extends TransportBlock {
       canvas,
       category,
       layers: [`ducts/${this.name}`],
+    })
+    drawRotatedTile({
+      canvas,
+      tile,
+      image: await blockAsset(category, `ducts/${this.name}-dir`),
     })
   }
 }
