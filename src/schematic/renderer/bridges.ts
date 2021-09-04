@@ -56,8 +56,22 @@ export async function drawBridges(
     }
 
     const end = await blockAsset(category, block.name + '-end')
-    drawRotated(tcanvas, end, 0, 0, 16, -90)
-    drawRotated(tcanvas, end, distance * 32, 0, 16, 90)
+    drawRotated({
+      canvas: tcanvas,
+      image: end,
+      x: 0,
+      y: 0,
+      offset: 16,
+      angle: -90,
+    })
+    drawRotated({
+      canvas: tcanvas,
+      image: end,
+      x: distance * 32,
+      y: 0,
+      offset: 16,
+      angle: 90,
+    })
     for (let i = 0; i < distance - 1; i++) {
       tcontext.drawImage(bridge, (i + 1) * 32, 0)
     }
@@ -69,7 +83,14 @@ export async function drawBridges(
         : options.bridges?.opacity
     context.save()
     context.globalAlpha = opacity ?? 1
-    drawRotated(canvas, tcanvas, x, y, tileRotationToAngle(rotation), 16)
+    drawRotated({
+      canvas,
+      image: tcanvas,
+      x,
+      y,
+      angle: tileRotationToAngle(rotation),
+      offset: 16,
+    })
     context.restore()
   }
 }

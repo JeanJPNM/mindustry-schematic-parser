@@ -155,18 +155,25 @@ export async function drawChained(
         mappedTiles,
         'plastanium-conveyor'
       )
-      drawRotated(canvas, base, x, y, 16, tileRotationToAngle(tile.rotation))
+      drawRotated({
+        canvas,
+        image: base,
+        x,
+        y,
+        offset: 16,
+        angle: tileRotationToAngle(tile.rotation),
+      })
       for (const k in connections) {
         const key = k as keyof typeof connections
         if (connections[key]) continue
-        drawRotated(
+        drawRotated({
           canvas,
-          edge,
+          image: edge,
           x,
           y,
-          16,
-          tileRotationToAngle(TileRotation[key])
-        )
+          offset: 16,
+          angle: tileRotationToAngle(TileRotation[key]),
+        })
       }
     } else if (
       block instanceof Conveyor ||

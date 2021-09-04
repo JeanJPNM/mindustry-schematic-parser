@@ -3,7 +3,7 @@ import { SchematicTile } from '../../schematic'
 import { TileRotation } from '../../schematic/tile'
 import { translatePos } from './translate_pos'
 
-export interface RotatedDrawOptions {
+export interface TileRotatedDrawOptions {
   canvas: Canvas
   tile: SchematicTile
   image: Image
@@ -14,7 +14,7 @@ export function drawRotatedTile({
   image,
   tile,
   angle = tileRotationToAngle(tile.rotation),
-}: RotatedDrawOptions): void {
+}: TileRotatedDrawOptions): void {
   const context = canvas.getContext('2d')
   const { x, y } = translatePos(tile, canvas)
   const size = tile.block.size * 32
@@ -26,14 +26,23 @@ export function drawRotatedTile({
   context.drawImage(image, 0, 0)
   context.restore()
 }
-export function drawRotated(
-  canvas: Canvas,
-  image: Image | Canvas,
-  x: number,
-  y: number,
-  offset: number,
+interface RotatedDrawOptions {
+  canvas: Canvas
+  image: Image | Canvas
+  x: number
+  y: number
+  offset: number
   angle: number
-): void {
+}
+
+export function drawRotated({
+  canvas,
+  image,
+  x,
+  y,
+  offset,
+  angle,
+}: RotatedDrawOptions): void {
   const context = canvas.getContext('2d')
   context.save()
   context.translate(x + offset, y + offset)
