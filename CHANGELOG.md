@@ -3,6 +3,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## [4.0.0] - 2021-09-04
+### Added
+- Support for Mindustry v7 blocks
+- `outputDirection` property on blocks
+- A `payload` namespace for payload transport blocks
+
+### Removed
+- The `BlockProperties` interface no longer exists (incorporated into the `Block` class)
+- The `SchematicDecoder` class was removed
+
+### Changed
+- Blocks now use an enum to determine their output
+- The `Block` class no longer receives an object with options as a parameter
+- `PayloadConveyor` and `PayloadRouter` were moved to the `payload` namespace
+
 ## [3.0.1] - 2021-05-03
 ### Fixed
 - dist directory not included on package, causing it to fail
