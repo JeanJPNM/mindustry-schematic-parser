@@ -328,50 +328,7 @@ export abstract class SchematicIO {
     ).toString('base64')
   }
 }
-/**
- * A simple way to decode schematics
- * @deprecated The use of this class is deprecated, use `Schematic.decode` instead
- */
-export class SchematicDecoder extends SchematicIO {
-  private readonly data: StreamedDataReader
 
-  /** The parsed schematic, will be `undefined` until parsing is complete */
-  private schematic?: Schematic
-
-  constructor(public readonly value: string) {
-    super()
-    const decoded = Buffer.from(value.trim(), 'base64').toString('binary')
-
-    const arr = new Uint8Array(decoded.length)
-    for (let i = 0; i < decoded.length; i++) {
-      const char = decoded.codePointAt(i)
-      if (char === null || char === undefined)
-        throw new Error('unknown character at: ' + i)
-      arr[i] = char
-    }
-    this.data = new StreamedDataReader(arr.buffer)
-  }
-
-  /**
-   * Parses the text and returns a schematic
-   *
-   * If called multiple times, the same `Schematic` instance will be returned
-   *
-   * @deprecated This class is deprecated use `Schematic.decode` instead
-   */
-  decode(): Schematic {
-    if (this.schematic) return this.schematic
-    this.schematic = SchematicIO.decode(this.value)
-    return this.schematic
-  }
-
-  /**
-   * @deprecated The use of this method is deprecated, use `Schematic.encode` instead
-   */
-  encodeWithTags(schematic: Schematic): string {
-    return SchematicIO.encodeTags(schematic)
-  }
-}
 function concatBytes(...arrays: Uint8Array[]) {
   let totalLength = 0
   for (const arr of arrays) {
