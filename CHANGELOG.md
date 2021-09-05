@@ -114,6 +114,7 @@ distribution: { Conveyor },
 ### Added
   - First release
 
+[4.0.0]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v3.0.2...v4.0.0
 [3.0.2]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v3.0.1...v3.0.2
 [3.0.1]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v2.1.0...v3.0.0
