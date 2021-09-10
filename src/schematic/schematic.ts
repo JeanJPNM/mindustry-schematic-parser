@@ -5,6 +5,7 @@ import { SchematicIO } from './io'
 import { SchematicTile } from './tile'
 import { createCanvas } from 'canvas'
 import { mapTiles } from './renderer/util'
+import { ticksPerSecond } from '../util'
 const {
   distribution: { Conveyor, PlastaniumConveyor },
   liquid: { Conduit },
@@ -138,7 +139,9 @@ export class Schematic implements SchematicProperties {
     let result = 0
     for (const tile of this.tiles) {
       result +=
-        tile.block instanceof PowerGenerator ? tile.block.powerGeneration : 0
+        tile.block instanceof PowerGenerator
+          ? tile.block.powerGeneration * ticksPerSecond
+          : 0
     }
     return result
   }
@@ -153,7 +156,7 @@ export class Schematic implements SchematicProperties {
   get powerConsumption(): number {
     let result = 0
     for (const tile of this.tiles) {
-      result += tile.block.powerConsumption
+      result += tile.block.powerConsumption * ticksPerSecond
     }
     return result
   }

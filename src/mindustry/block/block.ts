@@ -1,5 +1,5 @@
 import { Canvas, Image } from 'canvas'
-import { blockAsset, translatePos } from '../../util'
+import { blockAsset, ticksPerSecond, translatePos } from '../../util'
 import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
 import { UnlockableContent } from '../content'
@@ -61,7 +61,7 @@ export abstract class Block extends UnlockableContent {
   powerConsumption = 0
 
   get energyUsage(): number {
-    return this.powerConsumption * 60
+    return this.powerConsumption * ticksPerSecond
   }
 
   /**
