@@ -2,7 +2,7 @@ import { Block, BlockOutput, BlockOutputDirection } from './block'
 import { Canvas } from 'canvas'
 import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
-import { ticksPerSecond } from '../../util'
+
 const category = 'liquid'
 abstract class Pump extends Block {
   override output = BlockOutput.liquid
