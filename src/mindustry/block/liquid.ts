@@ -2,6 +2,7 @@ import { Block, BlockOutput, BlockOutputDirection } from './block'
 import { Canvas } from 'canvas'
 import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
+import { ticksPerSecond } from '../../util'
 const category = 'liquid'
 abstract class Pump extends Block {
   override output = BlockOutput.liquid
@@ -123,15 +124,14 @@ export class BridgeConduit extends Block {
   }
 }
 export class PhaseConduit extends BridgeConduit {
-  constructor() {
-    super()
-    this.name = 'phase-conduit'
-    this.requirements = {
-      'phase-fabric': 5,
-      silicon: 7,
-      metaglass: 20,
-      titanium: 10,
-    }
-    this.powerConsumption = 0.3 * 60
+  override name = 'phase-conduit'
+
+  override powerConsumption = 0.3
+
+  override requirements = {
+    'phase-fabric': 5,
+    silicon: 7,
+    metaglass: 20,
+    titanium: 10,
   }
 }
