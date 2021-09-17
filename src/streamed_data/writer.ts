@@ -127,35 +127,28 @@ export class StreamedDataWriter {
     if (utflen > 65535 || /* overflow */ utflen < strlen)
       throw new Error('the input string is too long')
 
-    const bytearr: number[] = []
-
-    let count = 0
-    bytearr[count++] = (utflen >>> 8) & 0xff
-    bytearr[count++] = (utflen >>> 0) & 0xff
+    this.setInt16(utflen)
 
     let i = 0
     for (i = 0; i < strlen; i++) {
       // optimized for initial run of ASCII
       const c = str.charCodeAt(i)
       if (c >= 0x80 || c === 0) break
-      bytearr[count++] = c
+      this.setUint8(c)
     }
 
     for (; i < strlen; i++) {
       const c = str.charCodeAt(i)
       if (c < 0x80 && c !== 0) {
-        bytearr[count++] = c
+        this.setUint8(c)
       } else if (c >= 0x800) {
-        bytearr[count++] = 0xe0 | ((c >> 12) & 0x0f)
-        bytearr[count++] = 0x80 | ((c >> 6) & 0x3f)
-        bytearr[count++] = 0x80 | ((c >> 0) & 0x3f)
+        this.setUint8(0xe0 | ((c >> 12) & 0x0f))
+        this.setUint8(0x80 | ((c >> 6) & 0x3f))
+        this.setUint8(0x80 | ((c >> 0) & 0x3f))
       } else {
-        bytearr[count++] = 0xc0 | ((c >> 6) & 0x1f)
-        bytearr[count++] = 0x80 | ((c >> 0) & 0x3f)
+        this.setUint8(0xc0 | ((c >> 6) & 0x1f))
+        this.setUint8(0x80 | ((c >> 0) & 0x3f))
       }
-    }
-    for (const byte of bytearr) {
-      this.setUint8(byte)
     }
     return utflen + 2
   }
