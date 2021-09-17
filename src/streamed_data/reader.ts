@@ -1,4 +1,5 @@
-import { StringParsingError } from './errors'
+import { TextDecoder } from 'util'
+
 /**
  * Similar to a DataView, but it has an auto incrementing offset.
  * A mix of `DataView` and the `DataInputStream` java class
@@ -141,82 +142,11 @@ export class StreamedDataReader {
    */
   getString(): string {
     const utflen = this.getUint16()
-    let c = 0,
-      c2 = 0,
-      c3 = 0
     const bytearr = new Uint8Array(
       this.buffer.slice(this.currentOffset, this.currentOffset + utflen)
     )
     this.currentOffset += utflen
-
-    let start = 0
-    const end = utflen
-    let result = ''
-    while (start < end) {
-      c = bytearr[start]
-      if (c > 127) break
-      start++
-      result += String.fromCodePoint(c)
-    }
-    while (start < end) {
-      c = bytearr[start]
-      switch (c >> 4) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-          /* 0xxxxxxx*/
-          start++
-          result += String.fromCodePoint(c)
-          break
-        case 12:
-        case 13:
-          /* 110x xxxx   10xx xxxx*/
-          start += 2
-          if (start > end)
-            throw new StringParsingError(
-              'malformed input: partial character at end',
-              result
-            )
-          c2 = bytearr[start - 1]
-          if ((c2 & 0xc0) !== 0x80)
-            throw new StringParsingError(
-              'malformed input around byte ' + start,
-              result
-            )
-          result += ((c & 0x1f) << 6) | (c2 & 0x3f)
-          break
-        case 14:
-          /* 1110 xxxx  10xx xxxx  10xx xxxx */
-          start += 3
-          if (start > end)
-            throw new StringParsingError(
-              'malformed input: partial character at end',
-              result
-            )
-          c2 = bytearr[start - 2]
-          c3 = bytearr[start - 1]
-          if ((c2 & 0xc0) !== 0x80 || (c3 & 0xc0) !== 0x80)
-            throw new StringParsingError(
-              'malformed input around byte ' + (start - 1),
-              result
-            )
-          result += ((c & 0x0f) << 12) | ((c2 & 0x3f) << 6) | ((c3 & 0x3f) << 0)
-          break
-        default:
-          /* 10xx xxxx,  1111 xxxx */
-          throw new StringParsingError(
-            'malformed input around byte ' + start,
-            result
-          )
-      }
-    }
-    // The number of chars produced may be less than utflen
-    return result
+    return new TextDecoder().decode(bytearr)
   }
 
   /**
