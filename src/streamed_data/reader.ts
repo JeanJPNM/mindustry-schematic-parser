@@ -142,11 +142,12 @@ export class StreamedDataReader {
    */
   getString(): string {
     const utflen = this.getUint16()
-    const bytearr = new Uint8Array(
-      this.buffer.slice(this.currentOffset, this.currentOffset + utflen)
+    const buffer = this.buffer.slice(
+      this.currentOffset,
+      this.currentOffset + utflen
     )
     this.currentOffset += utflen
-    return new TextDecoder().decode(bytearr)
+    return new TextDecoder().decode(buffer)
   }
 
   /**
