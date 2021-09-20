@@ -1,5 +1,4 @@
 import { Block, BlockOutput, BlockOutputDirection } from './block'
-import { Canvas, createCanvas } from 'canvas'
 import { Item, ItemCost } from '../item'
 import {
   blockAsset,
@@ -7,6 +6,7 @@ import {
   outlineImage,
   tintImage,
 } from '../../util'
+import { Canvas } from 'canvas'
 import { SchematicTile } from '../../schematic'
 const category = 'distribution'
 
@@ -155,7 +155,6 @@ export class MassDriver extends TransportBlock {
     })
 
     const top = outlineImage({
-      canvas: createCanvas(this.size * 32, this.size * 32),
       image: await blockAsset(category, this.name),
       fillStyle: '#353535',
       thickness: 3,
