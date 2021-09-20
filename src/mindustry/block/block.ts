@@ -3,8 +3,6 @@ import { blockAsset, ticksPerSecond, translatePos } from '../../util'
 import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
 import { UnlockableContent } from '../content'
-import path from 'path'
-import { sync as pkgDir } from 'pkg-dir'
 
 export interface BlockRenderingOptions {
   tile: SchematicTile
@@ -111,8 +109,3 @@ export abstract class Block extends UnlockableContent {
    */
   abstract draw(tile: SchematicTile, canvas: Canvas): Promise<void>
 }
-
-export const blocksFolder = path.join(
-  pkgDir(__dirname) as string,
-  'assets/sprites/blocks'
-)
