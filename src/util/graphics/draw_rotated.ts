@@ -51,3 +51,6 @@ export function drawRotated({
 export function tileRotationToAngle(rotation: TileRotation): number {
   return ((rotation % 2 ? rotation + 2 : rotation) * Math.PI) / 2
 }
+export function degreeToAngle(degree: number): number {
+  return (degree * Math.PI) / 180
+}
