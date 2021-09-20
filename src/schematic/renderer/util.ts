@@ -2,11 +2,13 @@ import { Schematic } from '../schematic'
 import { SchematicTile } from '../tile'
 
 export function handlePlacement(tile: SchematicTile): { x: number; y: number } {
-  let { x, y } = tile
   const { size } = tile.block
-  x -= Math.floor(size / 2 - 0.1)
-  y -= Math.floor(size / 2 - 0.1)
-  return { x, y }
+  const { x, y } = tile
+  const offset = Math.ceil(size / 2) - 1
+  return {
+    x: x - offset,
+    y: y - offset,
+  }
 }
 export type SchematicTileMap = ((SchematicTile | undefined)[] | undefined)[]
 export function mapTiles(schematic: Schematic): SchematicTileMap {

@@ -2,6 +2,7 @@ import { Canvas, createCanvas } from 'canvas'
 import { Schematic, SchematicRenderingOptions } from '../schematic'
 import {
   blockAsset,
+  degreeToAngle,
   drawRotated,
   tileRotationToAngle,
   translatePos,
@@ -62,7 +63,7 @@ export async function drawBridges(
       x: 0,
       y: 0,
       offset: 16,
-      angle: -90,
+      angle: degreeToAngle(-90),
     })
     drawRotated({
       canvas: tcanvas,
@@ -70,7 +71,7 @@ export async function drawBridges(
       x: distance * 32,
       y: 0,
       offset: 16,
-      angle: 90,
+      angle: degreeToAngle(90),
     })
     for (let i = 0; i < distance - 1; i++) {
       tcontext.drawImage(bridge, (i + 1) * 32, 0)

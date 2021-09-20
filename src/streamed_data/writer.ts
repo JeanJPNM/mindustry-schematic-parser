@@ -124,8 +124,7 @@ export class StreamedDataWriter {
       if (c >= 0x80 || c === 0) utflen += c >= 0x800 ? 2 : 1
     }
 
-    if (utflen > 65535 || /* overflow */ utflen < strlen)
-      throw new Error('the input string is too long')
+    if (utflen > 65535) throw new Error('the input string is too long')
 
     this.setInt16(utflen)
 

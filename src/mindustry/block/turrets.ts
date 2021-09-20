@@ -1,6 +1,6 @@
-import { Canvas, createCanvas } from 'canvas'
 import { blockAsset, outlineImage } from '../../util'
 import { Block } from './block'
+import { Canvas } from 'canvas'
 import { SchematicTile } from '../../schematic'
 
 const category = 'turrets'
@@ -14,7 +14,6 @@ abstract class Turret extends Block {
     })
 
     const top = outlineImage({
-      canvas: createCanvas(this.size * 32, this.size * 32),
       image: await blockAsset(category, this.name),
       fillStyle: '#353535',
       thickness: 3,

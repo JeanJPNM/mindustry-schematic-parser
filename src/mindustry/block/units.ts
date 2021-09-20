@@ -1,11 +1,11 @@
 import { Block, BlockOutput, BlockOutputDirection } from './block'
-import { Canvas, createCanvas } from 'canvas'
 import {
   blockAsset,
   drawRotatedTile,
   outlineImage,
   tintImage,
 } from '../../util'
+import { Canvas } from 'canvas'
 import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
 
@@ -185,7 +185,6 @@ export class RepairPoint extends Block {
     })
 
     const top = outlineImage({
-      canvas: createCanvas(this.size * 32, this.size * 32),
       image: await blockAsset(category, this.name),
       fillStyle: '#353535',
       thickness: 3,
@@ -213,7 +212,6 @@ export class RepairTurret extends RepairPoint {
       layers: ['bases/block-2'],
     })
     const top = outlineImage({
-      canvas: createCanvas(this.size * 32, this.size * 32),
       image: await blockAsset(category, this.name),
       fillStyle: '#353535',
       thickness: 3,
