@@ -11,6 +11,9 @@
     "watch": "tsc --watch",
     "prepublishOnly": "tsc"
   },
+  "engines": {
+    "node": ">=12"
+  },
   "keywords": [
     "Mindustry"
   ],
