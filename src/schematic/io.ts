@@ -1,9 +1,5 @@
 import { Block, Blocks, Liquid, UnitCommand } from '../mindustry'
-import {
-  StreamedDataReader,
-  StreamedDataWriter,
-  StringParsingError,
-} from '../streamed_data'
+import { StreamedDataReader, StreamedDataWriter } from '../streamed_data'
 import { Item } from '../mindustry/item'
 import { MindustryVersion } from './version'
 import Pako from 'pako'
@@ -114,14 +110,7 @@ export abstract class SchematicIO {
       case 4: {
         const exists = cData.getInt8()
         if (exists !== 0) {
-          try {
-            return cData.getString()
-          } catch (e) {
-            if (e instanceof StringParsingError) {
-              return e.parsedText
-            }
-            throw e
-          }
+          return cData.getString()
         }
         return null
       }
