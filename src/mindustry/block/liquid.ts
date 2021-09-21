@@ -52,6 +52,10 @@ export class Conduit extends Block {
 
   size = 1
 
+  override output = BlockOutput.liquid
+
+  override outputDirection = BlockOutputDirection.front
+
   // this block cannot be rendered individually
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   async draw(): Promise<void> {}
