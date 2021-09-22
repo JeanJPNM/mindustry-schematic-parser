@@ -32,6 +32,7 @@
     "quotes": ["error", "single"],
     "require-await": "error",
     "semi": ["error", "never"],
-    "sort-imports": "error"
+    "sort-imports": "error",
+    "object-shorthand": "error"
   }
 }
