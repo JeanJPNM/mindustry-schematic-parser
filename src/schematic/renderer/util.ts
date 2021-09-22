@@ -1,3 +1,5 @@
+import { BlockOutputDirection } from '../../mindustry/block/block'
+import { Flags } from '../../util'
 import { Schematic } from '../schematic'
 import { SchematicTile } from '../tile'
 
@@ -29,6 +31,28 @@ export function mapTiles(schematic: Schematic): SchematicTileMap {
         result[x][y] = tile
       }
     }
+  }
+  return result
+}
+
+const directions = [
+  BlockOutputDirection.front,
+  BlockOutputDirection.left,
+  BlockOutputDirection.back,
+  BlockOutputDirection.right,
+]
+export function rotateOutputDirection(
+  tile: SchematicTile
+): BlockOutputDirection {
+  const { rotation } = tile
+  const { outputDirection } = tile.block
+  if (outputDirection === BlockOutputDirection.all) return outputDirection
+
+  let result = BlockOutputDirection.none
+  // rotates the output direction
+  for (let i = 0; i < directions.length; i++) {
+    if (Flags.has(outputDirection, directions[i]))
+      result |= directions[(rotation + i) % 4]
   }
   return result
 }

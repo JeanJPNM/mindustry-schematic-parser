@@ -1,3 +1,4 @@
+import { BlockOutput, BlockOutputDirection } from '../../mindustry/block/block'
 import {
   Flags,
   blockAsset,
@@ -7,10 +8,10 @@ import {
 } from '../../util'
 import { Schematic, SchematicRenderingOptions } from '../schematic'
 import { SchematicTile, TileRotation } from '../tile'
-import { BlockOutput } from '../../mindustry/block/block'
 import { Blocks } from '../../mindustry'
 import { Canvas } from 'canvas'
 import { SchematicTileMap } from './util'
+import { rotateOutputDirection } from '.'
 
 const {
   distribution: { ArmoredConveyor, Conveyor, PlastaniumConveyor, Duct },
@@ -61,29 +62,36 @@ function getConnections(
       result[key] ||= tile.block instanceof PlastaniumConveyor
       const content =
         mode === 'conveyor' ? BlockOutput.item : BlockOutput.liquid
+      const directions = {
+        top: BlockOutputDirection.right,
+        bottom: BlockOutputDirection.left,
+        left: BlockOutputDirection.front,
+        right: BlockOutputDirection.back,
+      }
+      for (const k in tiles) {
+        const key = k as keyof typeof tiles
+        const t = tiles[key]
+        if (!t) continue
+        const direction = rotateOutputDirection(t)
+        result[key] ||=
+          Flags.has(t.block.output, content) &&
+          t !== tile &&
+          Flags.has(direction, directions[key])
+      }
+      break
+    }
+    case 'plastanium-conveyor':
       for (const k in tiles) {
         const key = k as keyof typeof tiles
         const t = tiles[key]
         if (!t) continue
         result[key] ||=
-          (t.block instanceof blockType &&
-            t.rotation === (TileRotation[key] + 2) % 4) ||
-          (Flags.has(t.block.output, content) && t !== tile)
+          t.block instanceof blockType &&
+          t.rotation === (TileRotation[key] + 2) % 4
       }
       break
-    }
     case 'armored-conveyor':
     case 'plated-conduit':
-    case 'plastanium-conveyor':
-      for (const k in tiles) {
-        const key = k as keyof typeof tiles
-        const tile = tiles[key]
-        if (!tile) continue
-        result[key] ||=
-          tile.block instanceof blockType &&
-          tile.rotation === (TileRotation[key] + 2) % 4
-      }
-      break
     case 'duct':
       for (const k in tiles) {
         const key = k as keyof typeof tiles
