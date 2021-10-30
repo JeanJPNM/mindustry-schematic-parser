@@ -1,3 +1,5 @@
+import { TextEncoder } from 'util'
+
 export class StreamedDataWriter {
   /**
    * The `DataView` wrapped by this `StreamedDataView`.
@@ -115,41 +117,13 @@ export class StreamedDataWriter {
    * format.
    */
   setString(str: string): number {
-    // code copied from DataOutputStream java implementation
-    const strlen = str.length
-    let utflen = strlen // optimized for ASCII
-
-    for (let i = 0; i < strlen; i++) {
-      const c = str.charCodeAt(i)
-      if (c >= 0x80 || c === 0) utflen += c >= 0x800 ? 2 : 1
-    }
-
-    if (utflen > 65535) throw new Error('the input string is too long')
-
-    this.setInt16(utflen)
-
-    let i = 0
-    for (i = 0; i < strlen; i++) {
-      // optimized for initial run of ASCII
-      const c = str.charCodeAt(i)
-      if (c >= 0x80 || c === 0) break
-      this.setUint8(c)
-    }
-
-    for (; i < strlen; i++) {
-      const c = str.charCodeAt(i)
-      if (c < 0x80 && c !== 0) {
-        this.setUint8(c)
-      } else if (c >= 0x800) {
-        this.setUint8(0xe0 | ((c >> 12) & 0x0f))
-        this.setUint8(0x80 | ((c >> 6) & 0x3f))
-        this.setUint8(0x80 | ((c >> 0) & 0x3f))
-      } else {
-        this.setUint8(0xc0 | ((c >> 6) & 0x1f))
-        this.setUint8(0x80 | ((c >> 0) & 0x3f))
-      }
-    }
-    return utflen + 2
+    const offset = this.currentOffset + 2 // reserve space for the 16 bit length value
+    const slice = new Uint8Array(this.data.buffer, offset)
+    const result = new TextEncoder().encodeInto(str, slice)
+    const length = result.written as number
+    this.setInt16(length) // writes length of the string before the string bytes
+    this.currentOffset += length
+    return length
   }
 
   /**
