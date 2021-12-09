@@ -1,6 +1,7 @@
+import { Schematic, SchematicTile } from '../../schematic'
 import { Block } from './index'
 import { Item } from '../item'
-import { SchematicTile } from '../../schematic'
+import { RenderingInfo } from '../../util'
 import { createCanvas } from 'canvas'
 
 test('individual block rendering', async () => {
@@ -9,6 +10,18 @@ test('individual block rendering', async () => {
     const [, block] = pair
     // items are the only configuration value curretly used, this might change in the future
     const tile = new SchematicTile(block, 0, 0, Item.create('copper'), 0)
-    await block.draw(tile, canvas)
+    await block.draw(
+      tile,
+      new RenderingInfo(
+        new Schematic({
+          height: 100,
+          tags: new Map(),
+          tiles: [tile],
+          width: 100,
+        }),
+        canvas,
+        {}
+      )
+    )
   }
 })
