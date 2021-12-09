@@ -1,13 +1,15 @@
 import { Schematic, SchematicTile } from '../schematic'
 import { SchematicTileMap, handlePlacement } from '../schematic/renderer'
 import { Canvas } from 'canvas'
+import { SchematicRenderingOptions } from '../schematic/schematic'
 
 export class RenderingInfo {
   private _tileMap: SchematicTileMap | null = null
 
   constructor(
     public readonly schematic: Schematic,
-    public readonly canvas: Canvas
+    public readonly canvas: Canvas,
+    public readonly options: SchematicRenderingOptions
   ) {}
 
   get tileMap(): SchematicTileMap {
