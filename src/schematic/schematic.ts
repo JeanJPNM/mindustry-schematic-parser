@@ -1,11 +1,10 @@
 import * as renderer from './renderer'
 import { Blocks, ItemCost, ItemName } from '../mindustry'
+import { RenderingInfo, ticksPerSecond } from '../util'
 import { MindustryVersion } from './version'
 import { SchematicIO } from './io'
 import { SchematicTile } from './tile'
 import { createCanvas } from 'canvas'
-import { mapTiles } from './renderer/util'
-import { ticksPerSecond } from '../util'
 const {
   distribution: { Conveyor, PlastaniumConveyor },
   liquid: { Conduit },
@@ -222,7 +221,7 @@ export class Schematic implements SchematicProperties {
     } else if (options.maxSize) {
       size = Math.min(options.maxSize, size)
     }
-    const mappedTiles = mapTiles(this)
+    const renderingInfo = new RenderingInfo(this, canvas, options)
     for (const tile of this.tiles) {
       const { block } = tile
       if (
@@ -231,12 +230,10 @@ export class Schematic implements SchematicProperties {
         block instanceof Conduit
       )
         continue
-      await block.draw(tile, canvas)
+      await block.draw(tile, renderingInfo)
     }
     if (options.conveyors.render || options.conduits.render)
-      await renderer.drawChained(this, canvas, mappedTiles, options)
-    if (options.bridges.render)
-      await renderer.drawBridges(this, canvas, mappedTiles, options)
+      await renderer.drawChained(this, canvas, renderingInfo.tileMap, options)
     const background = createCanvas(size, size)
     if (options.background) {
       await renderer.drawBackground(background, size)

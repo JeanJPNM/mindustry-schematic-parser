@@ -1,6 +1,6 @@
 import { Block, BlockOutput, BlockOutputDirection } from './block'
+import { RenderingInfo, drawBridge } from '../../util'
 import { ItemCost } from '../item'
-import { RenderingInfo } from '../../util'
 import { SchematicTile } from '../../schematic'
 
 const category = 'liquid'
@@ -123,8 +123,23 @@ export class BridgeConduit extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
-    await this.render({ tile, canvas, category, layers: [this.name] })
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      canvas: info.canvas,
+      category,
+      layers: [this.name],
+    })
+
+    const type = this instanceof PhaseConduit ? 'phaseBridges' : 'bridges'
+    if (info.options[type]?.render) {
+      await drawBridge({
+        tile,
+        info,
+        category,
+        opacity: info.options[type]?.opacity,
+      })
+    }
   }
 }
 export class PhaseConduit extends BridgeConduit {

@@ -3,6 +3,7 @@ import { Item, ItemCost } from '../item'
 import {
   RenderingInfo,
   blockAsset,
+  drawBridge,
   drawRotatedTile,
   outlineImage,
   tintImage,
@@ -74,6 +75,20 @@ export class ItemBridge extends TransportBlock {
   requirements: ItemCost = { lead: 6, copper: 6 }
 
   size = 1
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await super.draw(tile, info)
+
+    const type = this instanceof PhaseConveyor ? 'phaseBridges' : 'bridges'
+    if (info.options[type]?.render) {
+      await drawBridge({
+        tile,
+        info,
+        category,
+        opacity: info.options[type]?.opacity,
+      })
+    }
+  }
 }
 export class PhaseConveyor extends ItemBridge {
   override name = 'phase-conveyor'
@@ -227,20 +242,27 @@ export class DuctBridge extends TransportBlock {
 
   override outputDirection = BlockOutputDirection.front
 
-  override async draw(
-    tile: SchematicTile,
-    { canvas }: RenderingInfo
-  ): Promise<void> {
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     await this.render({
       tile,
-      canvas,
+      canvas: info.canvas,
       category,
       layers: [`ducts/${this.name}`],
     })
+
     drawRotatedTile({
-      canvas,
+      canvas: info.canvas,
       tile,
       image: await blockAsset(category, `ducts/${this.name}-dir`),
     })
+
+    if (info.options.bridges?.render) {
+      await drawBridge({
+        tile,
+        info,
+        category: `${category}/ducts`,
+        opacity: info.options.bridges?.opacity,
+      })
+    }
   }
 }
