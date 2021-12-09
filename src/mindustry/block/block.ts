@@ -1,5 +1,10 @@
 import { Canvas, Image } from 'canvas'
-import { blockAsset, ticksPerSecond, translatePos } from '../../util'
+import {
+  RenderingInfo,
+  blockAsset,
+  ticksPerSecond,
+  translatePos,
+} from '../../util'
 import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
 import { UnlockableContent } from '../content'
@@ -107,5 +112,5 @@ export abstract class Block extends UnlockableContent {
    * @package
    * @internal
    */
-  abstract draw(tile: SchematicTile, canvas: Canvas): Promise<void>
+  abstract draw(tile: SchematicTile, info: RenderingInfo): Promise<void>
 }

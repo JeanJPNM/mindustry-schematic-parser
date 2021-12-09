@@ -1,11 +1,10 @@
-import { blockAsset, outlineImage } from '../../util'
+import { RenderingInfo, blockAsset, outlineImage } from '../../util'
 import { Block } from './block'
-import { Canvas } from 'canvas'
 import { SchematicTile } from '../../schematic'
 
 const category = 'turrets'
 abstract class Turret extends Block {
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
     await this.render({
       tile,
       canvas,
@@ -61,10 +60,10 @@ export class Wave extends Turret {
 
   size = 2
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
-    await super.draw(tile, canvas)
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await super.draw(tile, info)
     await this.render({
-      canvas,
+      canvas: info.canvas,
       category,
       layers: [this.name + '-top'],
       tile,
@@ -120,10 +119,10 @@ export class Tsunami extends Turret {
 
   size = 3
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
-    await super.draw(tile, canvas)
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await super.draw(tile, info)
     await this.render({
-      canvas,
+      canvas: info.canvas,
       category,
       layers: [this.name + '-top'],
       tile,

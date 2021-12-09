@@ -1,13 +1,12 @@
 import { Block, BlockOutput, BlockOutputDirection } from './block'
-import { blockAsset, tintImage } from '../../util'
-import { Canvas } from 'canvas'
+import { RenderingInfo, blockAsset, tintImage } from '../../util'
 import { Item } from '../item'
 import { Liquid } from '../liquid'
 import { SchematicTile } from '../../schematic'
 
 const category = 'sandbox'
 abstract class SandBoxBlock extends Block {
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
   }
 }
@@ -36,7 +35,10 @@ export class ItemSource extends SandBoxBlock {
 
   override outputDirection = BlockOutputDirection.all
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  override async draw(
+    tile: SchematicTile,
+    { canvas }: RenderingInfo
+  ): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
     const config = tile.config as Item | null
     const imgName = config ? 'center' : 'cross'
@@ -67,7 +69,10 @@ export class LiquidSource extends SandBoxBlock {
 
   override outputDirection = BlockOutputDirection.all
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  override async draw(
+    tile: SchematicTile,
+    { canvas }: RenderingInfo
+  ): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
     const config = tile.config as Liquid | null
     const imgName = config ? 'center' : 'cross'
@@ -107,7 +112,10 @@ export class PayloadSource extends SandBoxBlock {
 
   override outputDirection = BlockOutputDirection.all
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  override async draw(
+    tile: SchematicTile,
+    { canvas }: RenderingInfo
+  ): Promise<void> {
     await this.render({
       tile,
       canvas,
@@ -123,7 +131,10 @@ export class PayloadVoid extends SandBoxBlock {
 
   size = 5
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  override async draw(
+    tile: SchematicTile,
+    { canvas }: RenderingInfo
+  ): Promise<void> {
     await this.render({
       tile,
       canvas,

@@ -1,12 +1,12 @@
 import { Block, BlockOutput, BlockOutputDirection } from './block'
 import { Item, ItemCost } from '../item'
 import {
+  RenderingInfo,
   blockAsset,
   drawRotatedTile,
   outlineImage,
   tintImage,
 } from '../../util'
-import { Canvas } from 'canvas'
 import { SchematicTile } from '../../schematic'
 const category = 'distribution'
 
@@ -15,7 +15,7 @@ abstract class TransportBlock extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
     await this.render({
       tile,
       canvas,
@@ -94,7 +94,10 @@ export class Sorter extends TransportBlock {
 
   size = 1
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  override async draw(
+    tile: SchematicTile,
+    { canvas }: RenderingInfo
+  ): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
     const config = tile.config as Item | null
     const imgName = config ? 'center' : 'cross'
@@ -146,7 +149,10 @@ export class MassDriver extends TransportBlock {
 
   override powerConsumption = 1.75
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  override async draw(
+    tile: SchematicTile,
+    { canvas }: RenderingInfo
+  ): Promise<void> {
     await this.render({
       canvas,
       category,
@@ -192,7 +198,10 @@ export class DuctRouter extends TransportBlock {
 
   size = 1
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  override async draw(
+    tile: SchematicTile,
+    { canvas }: RenderingInfo
+  ): Promise<void> {
     await this.render({
       tile,
       canvas,
@@ -218,7 +227,10 @@ export class DuctBridge extends TransportBlock {
 
   override outputDirection = BlockOutputDirection.front
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  override async draw(
+    tile: SchematicTile,
+    { canvas }: RenderingInfo
+  ): Promise<void> {
     await this.render({
       tile,
       canvas,
