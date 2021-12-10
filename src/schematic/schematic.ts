@@ -6,8 +6,6 @@ import { SchematicIO } from './io'
 import { SchematicTile } from './tile'
 import { createCanvas } from 'canvas'
 const {
-  distribution: { Conveyor, PlastaniumConveyor },
-  liquid: { Conduit },
   power: { PowerGenerator },
 } = Blocks
 export interface SchematicProperties {
@@ -223,17 +221,8 @@ export class Schematic implements SchematicProperties {
     }
     const renderingInfo = new RenderingInfo(this, canvas, options)
     for (const tile of this.tiles) {
-      const { block } = tile
-      if (
-        block instanceof Conveyor ||
-        block instanceof PlastaniumConveyor ||
-        block instanceof Conduit
-      )
-        continue
-      await block.draw(tile, renderingInfo)
+      await tile.block.draw(tile, renderingInfo)
     }
-    if (options.conveyors.render || options.conduits.render)
-      await renderer.drawChained(this, canvas, renderingInfo.tileMap, options)
     const background = createCanvas(size, size)
     if (options.background) {
       await renderer.drawBackground(background, size)
