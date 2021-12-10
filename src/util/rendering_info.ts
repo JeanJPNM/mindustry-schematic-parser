@@ -1,5 +1,5 @@
 import { Schematic, SchematicTile } from '../schematic'
-import { SchematicTileMap, handlePlacement } from '../schematic/renderer'
+import { SchematicTileMap, handlePlacement } from './graphics'
 import { Canvas } from 'canvas'
 import { SchematicRenderingOptions } from '../schematic/schematic'
 

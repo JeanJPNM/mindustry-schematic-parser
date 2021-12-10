@@ -1,7 +1,7 @@
 import { Canvas, Image } from 'canvas'
 import { SchematicTile } from '../../schematic'
 import { TileRotation } from '../../schematic/tile'
-import { translatePos } from './translate_pos'
+import { translatePos } from './positioning'
 
 export interface TileRotatedDrawOptions {
   canvas: Canvas

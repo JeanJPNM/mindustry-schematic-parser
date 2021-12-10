@@ -1,8 +1,10 @@
-import { BlockOutput, BlockOutputDirection } from '../../mindustry/block/block'
+import { BlockOutput, BlockOutputDirection } from '../../mindustry/block/helper'
 import {
   Flags,
+  SchematicTileMap,
   blockAsset,
   drawRotated,
+  rotateOutputDirection,
   tileRotationToAngle,
   translatePos,
 } from '../../util'
@@ -10,8 +12,6 @@ import { Schematic, SchematicRenderingOptions } from '../schematic'
 import { SchematicTile, TileRotation } from '../tile'
 import { Blocks } from '../../mindustry'
 import { Canvas } from 'canvas'
-import { SchematicTileMap } from './util'
-import { rotateOutputDirection } from '.'
 
 const {
   distribution: { ArmoredConveyor, Conveyor, PlastaniumConveyor, Duct },

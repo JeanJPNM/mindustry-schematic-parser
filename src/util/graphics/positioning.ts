@@ -1,6 +1,9 @@
-import { BlockOutputDirection } from '../../mindustry/block/block'
-import { Flags } from '../../util'
-import { SchematicTile } from '../tile'
+import { BlockOutputDirection } from '../../mindustry/block/helper'
+import { Canvas } from 'canvas'
+import { Flags } from '../flags'
+import { SchematicTile } from '../../schematic'
+
+export type SchematicTileMap = ((SchematicTile | undefined)[] | undefined)[]
 
 export function handlePlacement(tile: SchematicTile): { x: number; y: number } {
   const { size } = tile.block
@@ -11,8 +14,21 @@ export function handlePlacement(tile: SchematicTile): { x: number; y: number } {
     y: y - offset,
   }
 }
-export type SchematicTileMap = ((SchematicTile | undefined)[] | undefined)[]
 
+export function translatePos(
+  tile: SchematicTile,
+  canvas: Canvas
+): { x: number; y: number } {
+  const { x, y } = tile
+  const { size } = tile.block
+  const offsetX = -Math.ceil(size / 2) + 1
+  const offsetY = Math.floor(size / 2) + 1
+
+  return {
+    x: (x + offsetX) * 32,
+    y: canvas.height - (y + offsetY) * 32,
+  }
+}
 const directions = [
   BlockOutputDirection.front,
   BlockOutputDirection.left,
