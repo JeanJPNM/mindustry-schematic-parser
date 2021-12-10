@@ -35,9 +35,26 @@ export class Conveyor extends TransportBlock {
 
   override outputDirection = BlockOutputDirection.front
 
-  // the rendering of this block cannot be done individually
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  override async draw(): Promise<void> {}
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    const connections = getConnections(tile, info, ConnectionSupport.regular)
+    const { imageIndex, scaleX, scaleY } = getChainedSpriteVariation(
+      tile,
+      connections
+    )
+    const { x, y } = translatePos(tile, info.canvas)
+    const context = info.canvas.getContext('2d')
+    const image = await blockAsset(
+      `${category}/conveyors`,
+      `${tile.block.name}-${imageIndex}-0`
+    )
+    context.save()
+    context.translate(x + 16, y + 16)
+    context.scale(scaleX, scaleY)
+    context.rotate(tileRotationToAngle(tile.rotation))
+    context.translate(-16, -16)
+    context.drawImage(image, 0, 0)
+    context.restore()
+  }
 }
 export class TitaniumConveyor extends Conveyor {
   override name = 'titanium-conveyor'
@@ -62,6 +79,30 @@ export class ArmoredConveyor extends Conveyor {
   override name = 'armored-conveyor'
 
   override requirements = { plastanium: 1, thorium: 1, metaglass: 1 }
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    const connections = getConnections(tile, info, [
+      ConnectionSupport.strict,
+      Conveyor,
+    ])
+    const { imageIndex, scaleX, scaleY } = getChainedSpriteVariation(
+      tile,
+      connections
+    )
+    const { x, y } = translatePos(tile, info.canvas)
+    const context = info.canvas.getContext('2d')
+    const image = await blockAsset(
+      `${category}/conveyors`,
+      `${tile.block.name}-${imageIndex}-0`
+    )
+    context.save()
+    context.translate(x + 16, y + 16)
+    context.scale(scaleX, scaleY)
+    context.rotate(tileRotationToAngle(tile.rotation))
+    context.translate(-16, -16)
+    context.drawImage(image, 0, 0)
+    context.restore()
+  }
 }
 export class Junction extends TransportBlock {
   name = 'junction'
