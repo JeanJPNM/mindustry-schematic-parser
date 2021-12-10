@@ -184,12 +184,14 @@ export class BridgeConduit extends Block {
 
     const type = this instanceof PhaseConduit ? 'phaseBridges' : 'bridges'
     if (info.options[type]?.render) {
-      await drawBridge({
-        tile,
-        info,
-        category,
-        opacity: info.options[type]?.opacity,
-      })
+      info.renderingQueue.add(1, () =>
+        drawBridge({
+          tile,
+          info,
+          category,
+          opacity: info.options[type]?.opacity,
+        })
+      )
     }
   }
 }

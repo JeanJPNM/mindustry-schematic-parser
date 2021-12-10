@@ -223,6 +223,7 @@ export class Schematic implements SchematicProperties {
     for (const tile of this.tiles) {
       await tile.block.draw(tile, renderingInfo)
     }
+    await renderingInfo.renderingQueue.execute()
     const background = createCanvas(size, size)
     if (options.background) {
       await renderer.drawBackground(background, size)

@@ -6,6 +6,8 @@ import { SchematicRenderingOptions } from '../schematic/schematic'
 export class RenderingInfo {
   private _tileMap: SchematicTileMap | null = null
 
+  readonly renderingQueue = new RenderingQueue()
+
   constructor(
     public readonly schematic: Schematic,
     public readonly canvas: Canvas,
@@ -17,7 +19,30 @@ export class RenderingInfo {
     return this._tileMap
   }
 }
+type RenderingExecutor = () => Promise<void>
+class RenderingQueue {
+  private _map: Map<number, RenderingExecutor[]> = new Map()
 
+  add(level: number, executor: RenderingExecutor) {
+    if (!this._map.has(level)) {
+      this._map.set(level, [])
+    }
+    const executors = this._map.get(level) as RenderingExecutor[]
+    executors.push(executor)
+  }
+
+  async execute(): Promise<void> {
+    if (this._map.size === 0) return
+    const keys = Array.from(this._map.keys()).sort((a, b) => a - b)
+
+    for (const key of keys) {
+      const executors = this._map.get(key) as RenderingExecutor[]
+      for (const executor of executors) {
+        await executor()
+      }
+    }
+  }
+}
 function mapTiles(schematic: Schematic): SchematicTileMap {
   const { width } = schematic
   const result: SchematicTile[][] = []

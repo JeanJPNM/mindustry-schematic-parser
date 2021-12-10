@@ -180,12 +180,14 @@ export class ItemBridge extends TransportBlock {
 
     const type = this instanceof PhaseConveyor ? 'phaseBridges' : 'bridges'
     if (info.options[type]?.render) {
-      await drawBridge({
-        tile,
-        info,
-        category,
-        opacity: info.options[type]?.opacity,
-      })
+      info.renderingQueue.add(1, () =>
+        drawBridge({
+          tile,
+          info,
+          category,
+          opacity: info.options[type]?.opacity,
+        })
+      )
     }
   }
 }
@@ -377,12 +379,14 @@ export class DuctBridge extends TransportBlock {
     })
 
     if (info.options.bridges?.render) {
-      await drawBridge({
-        tile,
-        info,
-        category: `${category}/ducts`,
-        opacity: info.options.bridges?.opacity,
-      })
+      info.renderingQueue.add(1, () =>
+        drawBridge({
+          tile,
+          info,
+          category: `${category}/ducts`,
+          opacity: info.options.bridges?.opacity,
+        })
+      )
     }
   }
 }
