@@ -1,5 +1,6 @@
-import { Block, BlockOutput, BlockOutputDirection } from './block'
+import { BlockOutput, BlockOutputDirection } from './helper'
 import { RenderingInfo, drawBridge } from '../../util'
+import { Block } from './block'
 import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
 

@@ -1,10 +1,11 @@
-import { Block, BlockOutput, BlockOutputDirection } from './block'
+import { BlockOutput, BlockOutputDirection } from './helper'
 import {
   RenderingInfo,
   blockAsset,
   drawRotatedTile,
   outlineImage,
 } from '../../util'
+import { Block } from './block'
 import { SchematicTile } from '../../schematic'
 
 const category = 'payload'

@@ -1,5 +1,6 @@
-import { Block, BlockOutput, BlockOutputDirection } from './block'
+import { BlockOutput, BlockOutputDirection } from './helper'
 import { RenderingInfo, blockAsset, tintImage } from '../../util'
+import { Block } from './block'
 import { Item } from '../item'
 import { Liquid } from '../liquid'
 import { SchematicTile } from '../../schematic'

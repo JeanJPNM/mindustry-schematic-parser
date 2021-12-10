@@ -1,4 +1,4 @@
-import { Block, BlockOutput, BlockOutputDirection } from './block'
+import { BlockOutput, BlockOutputDirection } from './helper'
 import { Item, ItemCost } from '../item'
 import {
   RenderingInfo,
@@ -8,6 +8,7 @@ import {
   outlineImage,
   tintImage,
 } from '../../util'
+import { Block } from './block'
 import { SchematicTile } from '../../schematic'
 const category = 'distribution'
 
