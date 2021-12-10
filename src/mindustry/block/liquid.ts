@@ -1,5 +1,14 @@
 import { BlockOutput, BlockOutputDirection } from './helper'
-import { RenderingInfo, drawBridge } from '../../util'
+import {
+  ConnectionSupport,
+  RenderingInfo,
+  blockAsset,
+  drawBridge,
+  getChainedSpriteVariation,
+  getConnections,
+  tileRotationToAngle,
+  translatePos,
+} from '../../util'
 import { Block } from './block'
 import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
@@ -57,9 +66,26 @@ export class Conduit extends Block {
 
   override outputDirection = BlockOutputDirection.front
 
-  // this block cannot be rendered individually
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  async draw(): Promise<void> {}
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    const connections = getConnections(tile, info, ConnectionSupport.regular)
+    const { imageIndex, scaleX, scaleY } = getChainedSpriteVariation(
+      tile,
+      connections
+    )
+    const { x, y } = translatePos(tile, info.canvas)
+    const context = info.canvas.getContext('2d')
+    const image = await blockAsset(
+      category,
+      `${tile.block.name}-top-${imageIndex}`
+    )
+    context.save()
+    context.translate(x + 16, y + 16)
+    context.scale(scaleX, scaleY)
+    context.rotate(tileRotationToAngle(tile.rotation))
+    context.translate(-16, -16)
+    context.drawImage(image, 0, 0)
+    context.restore()
+  }
 }
 export class PulseConduit extends Conduit {
   override name = 'pulse-conduit'
@@ -70,6 +96,30 @@ export class PlatedConduit extends Conduit {
   override name = 'plated-conduit'
 
   override requirements = { thorium: 2, metaglass: 1, plastanium: 1 }
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    const connections = getConnections(tile, info, [
+      ConnectionSupport.strict,
+      Conduit,
+    ])
+    const { imageIndex, scaleX, scaleY } = getChainedSpriteVariation(
+      tile,
+      connections
+    )
+    const { x, y } = translatePos(tile, info.canvas)
+    const context = info.canvas.getContext('2d')
+    const image = await blockAsset(
+      category,
+      `${tile.block.name}-top-${imageIndex}`
+    )
+    context.save()
+    context.translate(x + 16, y + 16)
+    context.scale(scaleX, scaleY)
+    context.rotate(tileRotationToAngle(tile.rotation))
+    context.translate(-16, -16)
+    context.drawImage(image, 0, 0)
+    context.restore()
+  }
 }
 export class LiquidRouter extends Block {
   name = 'liquid-router'
