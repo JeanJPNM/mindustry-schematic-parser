@@ -1,11 +1,12 @@
-import { Block, BlockOutput, BlockOutputDirection } from './block'
+import { BlockOutput, BlockOutputDirection } from './helper'
 import {
+  RenderingInfo,
   blockAsset,
   drawRotatedTile,
   outlineImage,
   tintImage,
 } from '../../util'
-import { Canvas } from 'canvas'
+import { Block } from './block'
 import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
 
@@ -16,7 +17,7 @@ abstract class Factory extends Block {
 
   override outputDirection = BlockOutputDirection.front
 
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
     await this.render({
       tile,
       canvas,
@@ -41,7 +42,7 @@ abstract class Reconstructor extends Block {
 
   override outputDirection = BlockOutputDirection.front
 
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
     await this.render({
       tile,
       canvas,
@@ -77,7 +78,7 @@ export class CommandCenter extends Block {
 
   size = 2
 
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
     await this.render({
       tile,
       canvas,
@@ -176,7 +177,7 @@ export class RepairPoint extends Block {
 
   size = 1
 
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
     await this.render({
       tile,
       canvas,
@@ -204,7 +205,10 @@ export class RepairTurret extends RepairPoint {
 
   override size = 2
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  override async draw(
+    tile: SchematicTile,
+    { canvas }: RenderingInfo
+  ): Promise<void> {
     await this.render({
       tile,
       canvas,
@@ -230,7 +234,7 @@ export class ResupplyPoint extends Block {
 
   size = 2
 
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
   }
 }

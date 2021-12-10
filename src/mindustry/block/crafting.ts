@@ -1,6 +1,7 @@
-import { Block, BlockOutput, BlockOutputDirection } from './block'
-import { Canvas } from 'canvas'
+import { BlockOutput, BlockOutputDirection } from './helper'
+import { Block } from './block'
 import { ItemCost } from '../item/item_cost'
+import { RenderingInfo } from '../../util'
 import { SchematicTile } from '../../schematic'
 
 const category = 'crafting'
@@ -9,7 +10,7 @@ abstract class GenericCrafter extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
     await this.render({
       tile,
       canvas,
@@ -96,7 +97,10 @@ export class PhaseWeaver extends GenericCrafter {
 
   override powerConsumption = 5.0
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  override async draw(
+    tile: SchematicTile,
+    { canvas }: RenderingInfo
+  ): Promise<void> {
     await this.render({
       canvas,
       category,
@@ -125,7 +129,10 @@ export class CryofluidMixer extends GenericCrafter {
 
   override output = BlockOutput.liquid
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  override async draw(
+    tile: SchematicTile,
+    { canvas }: RenderingInfo
+  ): Promise<void> {
     await this.render({
       canvas,
       category,
@@ -172,7 +179,10 @@ export class Separator extends GenericCrafter {
 
   override powerConsumption = 1.1
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  override async draw(
+    tile: SchematicTile,
+    { canvas }: RenderingInfo
+  ): Promise<void> {
     await this.render({
       canvas,
       category,
@@ -206,7 +216,10 @@ export class SporePress extends GenericCrafter {
 
   override output = BlockOutput.liquid
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  override async draw(
+    tile: SchematicTile,
+    { canvas }: RenderingInfo
+  ): Promise<void> {
     await this.render({
       canvas,
       category,
@@ -224,7 +237,10 @@ export class Pulverizer extends GenericCrafter {
 
   override powerConsumption = 0.5
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  override async draw(
+    tile: SchematicTile,
+    { canvas }: RenderingInfo
+  ): Promise<void> {
     await this.render({
       canvas,
       category,

@@ -1,5 +1,15 @@
-import { Block, BlockOutput, BlockOutputDirection } from './block'
-import { Canvas } from 'canvas'
+import { BlockOutput, BlockOutputDirection } from './helper'
+import {
+  ConnectionSupport,
+  RenderingInfo,
+  blockAsset,
+  drawBridge,
+  getChainedSpriteVariation,
+  getConnections,
+  tileRotationToAngle,
+  translatePos,
+} from '../../util'
+import { Block } from './block'
 import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
 
@@ -9,7 +19,7 @@ abstract class Pump extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
   }
 }
@@ -56,9 +66,26 @@ export class Conduit extends Block {
 
   override outputDirection = BlockOutputDirection.front
 
-  // this block cannot be rendered individually
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  async draw(): Promise<void> {}
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    const connections = getConnections(tile, info, ConnectionSupport.regular)
+    const { imageIndex, scaleX, scaleY } = getChainedSpriteVariation(
+      tile,
+      connections
+    )
+    const { x, y } = translatePos(tile, info.canvas)
+    const context = info.canvas.getContext('2d')
+    const image = await blockAsset(
+      category,
+      `${tile.block.name}-top-${imageIndex}`
+    )
+    context.save()
+    context.translate(x + 16, y + 16)
+    context.scale(scaleX, scaleY)
+    context.rotate(tileRotationToAngle(tile.rotation))
+    context.translate(-16, -16)
+    context.drawImage(image, 0, 0)
+    context.restore()
+  }
 }
 export class PulseConduit extends Conduit {
   override name = 'pulse-conduit'
@@ -69,6 +96,30 @@ export class PlatedConduit extends Conduit {
   override name = 'plated-conduit'
 
   override requirements = { thorium: 2, metaglass: 1, plastanium: 1 }
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    const connections = getConnections(tile, info, [
+      ConnectionSupport.strict,
+      Conduit,
+    ])
+    const { imageIndex, scaleX, scaleY } = getChainedSpriteVariation(
+      tile,
+      connections
+    )
+    const { x, y } = translatePos(tile, info.canvas)
+    const context = info.canvas.getContext('2d')
+    const image = await blockAsset(
+      category,
+      `${tile.block.name}-top-${imageIndex}`
+    )
+    context.save()
+    context.translate(x + 16, y + 16)
+    context.scale(scaleX, scaleY)
+    context.rotate(tileRotationToAngle(tile.rotation))
+    context.translate(-16, -16)
+    context.drawImage(image, 0, 0)
+    context.restore()
+  }
 }
 export class LiquidRouter extends Block {
   name = 'liquid-router'
@@ -81,7 +132,7 @@ export class LiquidRouter extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
     await this.render({
       tile,
       canvas,
@@ -108,7 +159,7 @@ export class LiquidJunction extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
   }
 }
@@ -123,8 +174,25 @@ export class BridgeConduit extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
-    await this.render({ tile, canvas, category, layers: [this.name] })
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      canvas: info.canvas,
+      category,
+      layers: [this.name],
+    })
+
+    const type = this instanceof PhaseConduit ? 'phaseBridges' : 'bridges'
+    if (info.options[type]?.render) {
+      info.renderingQueue.add(1, () =>
+        drawBridge({
+          tile,
+          info,
+          category,
+          opacity: info.options[type]?.opacity,
+        })
+      )
+    }
   }
 }
 export class PhaseConduit extends BridgeConduit {

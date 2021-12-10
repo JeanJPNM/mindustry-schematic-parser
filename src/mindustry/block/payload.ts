@@ -1,6 +1,11 @@
-import { Block, BlockOutput, BlockOutputDirection } from './block'
-import { blockAsset, drawRotatedTile, outlineImage } from '../../util'
-import { Canvas } from 'canvas'
+import { BlockOutput, BlockOutputDirection } from './helper'
+import {
+  RenderingInfo,
+  blockAsset,
+  drawRotatedTile,
+  outlineImage,
+} from '../../util'
+import { Block } from './block'
 import { SchematicTile } from '../../schematic'
 
 const category = 'payload'
@@ -16,7 +21,10 @@ export class PayloadConveyor extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  override async draw(
+    tile: SchematicTile,
+    { canvas }: RenderingInfo
+  ): Promise<void> {
     drawRotatedTile({
       canvas,
       image: await blockAsset(category, this.name + '-icon'),
@@ -35,7 +43,10 @@ export class PayloadRouter extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  override async draw(
+    tile: SchematicTile,
+    { canvas }: RenderingInfo
+  ): Promise<void> {
     await this.render({
       tile,
       canvas,
@@ -67,7 +78,10 @@ export class PayloadPropulsionTower extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  override async draw(
+    tile: SchematicTile,
+    { canvas }: RenderingInfo
+  ): Promise<void> {
     await this.render({
       tile,
       canvas,

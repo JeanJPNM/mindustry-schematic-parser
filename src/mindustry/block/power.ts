@@ -1,10 +1,9 @@
-import { blockAsset, drawRotatedTile } from '../../util'
+import { RenderingInfo, blockAsset, drawRotatedTile } from '../../util'
 import { Block } from './block'
-import { Canvas } from 'canvas'
 import { SchematicTile } from '../../schematic'
 const category = 'power'
 abstract class PowerBlock extends Block {
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
   }
 }
@@ -52,10 +51,10 @@ export class Diode extends PowerBlock {
 
   size = 1
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
-    await super.draw(tile, canvas)
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await super.draw(tile, info)
     drawRotatedTile({
-      canvas,
+      canvas: info.canvas,
       tile,
       image: await blockAsset(category, this.name + '-arrow'),
     })
@@ -127,7 +126,10 @@ export class SteamGenerator extends PowerGenerator {
 
   powerGeneration = 5.5
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  override async draw(
+    tile: SchematicTile,
+    { canvas }: RenderingInfo
+  ): Promise<void> {
     await this.render({
       tile,
       canvas,
@@ -229,7 +231,10 @@ export class ImpactReactor extends PowerGenerator {
 
   override powerConsumption = 25
 
-  override async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  override async draw(
+    tile: SchematicTile,
+    { canvas }: RenderingInfo
+  ): Promise<void> {
     await this.render({
       canvas,
       category,

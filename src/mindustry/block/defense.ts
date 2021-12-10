@@ -1,6 +1,6 @@
 import { ItemCost, ItemName } from '../item'
 import { Block } from './block'
-import { Canvas } from 'canvas'
+import { RenderingInfo } from '../../util'
 import { SchematicTile } from '../../schematic'
 
 const category = 'defense'
@@ -14,7 +14,7 @@ function multiplyRequirements(requirements: ItemCost, multiplier = 4): void {
   }
 }
 abstract class DefenseBlock extends Block {
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
     await this.render({
       tile,
       canvas,

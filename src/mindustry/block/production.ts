@@ -1,5 +1,6 @@
-import { Block, BlockOutput, BlockOutputDirection } from './block'
-import { Canvas } from 'canvas'
+import { BlockOutput, BlockOutputDirection } from './helper'
+import { Block } from './block'
+import { RenderingInfo } from '../../util'
 import { SchematicTile } from '../../schematic'
 const category = 'production'
 abstract class Drill extends Block {
@@ -7,7 +8,7 @@ abstract class Drill extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
     await this.render({
       tile,
       canvas,
@@ -68,7 +69,7 @@ export class Cultivator extends Block {
 
   override powerConsumption = 0.9
 
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
     await this.render({
       tile,
       canvas,

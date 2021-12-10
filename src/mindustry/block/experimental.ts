@@ -1,10 +1,11 @@
-import { Block, BlockOutput, BlockOutputDirection } from './block'
-import { Canvas } from 'canvas'
+import { BlockOutput, BlockOutputDirection } from './helper'
+import { Block } from './block'
+import { RenderingInfo } from '../../util'
 import { SchematicTile } from '../../schematic'
 
 const category = 'experimental'
 abstract class ExperimentalBlock extends Block {
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
   }
 }

@@ -1,11 +1,10 @@
-import { blockAsset, tintImage } from '../../util'
+import { RenderingInfo, blockAsset, tintImage } from '../../util'
 import { Block } from './block'
-import { Canvas } from 'canvas'
 import { ItemCost } from '../item'
 import { SchematicTile } from '../..'
 const category = 'campaign'
 abstract class Pad extends Block {
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
     await this.render({
       tile,
       canvas,
@@ -45,7 +44,7 @@ export class InterplanetaryAccelerator extends Block {
 
   override powerConsumption = 10.0
 
-  async draw(tile: SchematicTile, canvas: Canvas): Promise<void> {
+  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
     const image = await blockAsset(category, this.name + '-team')
     this.renderImage({

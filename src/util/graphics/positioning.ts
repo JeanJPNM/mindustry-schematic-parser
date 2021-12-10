@@ -1,7 +1,9 @@
-import { BlockOutputDirection } from '../../mindustry/block/block'
-import { Flags } from '../../util'
-import { Schematic } from '../schematic'
-import { SchematicTile } from '../tile'
+import { BlockOutputDirection } from '../../mindustry/block/helper'
+import { Canvas } from 'canvas'
+import { Flags } from '../flags'
+import { SchematicTile } from '../../schematic'
+
+export type SchematicTileMap = ((SchematicTile | undefined)[] | undefined)[]
 
 export function handlePlacement(tile: SchematicTile): { x: number; y: number } {
   const { size } = tile.block
@@ -12,29 +14,21 @@ export function handlePlacement(tile: SchematicTile): { x: number; y: number } {
     y: y - offset,
   }
 }
-export type SchematicTileMap = ((SchematicTile | undefined)[] | undefined)[]
-export function mapTiles(schematic: Schematic): SchematicTileMap {
-  const { width } = schematic
-  const result: SchematicTile[][] = []
-  for (let x = 0; x < width; x++) {
-    result[x] = []
-  }
-  for (const tile of schematic.tiles) {
-    const { size } = tile.block
-    const start = handlePlacement(tile)
-    const end = {
-      x: start.x + size,
-      y: start.y + size,
-    }
-    for (let { x } = start; x < end.x && x < schematic.width; x++) {
-      for (let { y } = start; y < end.y && y < schematic.height; y++) {
-        result[x][y] = tile
-      }
-    }
-  }
-  return result
-}
 
+export function translatePos(
+  tile: SchematicTile,
+  canvas: Canvas
+): { x: number; y: number } {
+  const { x, y } = tile
+  const { size } = tile.block
+  const offsetX = -Math.ceil(size / 2) + 1
+  const offsetY = Math.floor(size / 2) + 1
+
+  return {
+    x: (x + offsetX) * 32,
+    y: canvas.height - (y + offsetY) * 32,
+  }
+}
 const directions = [
   BlockOutputDirection.front,
   BlockOutputDirection.left,
