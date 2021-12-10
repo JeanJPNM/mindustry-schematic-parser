@@ -299,8 +299,29 @@ export class Duct extends TransportBlock {
 
   size = 1
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  override async draw(): Promise<void> {}
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    const connections = getConnections(tile, info, [
+      ConnectionSupport.strict,
+      Duct,
+    ])
+    const { imageIndex, scaleX, scaleY } = getChainedSpriteVariation(
+      tile,
+      connections
+    )
+    const { x, y } = translatePos(tile, info.canvas)
+    const context = info.canvas.getContext('2d')
+    const image = await blockAsset(
+      `${category}/ducts`,
+      `${tile.block.name}-top-${imageIndex}`
+    )
+    context.save()
+    context.translate(x + 16, y + 16)
+    context.scale(scaleX, scaleY)
+    context.rotate(tileRotationToAngle(tile.rotation))
+    context.translate(-16, -16)
+    context.drawImage(image, 0, 0)
+    context.restore()
+  }
 }
 export class DuctRouter extends TransportBlock {
   name = 'duct-router'
