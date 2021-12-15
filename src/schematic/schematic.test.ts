@@ -1,5 +1,7 @@
 import { Schematic } from './schematic'
+import { createCanvas } from 'canvas'
 import { readFileSync } from 'fs'
+
 test('schematic getters functioning correctly', () => {
   const schematic = new Schematic({
     height: 0,
@@ -68,5 +70,7 @@ test('schematic image generation', async () => {
     readFileSync('src/schematic/schematic.test.json', 'utf-8')
   )['encodedSchematic'] as string
   const schematic = Schematic.decode(base64)
-  await schematic.toImageBuffer()
+  await schematic.render({
+    createCanvas,
+  })
 })

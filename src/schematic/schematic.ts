@@ -201,7 +201,7 @@ export class Schematic implements SchematicProperties {
   /**
    * Creates an image that represents this schematic's preview
    */
-  async toImageBuffer<Canvas extends CanvasLike>(
+  async render<Canvas extends CanvasLike>(
     options: SchematicRenderingOptions<Canvas>
   ): Promise<Canvas> {
     // default options

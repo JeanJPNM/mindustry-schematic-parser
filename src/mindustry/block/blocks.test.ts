@@ -14,7 +14,9 @@ test('individual block rendering', async () => {
       width: 100,
     }),
     canvas,
-    {}
+    {
+      createCanvas,
+    }
   )
   for (const pair of Block.codes) {
     const [, block] = pair
