@@ -44,13 +44,16 @@ export class InterplanetaryAccelerator extends Block {
 
   override powerConsumption = 10.0
 
-  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
+  async draw(
+    tile: SchematicTile,
+    { canvas, options }: RenderingInfo
+  ): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
     const image = await blockAsset(category, this.name + '-team')
     this.renderImage({
       canvas,
       tile,
-      image: tintImage(image, '#ffa600'),
+      image: tintImage(options.createCanvas, image, '#ffa600'),
     })
   }
 }

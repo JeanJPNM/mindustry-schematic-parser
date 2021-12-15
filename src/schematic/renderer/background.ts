@@ -1,8 +1,7 @@
-import { Canvas } from 'canvas'
-import { blockAsset } from '../../util'
+import { CanvasLike, blockAsset } from '../../util'
 
 export async function drawBackground(
-  backgroundCanvas: Canvas,
+  backgroundCanvas: CanvasLike,
   size: number
 ): Promise<void> {
   const context = backgroundCanvas.getContext('2d')

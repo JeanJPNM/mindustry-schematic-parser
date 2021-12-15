@@ -1,5 +1,12 @@
-import { Canvas, Image, createCanvas } from 'canvas'
-export function tintImage(image: Image, color: string, opacity = 0.5): Canvas {
+import { CanvasLike, ImageLike } from '../canvas_types'
+import { RenderingInfo } from '../rendering_info'
+
+export function tintImage(
+  createCanvas: RenderingInfo['options']['createCanvas'],
+  image: ImageLike,
+  color: string,
+  opacity = 0.5
+): CanvasLike {
   const canvas = createCanvas(image.width, image.height)
   const context = canvas.getContext('2d')
   context.save()

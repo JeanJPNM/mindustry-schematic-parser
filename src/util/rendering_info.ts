@@ -1,6 +1,6 @@
 import { Schematic, SchematicTile } from '../schematic'
 import { SchematicTileMap, handlePlacement } from './graphics'
-import { Canvas } from 'canvas'
+import { CanvasLike } from './canvas_types'
 import { SchematicRenderingOptions } from '../schematic/schematic'
 
 export class RenderingInfo {
@@ -10,8 +10,8 @@ export class RenderingInfo {
 
   constructor(
     public readonly schematic: Schematic,
-    public readonly canvas: Canvas,
-    public readonly options: SchematicRenderingOptions
+    public readonly canvas: CanvasLike,
+    public readonly options: SchematicRenderingOptions<CanvasLike>
   ) {}
 
   get tileMap(): SchematicTileMap {

@@ -1,5 +1,5 @@
 import { BlockOutputDirection } from '../../mindustry/block/helper'
-import { Canvas } from 'canvas'
+import { CanvasLike } from '../canvas_types'
 import { Flags } from '../flags'
 import { SchematicTile } from '../../schematic'
 
@@ -17,7 +17,7 @@ export function handlePlacement(tile: SchematicTile): { x: number; y: number } {
 
 export function translatePos(
   tile: SchematicTile,
-  canvas: Canvas
+  canvas: CanvasLike
 ): { x: number; y: number } {
   const { x, y } = tile
   const { size } = tile.block

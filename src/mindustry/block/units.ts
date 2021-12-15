@@ -78,7 +78,10 @@ export class CommandCenter extends Block {
 
   size = 2
 
-  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
+  async draw(
+    tile: SchematicTile,
+    { canvas, options }: RenderingInfo
+  ): Promise<void> {
     await this.render({
       tile,
       canvas,
@@ -88,7 +91,7 @@ export class CommandCenter extends Block {
     const detail = await blockAsset(category, this.name + '-team')
     this.renderImage({
       canvas,
-      image: tintImage(detail, '#ffa600'),
+      image: tintImage(options.createCanvas, detail, '#ffa600'),
       tile,
     })
   }
@@ -177,7 +180,10 @@ export class RepairPoint extends Block {
 
   size = 1
 
-  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
+  async draw(
+    tile: SchematicTile,
+    { canvas, options }: RenderingInfo
+  ): Promise<void> {
     await this.render({
       tile,
       canvas,
@@ -186,6 +192,7 @@ export class RepairPoint extends Block {
     })
 
     const top = outlineImage({
+      createCanvas: options.createCanvas,
       image: await blockAsset(category, this.name),
       fillStyle: '#353535',
       thickness: 3,
@@ -207,7 +214,7 @@ export class RepairTurret extends RepairPoint {
 
   override async draw(
     tile: SchematicTile,
-    { canvas }: RenderingInfo
+    { canvas, options }: RenderingInfo
   ): Promise<void> {
     await this.render({
       tile,
@@ -216,6 +223,7 @@ export class RepairTurret extends RepairPoint {
       layers: ['bases/block-2'],
     })
     const top = outlineImage({
+      createCanvas: options.createCanvas,
       image: await blockAsset(category, this.name),
       fillStyle: '#353535',
       thickness: 3,

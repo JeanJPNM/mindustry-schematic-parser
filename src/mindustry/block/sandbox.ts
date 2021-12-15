@@ -38,7 +38,7 @@ export class ItemSource extends SandBoxBlock {
 
   override async draw(
     tile: SchematicTile,
-    { canvas }: RenderingInfo
+    { canvas, options }: RenderingInfo
   ): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
     const config = tile.config as Item | null
@@ -47,7 +47,9 @@ export class ItemSource extends SandBoxBlock {
     this.renderImage({
       canvas,
       tile,
-      image: config ? tintImage(image, config.color, 1) : image,
+      image: config
+        ? tintImage(options.createCanvas, image, config.color, 1)
+        : image,
     })
   }
 }
@@ -72,7 +74,7 @@ export class LiquidSource extends SandBoxBlock {
 
   override async draw(
     tile: SchematicTile,
-    { canvas }: RenderingInfo
+    { canvas, options }: RenderingInfo
   ): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
     const config = tile.config as Liquid | null
@@ -81,7 +83,9 @@ export class LiquidSource extends SandBoxBlock {
     this.renderImage({
       canvas,
       tile,
-      image: config ? tintImage(image, config.color, 1) : image,
+      image: config
+        ? tintImage(options.createCanvas, image, config.color, 1)
+        : image,
     })
   }
 }

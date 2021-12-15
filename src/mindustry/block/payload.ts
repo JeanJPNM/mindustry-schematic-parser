@@ -80,7 +80,7 @@ export class PayloadPropulsionTower extends Block {
 
   override async draw(
     tile: SchematicTile,
-    { canvas }: RenderingInfo
+    { canvas, options }: RenderingInfo
   ): Promise<void> {
     await this.render({
       tile,
@@ -89,6 +89,7 @@ export class PayloadPropulsionTower extends Block {
       layers: [`${this.name}-base`],
     })
     const top = outlineImage({
+      createCanvas: options.createCanvas,
       image: await blockAsset(category, this.name),
       fillStyle: '#353535',
       thickness: 3,

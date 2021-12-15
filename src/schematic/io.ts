@@ -19,6 +19,8 @@ const {
   sandbox: { ItemSource, LiquidSource, LightBlock },
   environment: { AirBlock },
 } = Blocks
+
+// TODO: remove class wrapper, lazy
 export abstract class SchematicIO {
   static readonly header = 'msch'
 

@@ -1,16 +1,13 @@
-import {
-  Canvas,
-  CanvasGradient,
-  CanvasPattern,
-  Image,
-  createCanvas,
-} from 'canvas'
+import { CanvasLike, ImageLike } from '../canvas_types'
+import { RenderingInfo } from '..'
+
 export interface OutlineOptions {
-  image: Image
+  image: ImageLike
   fillStyle?: string | CanvasGradient | CanvasPattern
   x?: number
   y?: number
   thickness?: number
+  createCanvas: RenderingInfo['options']['createCanvas']
 }
 /**
  * Outlines an image using an offset array.
@@ -22,7 +19,8 @@ export function outlineImage({
   image,
   fillStyle = 'black',
   thickness = 2,
-}: OutlineOptions): Canvas {
+  createCanvas,
+}: OutlineOptions): CanvasLike {
   const canvas = createCanvas(image.width, image.height)
   const context = canvas.getContext('2d')
   const dArr = [-1, -1, 0, -1, 1, -1, -1, 0, 1, 0, -1, 1, 0, 1, 1, 1] // offset array

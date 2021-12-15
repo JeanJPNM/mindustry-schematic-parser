@@ -1,16 +1,16 @@
-import { Canvas, Image } from 'canvas'
+import { CanvasLike, ImageLike } from '../../util'
 import { SchematicTile } from '../../schematic'
 
 export interface BlockRenderingOptions {
   tile: SchematicTile
-  canvas: Canvas
+  canvas: CanvasLike
   category: string
   layers: string[]
 }
 export interface BlockImageRenderingOptions {
   tile: SchematicTile
-  canvas: Canvas
-  image: Image | Canvas
+  canvas: CanvasLike
+  image: ImageLike | CanvasLike
 }
 
 /**

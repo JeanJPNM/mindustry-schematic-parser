@@ -1,12 +1,12 @@
-import { Canvas, Image } from 'canvas'
+import { CanvasLike, ImageLike } from '../canvas_types'
 import { SchematicTile } from '../../schematic'
 import { TileRotation } from '../../schematic/tile'
 import { translatePos } from './positioning'
 
 export interface TileRotatedDrawOptions {
-  canvas: Canvas
+  canvas: CanvasLike
   tile: SchematicTile
-  image: Image
+  image: ImageLike
   angle?: number
 }
 export function drawRotatedTile({
@@ -24,8 +24,8 @@ export function drawRotatedTile({
   })
 }
 interface RotatedDrawOptions {
-  canvas: Canvas
-  image: Image | Canvas
+  canvas: CanvasLike
+  image: ImageLike | CanvasLike
   x: number
   y: number
   offset: number

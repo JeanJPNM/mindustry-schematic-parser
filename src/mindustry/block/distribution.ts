@@ -212,7 +212,7 @@ export class Sorter extends TransportBlock {
 
   override async draw(
     tile: SchematicTile,
-    { canvas }: RenderingInfo
+    { canvas, options }: RenderingInfo
   ): Promise<void> {
     await this.render({ tile, canvas, category, layers: [this.name] })
     const config = tile.config as Item | null
@@ -221,7 +221,9 @@ export class Sorter extends TransportBlock {
     this.renderImage({
       canvas,
       tile,
-      image: config ? tintImage(image, config.color, 1) : image,
+      image: config
+        ? tintImage(options.createCanvas, image, config.color, 1)
+        : image,
     })
   }
 }
@@ -267,7 +269,7 @@ export class MassDriver extends TransportBlock {
 
   override async draw(
     tile: SchematicTile,
-    { canvas }: RenderingInfo
+    { canvas, options }: RenderingInfo
   ): Promise<void> {
     await this.render({
       canvas,
@@ -277,6 +279,7 @@ export class MassDriver extends TransportBlock {
     })
 
     const top = outlineImage({
+      createCanvas: options.createCanvas,
       image: await blockAsset(category, this.name),
       fillStyle: '#353535',
       thickness: 3,

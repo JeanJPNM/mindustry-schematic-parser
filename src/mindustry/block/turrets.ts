@@ -4,7 +4,10 @@ import { SchematicTile } from '../../schematic'
 
 const category = 'turrets'
 abstract class Turret extends Block {
-  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
+  async draw(
+    tile: SchematicTile,
+    { canvas, options }: RenderingInfo
+  ): Promise<void> {
     await this.render({
       tile,
       canvas,
@@ -13,6 +16,7 @@ abstract class Turret extends Block {
     })
 
     const top = outlineImage({
+      createCanvas: options.createCanvas,
       image: await blockAsset(category, this.name),
       fillStyle: '#353535',
       thickness: 3,
