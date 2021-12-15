@@ -1,10 +1,10 @@
 import * as renderer from './renderer'
 import { Blocks, ItemCost, ItemName } from '../mindustry'
-import { RenderingInfo, ticksPerSecond } from '../util'
+import { CanvasLike, RenderingInfo, ticksPerSecond } from '../util'
 import { MindustryVersion } from './version'
 import { SchematicIO } from './io'
 import { SchematicTile } from './tile'
-import { createCanvas } from 'canvas'
+
 const {
   power: { PowerGenerator },
 } = Blocks
@@ -29,7 +29,7 @@ export interface SchematicProperties {
   /** The version of mindustry that encoded this schematic */
   version?: MindustryVersion
 }
-export interface SchematicRenderingOptions {
+export interface SchematicRenderingOptions<Canvas extends CanvasLike> {
   /** Options for rendering coveyors */
   conveyors?: {
     render: boolean
@@ -57,6 +57,8 @@ export interface SchematicRenderingOptions {
   size?: number
   /** Whether the image should have a background */
   background?: boolean
+
+  createCanvas(width: number, height: number): Canvas
 }
 /**
  * A simple representation for a mindustry schematic
@@ -199,9 +201,9 @@ export class Schematic implements SchematicProperties {
   /**
    * Creates an image that represents this schematic's preview
    */
-  async toImageBuffer(
-    options: SchematicRenderingOptions = {}
-  ): Promise<Buffer> {
+  async toImageBuffer<Canvas extends CanvasLike>(
+    options: SchematicRenderingOptions<Canvas>
+  ): Promise<Canvas> {
     // default options
     options.background ??= true
     options.bridges ??= { opacity: 0.7, render: true }
@@ -211,7 +213,7 @@ export class Schematic implements SchematicProperties {
     options.phaseBridges ??= { opacity: 1, render: true }
     options.phaseBridges.render ??= true
 
-    const canvas = createCanvas(this.width * 32, this.height * 32)
+    const canvas = options.createCanvas(this.width * 32, this.height * 32)
     let size = Math.max(this.width, this.height) * 32
     if (options.background) size += 64
     if (options.size) {
@@ -224,7 +226,7 @@ export class Schematic implements SchematicProperties {
       await tile.block.draw(tile, renderingInfo)
     }
     await renderingInfo.renderingQueue.execute()
-    const background = createCanvas(size, size)
+    const background = options.createCanvas(size, size)
     if (options.background) {
       await renderer.drawBackground(background, size)
     }
@@ -240,6 +242,6 @@ export class Schematic implements SchematicProperties {
       width,
       height
     )
-    return background.toBuffer()
+    return background
   }
 }
