@@ -1,4 +1,7 @@
 export type CanvasLike = Pick<HTMLCanvasElement, 'width' | 'height'> & {
+  getContext(contextId: '2d'): CanvasContextLike | null
+}
+export type SafeCanvasLike = Omit<CanvasLike, 'getContext'> & {
   getContext(contextId: '2d'): CanvasContextLike
 }
 export type CanvasDrawable = CanvasLike | ImageLike

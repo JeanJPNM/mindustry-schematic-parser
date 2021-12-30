@@ -1,6 +1,12 @@
 import * as renderer from './renderer'
 import { Blocks, ItemCost, ItemName } from '../mindustry'
-import { CanvasLike, RenderingInfo, ticksPerSecond } from '../util'
+import {
+  CanvasLike,
+  ImageLike,
+  RenderingInfo,
+  SafeCanvasLike,
+  ticksPerSecond,
+} from '../util'
 import { MindustryVersion } from './version'
 import { SchematicIO } from './io'
 import { SchematicTile } from './tile'
@@ -213,7 +219,10 @@ export class Schematic implements SchematicProperties {
     options.phaseBridges ??= { opacity: 1, render: true }
     options.phaseBridges.render ??= true
 
-    const canvas = options.createCanvas(this.width * 32, this.height * 32)
+    const canvas = options.createCanvas(
+      this.width * 32,
+      this.height * 32
+    ) as SafeCanvasLike
     let size = Math.max(this.width, this.height) * 32
     if (options.background) size += 64
     if (options.size) {
@@ -221,12 +230,16 @@ export class Schematic implements SchematicProperties {
     } else if (options.maxSize) {
       size = Math.min(options.maxSize, size)
     }
-    const renderingInfo = new RenderingInfo(this, canvas, options)
+    const renderingInfo = new RenderingInfo(
+      this,
+      canvas,
+      options as SchematicRenderingOptions<SafeCanvasLike>
+    )
     for (const tile of this.tiles) {
       await tile.block.draw(tile, renderingInfo)
     }
     await renderingInfo.renderingQueue.execute()
-    const background = options.createCanvas(size, size)
+    const background = options.createCanvas(size, size) as SafeCanvasLike
     if (options.background) {
       await renderer.drawBackground(background, size)
     }
@@ -242,6 +255,6 @@ export class Schematic implements SchematicProperties {
       width,
       height
     )
-    return background
+    return background as Canvas
   }
 }
