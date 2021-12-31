@@ -64,7 +64,46 @@ export interface SchematicRenderingOptions<Canvas extends CanvasLike> {
   /** Whether the image should have a background */
   background?: boolean
 
+  /**
+   * Creates a canvas with the specified size.
+   *
+   * To find examples on how to use this parameter, please look at {@link getAsset}
+   *  */
   createCanvas(width: number, height: number): Canvas
+
+  /**
+   * This handler must be provided to load images.
+   *
+   * This package does not cache images or their contents,
+   * in most scenarios (like in web browsers), you won't need to cache them manually.
+   * @param path The path of the asset relative to this packages' `assets` folder
+   *
+   * Example for web browsers
+   * @example
+   * schematic.render({
+   *    createCanvas(width, height) {
+   *      const canvas = document.createElement("canvas");
+   *      canvas.width = width;
+   *      canvas.height = height;
+   *      return canvas;
+   *    },
+   *    getAsset(assetPath) {
+   *      const img = document.createElement("image"); // or new Image()
+   *      img.src = new URL(assetPath, "/url/to/package/assets").href;
+   *      return img;
+   *    }
+   * });
+   *
+   * The example bellow runs on nodejs, using the `canvas` library.
+   * @example
+   *  schematic.render({
+   *    createCanvas, // `createCanvas` from `canvas`
+   *    getAsset(assetPath) {
+   *      return loadImage(path.join("path/to/assets/folder", assetPath)); // `loadImage` from `canvas`
+   *    }
+   * });
+   */
+  getAsset(path: string): Promise<ImageLike> | ImageLike
 }
 /**
  * A simple representation for a mindustry schematic
