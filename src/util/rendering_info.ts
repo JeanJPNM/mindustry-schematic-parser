@@ -1,6 +1,6 @@
+import { ImageLike, SafeCanvasLike } from './canvas_types'
 import { Schematic, SchematicTile } from '../schematic'
 import { SchematicTileMap, handlePlacement } from './graphics'
-import { SafeCanvasLike } from './canvas_types'
 import { SchematicRenderingOptions } from '../schematic/schematic'
 
 export class RenderingInfo {
@@ -17,6 +17,13 @@ export class RenderingInfo {
   get tileMap(): SchematicTileMap {
     if (this._tileMap === null) this._tileMap = mapTiles(this.schematic)
     return this._tileMap
+  }
+
+  async blockAsset(category: string, name: string): Promise<ImageLike> {
+    const path = ['sprites/blocks', category, name + '.png']
+      .join('/')
+      .replace(/\/+/g, '/')
+    return await this.options.getAsset(path)
   }
 }
 type RenderingExecutor = () => Promise<void>
