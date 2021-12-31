@@ -1,5 +1,7 @@
+import { createCanvas, loadImage } from 'canvas'
 import { Schematic } from './schematic'
-import { createCanvas } from 'canvas'
+import { join } from 'path'
+import pkgDir from 'pkg-dir'
 import { readFileSync } from 'fs'
 
 test('schematic getters functioning correctly', () => {
@@ -70,7 +72,11 @@ test('schematic image generation', async () => {
     readFileSync('src/schematic/schematic.test.json', 'utf-8')
   )['encodedSchematic'] as string
   const schematic = Schematic.decode(base64)
+  const assetsFolder = join((await pkgDir()) as string, 'assets')
   await schematic.render({
     createCanvas,
+    getAsset(assetPath) {
+      return loadImage(join(assetsFolder, assetPath))
+    },
   })
 })

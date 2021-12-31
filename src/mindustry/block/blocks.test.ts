@@ -1,11 +1,14 @@
 import { Schematic, SchematicTile } from '../../schematic'
+import { createCanvas, loadImage } from 'canvas'
 import { Block } from './index'
 import { Item } from '../item'
 import { RenderingInfo } from '../../util'
-import { createCanvas } from 'canvas'
+import { join } from 'path'
+import pkgDir from 'pkg-dir'
 
 test('individual block rendering', async () => {
   const canvas = createCanvas(500, 500)
+  const assetsFolder = join((await pkgDir()) as string, 'assets')
   const info = new RenderingInfo(
     new Schematic({
       height: 100,
@@ -16,6 +19,9 @@ test('individual block rendering', async () => {
     canvas,
     {
       createCanvas,
+      getAsset(path) {
+        return loadImage(join(assetsFolder, path))
+      },
     }
   )
   for (const pair of Block.codes) {
