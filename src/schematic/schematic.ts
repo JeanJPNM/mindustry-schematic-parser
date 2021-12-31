@@ -1,7 +1,6 @@
 import * as renderer from './renderer'
 import { Blocks, ItemCost, ItemName } from '../mindustry'
 import {
-  CanvasLike,
   ImageLike,
   RenderingInfo,
   SafeCanvasLike,
@@ -35,7 +34,7 @@ export interface SchematicProperties {
   /** The version of mindustry that encoded this schematic */
   version?: MindustryVersion
 }
-export interface SchematicRenderingOptions<Canvas extends CanvasLike> {
+export interface SchematicRenderingOptions<Canvas> {
   /** Options for rendering coveyors */
   conveyors?: {
     render: boolean
@@ -246,7 +245,7 @@ export class Schematic implements SchematicProperties {
   /**
    * Creates an image that represents this schematic's preview
    */
-  async render<Canvas extends CanvasLike>(
+  async render<Canvas>(
     options: SchematicRenderingOptions<Canvas>
   ): Promise<Canvas> {
     // default options
@@ -261,7 +260,7 @@ export class Schematic implements SchematicProperties {
     const canvas = options.createCanvas(
       this.width * 32,
       this.height * 32
-    ) as SafeCanvasLike
+    ) as unknown as SafeCanvasLike
     let size = Math.max(this.width, this.height) * 32
     if (options.background) size += 64
     if (options.size) {
@@ -272,15 +271,18 @@ export class Schematic implements SchematicProperties {
     const renderingInfo = new RenderingInfo(
       this,
       canvas,
-      options as SchematicRenderingOptions<SafeCanvasLike>
+      options as unknown as SchematicRenderingOptions<SafeCanvasLike>
     )
     for (const tile of this.tiles) {
       await tile.block.draw(tile, renderingInfo)
     }
     await renderingInfo.renderingQueue.execute()
-    const background = options.createCanvas(size, size) as SafeCanvasLike
+    const background = options.createCanvas(
+      size,
+      size
+    ) as unknown as SafeCanvasLike
     if (options.background) {
-      await renderer.drawBackground(background, size)
+      await renderer.drawBackground(renderingInfo, background, size)
     }
     const bcontext = background.getContext('2d')
     const border = options.background ? 64 : 0
@@ -294,6 +296,6 @@ export class Schematic implements SchematicProperties {
       width,
       height
     )
-    return background as Canvas
+    return background as unknown as Canvas
   }
 }
