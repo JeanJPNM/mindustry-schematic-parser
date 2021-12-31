@@ -14,10 +14,10 @@ function multiplyRequirements(requirements: ItemCost, multiplier = 4): void {
   }
 }
 abstract class DefenseBlock extends Block {
-  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     await this.render({
       tile,
-      canvas,
+      info,
       category,
       layers: [this.name],
     })

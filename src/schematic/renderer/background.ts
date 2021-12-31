@@ -1,11 +1,12 @@
-import { SafeCanvasLike, blockAsset } from '../../util'
+import { RenderingInfo, SafeCanvasLike } from '../../util'
 
 export async function drawBackground(
+  info: RenderingInfo,
   backgroundCanvas: SafeCanvasLike,
   size: number
 ): Promise<void> {
   const context = backgroundCanvas.getContext('2d')
-  const floor = await blockAsset('environment', 'metal-floor')
+  const floor = await info.blockAsset('environment', 'metal-floor')
   const pattern = context.createPattern(floor, 'repeat')
 
   context.save()

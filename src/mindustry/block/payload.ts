@@ -1,10 +1,5 @@
 import { BlockOutput, BlockOutputDirection } from './helper'
-import {
-  RenderingInfo,
-  blockAsset,
-  drawRotatedTile,
-  outlineImage,
-} from '../../util'
+import { RenderingInfo, drawRotatedTile, outlineImage } from '../../util'
 import { Block } from './block'
 import { SchematicTile } from '../../schematic'
 
@@ -23,7 +18,7 @@ export class PayloadConveyor extends Block {
 
   override async draw(
     tile: SchematicTile,
-    { canvas }: RenderingInfo
+    { canvas, blockAsset }: RenderingInfo
   ): Promise<void> {
     drawRotatedTile({
       canvas,
@@ -43,19 +38,16 @@ export class PayloadRouter extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  override async draw(
-    tile: SchematicTile,
-    { canvas }: RenderingInfo
-  ): Promise<void> {
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     await this.render({
       tile,
-      canvas,
+      info,
       category,
       layers: [this.name, this.name + '-over'],
     })
     drawRotatedTile({
-      canvas,
-      image: await blockAsset(category, this.name + '-top'),
+      canvas: info.canvas,
+      image: await info.blockAsset(category, this.name + '-top'),
       tile,
     })
   }
@@ -78,25 +70,22 @@ export class PayloadPropulsionTower extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  override async draw(
-    tile: SchematicTile,
-    { canvas, options }: RenderingInfo
-  ): Promise<void> {
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     await this.render({
       tile,
-      canvas,
+      info,
       category,
       layers: [`${this.name}-base`],
     })
     const top = outlineImage({
-      createCanvas: options.createCanvas,
-      image: await blockAsset(category, this.name),
+      createCanvas: info.options.createCanvas,
+      image: await info.blockAsset(category, this.name),
       fillStyle: '#353535',
       thickness: 3,
     })
     this.renderImage({
       tile,
-      canvas,
+      info,
       image: top,
     })
   }

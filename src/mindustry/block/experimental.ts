@@ -5,8 +5,8 @@ import { SchematicTile } from '../../schematic'
 
 const category = 'experimental'
 abstract class ExperimentalBlock extends Block {
-  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
-    await this.render({ tile, canvas, category, layers: [this.name] })
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({ tile, info, category, layers: [this.name] })
   }
 }
 export class BlockForge extends ExperimentalBlock {

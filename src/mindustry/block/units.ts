@@ -1,7 +1,6 @@
 import { BlockOutput, BlockOutputDirection } from './helper'
 import {
   RenderingInfo,
-  blockAsset,
   drawRotatedTile,
   outlineImage,
   tintImage,
@@ -17,21 +16,21 @@ abstract class Factory extends Block {
 
   override outputDirection = BlockOutputDirection.front
 
-  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     await this.render({
       tile,
-      canvas,
+      info,
       category,
       layers: [this.name],
     })
     drawRotatedTile({
-      canvas,
-      image: await blockAsset(category, 'factory-out-' + this.size),
+      canvas: info.canvas,
+      image: await info.blockAsset(category, 'factory-out-' + this.size),
       tile,
     })
     await this.render({
       tile,
-      canvas,
+      info,
       category,
       layers: ['factory-top-' + this.size],
     })
@@ -42,30 +41,30 @@ abstract class Reconstructor extends Block {
 
   override outputDirection = BlockOutputDirection.front
 
-  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     await this.render({
       tile,
-      canvas,
+      info,
       category,
       layers: [this.name],
     })
 
-    const input = await blockAsset(category, 'factory-in-' + this.size)
-    const output = await blockAsset(category, 'factory-out-' + this.size)
+    const input = await info.blockAsset(category, 'factory-in-' + this.size)
+    const output = await info.blockAsset(category, 'factory-out-' + this.size)
     drawRotatedTile({
-      canvas,
+      canvas: info.canvas,
       image: input,
       tile,
     })
     drawRotatedTile({
-      canvas,
+      canvas: info.canvas,
       image: output,
       tile,
     })
 
     await this.render({
       tile,
-      canvas,
+      info,
       category,
       layers: [this.name + '-top'],
     })
@@ -78,20 +77,17 @@ export class CommandCenter extends Block {
 
   size = 2
 
-  async draw(
-    tile: SchematicTile,
-    { canvas, options }: RenderingInfo
-  ): Promise<void> {
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     await this.render({
       tile,
-      canvas,
+      info,
       category,
       layers: [this.name],
     })
-    const detail = await blockAsset(category, this.name + '-team')
+    const detail = await info.blockAsset(category, this.name + '-team')
     this.renderImage({
-      canvas,
-      image: tintImage(options.createCanvas, detail, '#ffa600'),
+      info,
+      image: tintImage(info.options.createCanvas, detail, '#ffa600'),
       tile,
     })
   }
@@ -180,27 +176,24 @@ export class RepairPoint extends Block {
 
   size = 1
 
-  async draw(
-    tile: SchematicTile,
-    { canvas, options }: RenderingInfo
-  ): Promise<void> {
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     await this.render({
       tile,
-      canvas,
+      info,
       category,
       layers: [this.name + '-base', this.name],
     })
 
     const top = outlineImage({
-      createCanvas: options.createCanvas,
-      image: await blockAsset(category, this.name),
+      createCanvas: info.options.createCanvas,
+      image: await info.blockAsset(category, this.name),
       fillStyle: '#353535',
       thickness: 3,
     })
 
     this.renderImage({
       tile,
-      canvas,
+      info,
       image: top,
     })
   }
@@ -212,25 +205,22 @@ export class RepairTurret extends RepairPoint {
 
   override size = 2
 
-  override async draw(
-    tile: SchematicTile,
-    { canvas, options }: RenderingInfo
-  ): Promise<void> {
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     await this.render({
       tile,
-      canvas,
+      info,
       category: 'turrets',
       layers: ['bases/block-2'],
     })
     const top = outlineImage({
-      createCanvas: options.createCanvas,
-      image: await blockAsset(category, this.name),
+      createCanvas: info.options.createCanvas,
+      image: await info.blockAsset(category, this.name),
       fillStyle: '#353535',
       thickness: 3,
     })
     this.renderImage({
       tile,
-      canvas,
+      info,
       image: top,
     })
   }
@@ -242,7 +232,7 @@ export class ResupplyPoint extends Block {
 
   size = 2
 
-  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
-    await this.render({ tile, canvas, category, layers: [this.name] })
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({ tile, info, category, layers: [this.name] })
   }
 }

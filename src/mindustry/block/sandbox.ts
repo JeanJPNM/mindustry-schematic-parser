@@ -1,5 +1,5 @@
 import { BlockOutput, BlockOutputDirection } from './helper'
-import { RenderingInfo, blockAsset, tintImage } from '../../util'
+import { RenderingInfo, tintImage } from '../../util'
 import { Block } from './block'
 import { Item } from '../item'
 import { Liquid } from '../liquid'
@@ -7,8 +7,8 @@ import { SchematicTile } from '../../schematic'
 
 const category = 'sandbox'
 abstract class SandBoxBlock extends Block {
-  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
-    await this.render({ tile, canvas, category, layers: [this.name] })
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({ tile, info, category, layers: [this.name] })
   }
 }
 export class PowerSource extends SandBoxBlock {
@@ -36,19 +36,16 @@ export class ItemSource extends SandBoxBlock {
 
   override outputDirection = BlockOutputDirection.all
 
-  override async draw(
-    tile: SchematicTile,
-    { canvas, options }: RenderingInfo
-  ): Promise<void> {
-    await this.render({ tile, canvas, category, layers: [this.name] })
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({ tile, info, category, layers: [this.name] })
     const config = tile.config as Item | null
     const imgName = config ? 'center' : 'cross'
-    const image = await blockAsset(category, imgName)
+    const image = await info.blockAsset(category, imgName)
     this.renderImage({
-      canvas,
+      info,
       tile,
       image: config
-        ? tintImage(options.createCanvas, image, config.color, 1)
+        ? tintImage(info.options.createCanvas, image, config.color, 1)
         : image,
     })
   }
@@ -72,19 +69,16 @@ export class LiquidSource extends SandBoxBlock {
 
   override outputDirection = BlockOutputDirection.all
 
-  override async draw(
-    tile: SchematicTile,
-    { canvas, options }: RenderingInfo
-  ): Promise<void> {
-    await this.render({ tile, canvas, category, layers: [this.name] })
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({ tile, info, category, layers: [this.name] })
     const config = tile.config as Liquid | null
     const imgName = config ? 'center' : 'cross'
-    const image = await blockAsset(category, imgName)
+    const image = await info.blockAsset(category, imgName)
     this.renderImage({
-      canvas,
+      info,
       tile,
       image: config
-        ? tintImage(options.createCanvas, image, config.color, 1)
+        ? tintImage(info.options.createCanvas, image, config.color, 1)
         : image,
     })
   }
@@ -117,13 +111,10 @@ export class PayloadSource extends SandBoxBlock {
 
   override outputDirection = BlockOutputDirection.all
 
-  override async draw(
-    tile: SchematicTile,
-    { canvas }: RenderingInfo
-  ): Promise<void> {
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     await this.render({
       tile,
-      canvas,
+      info,
       category,
       layers: [this.name, `${this.name}-top`],
     })
@@ -136,13 +127,10 @@ export class PayloadVoid extends SandBoxBlock {
 
   size = 5
 
-  override async draw(
-    tile: SchematicTile,
-    { canvas }: RenderingInfo
-  ): Promise<void> {
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     await this.render({
       tile,
-      canvas,
+      info,
       category,
       layers: [this.name, `${this.name}-top`],
     })

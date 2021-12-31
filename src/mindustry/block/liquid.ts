@@ -2,7 +2,6 @@ import { BlockOutput, BlockOutputDirection } from './helper'
 import {
   ConnectionSupport,
   RenderingInfo,
-  blockAsset,
   drawBridge,
   getChainedSpriteVariation,
   getConnections,
@@ -19,8 +18,8 @@ abstract class Pump extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
-    await this.render({ tile, canvas, category, layers: [this.name] })
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({ tile, info, category, layers: [this.name] })
   }
 }
 
@@ -74,7 +73,7 @@ export class Conduit extends Block {
     )
     const { x, y } = translatePos(tile, info.canvas)
     const context = info.canvas.getContext('2d')
-    const image = await blockAsset(
+    const image = await info.blockAsset(
       category,
       `${tile.block.name}-top-${imageIndex}`
     )
@@ -108,7 +107,7 @@ export class PlatedConduit extends Conduit {
     )
     const { x, y } = translatePos(tile, info.canvas)
     const context = info.canvas.getContext('2d')
-    const image = await blockAsset(
+    const image = await info.blockAsset(
       category,
       `${tile.block.name}-top-${imageIndex}`
     )
@@ -132,10 +131,10 @@ export class LiquidRouter extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     await this.render({
       tile,
-      canvas,
+      info,
       category,
       layers: [this.name + '-bottom', this.name + '-top'],
     })
@@ -159,8 +158,8 @@ export class LiquidJunction extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
-    await this.render({ tile, canvas, category, layers: [this.name] })
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({ tile, info, category, layers: [this.name] })
   }
 }
 export class BridgeConduit extends Block {
@@ -177,7 +176,7 @@ export class BridgeConduit extends Block {
   async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     await this.render({
       tile,
-      canvas: info.canvas,
+      info,
       category,
       layers: [this.name],
     })

@@ -1,6 +1,5 @@
 import {
   RenderingInfo,
-  blockAsset,
   degreeToAngle,
   drawRotated,
   tileRotationToAngle,
@@ -18,7 +17,7 @@ export interface BridgeDrawOptions {
 }
 export async function drawBridge({
   tile,
-  info: { canvas, tileMap, options },
+  info: { canvas, tileMap, options, blockAsset },
   category,
   opacity,
 }: BridgeDrawOptions): Promise<void> {
