@@ -12,7 +12,9 @@ export class RenderingInfo {
     public readonly schematic: Schematic,
     public readonly canvas: SafeCanvasLike,
     public readonly options: SchematicRenderingOptions<SafeCanvasLike>
-  ) {}
+  ) {
+    this.blockAsset = this.blockAsset.bind(this)
+  }
 
   get tileMap(): SchematicTileMap {
     if (this._tileMap === null) this._tileMap = mapTiles(this.schematic)
