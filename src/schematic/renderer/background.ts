@@ -1,7 +1,8 @@
 import { Canvas } from 'canvas'
-import { blockAsset } from '../../util'
+import { RenderingInfo } from '../../util'
 
 export async function drawBackground(
+  { blockAsset }: RenderingInfo,
   backgroundCanvas: Canvas,
   size: number
 ): Promise<void> {

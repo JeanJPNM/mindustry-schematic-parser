@@ -36,7 +36,7 @@ export abstract class SchematicIO {
       return true
     }
     for (let i = 0; i < header.length; i++) {
-      if (header[i] !== String.fromCodePoint(data.data.getUint8(i))) {
+      if (header[i] !== String.fromCharCode(data.data.getUint8(i))) {
         return false
       }
     }
@@ -235,11 +235,10 @@ export abstract class SchematicIO {
    * Parses the data and returns a schematic
    *  @param encoded The encoded schematic data
    */
-  static decode(encoded: string | Buffer): Schematic {
+  static decode(encoded: string | Uint8Array): Schematic {
     const decoded =
-      typeof encoded === 'string'
-        ? Buffer.from(encoded.trim(), 'base64')
-        : encoded
+      typeof encoded === 'string' ? base64ToBytes(encoded.trim()) : encoded
+
     const arr = new Uint8Array(decoded)
     const data = new StreamedDataReader(arr.buffer)
     if (!this.isValid(data, true)) {
@@ -252,7 +251,7 @@ export abstract class SchematicIO {
     const blocks = this.blocks(cData)
     const tiles = this.tiles(cData, blocks, version)
     const base64 =
-      typeof encoded === 'string' ? encoded : encoded.toString('base64')
+      typeof encoded === 'string' ? encoded : bytesToBase64(encoded)
     return new Schematic({
       height,
       tags,
@@ -269,7 +268,7 @@ export abstract class SchematicIO {
   static encodeTags(schematic: Schematic): string {
     if (!schematic.base64)
       throw new Error('cannot save the tags of a non parsed schematic')
-    const decoded = Buffer.from(schematic.base64, 'base64')
+    const decoded = base64ToBytes(schematic.base64)
     const arr = new Uint8Array(decoded)
     const data = new StreamedDataReader(arr.buffer)
     // read header
@@ -312,9 +311,9 @@ export abstract class SchematicIO {
     for (let i = 0; i < bytes.byteLength; i++) {
       resultWriter.setUint8(bytes[i])
     }
-    return Buffer.from(
-      resultWriter.buffer.slice(0, resultWriter.offset)
-    ).toString('base64')
+    return bytesToBase64(
+      new Uint8Array(resultWriter.buffer.slice(0, resultWriter.offset))
+    )
   }
 }
 
@@ -330,4 +329,27 @@ function concatBytes(...arrays: Uint8Array[]) {
     currentOffset += arr.length
   }
   return result
+}
+
+function base64ToBytes(source: string) {
+  if (typeof window === 'undefined') return Buffer.from(source, 'base64')
+
+  const binaryString = atob(source)
+  const bytes = new Uint8Array(binaryString.length)
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i)
+  }
+  return bytes
+}
+
+function bytesToBase64(source: Buffer | Uint8Array) {
+  if ('write' in source) return source.toString('base64')
+  if (typeof window === 'undefined')
+    return Buffer.from(source).toString('base64')
+
+  let result = ''
+  for (let i = 0; i < source.length; i++) {
+    result += String.fromCharCode(source[i])
+  }
+  return btoa(result)
 }

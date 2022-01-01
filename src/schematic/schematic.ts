@@ -1,10 +1,10 @@
 import * as renderer from './renderer'
 import { Blocks, ItemCost, ItemName } from '../mindustry'
+import { Canvas, createCanvas } from 'canvas'
 import { RenderingInfo, ticksPerSecond } from '../util'
 import { MindustryVersion } from './version'
 import { SchematicIO } from './io'
 import { SchematicTile } from './tile'
-import { createCanvas } from 'canvas'
 const {
   power: { PowerGenerator },
 } = Blocks
@@ -57,6 +57,11 @@ export interface SchematicRenderingOptions {
   size?: number
   /** Whether the image should have a background */
   background?: boolean
+}
+
+export interface WebSchematicRenderingOptions
+  extends SchematicRenderingOptions {
+  assetsBaseUrl: string
 }
 /**
  * A simple representation for a mindustry schematic
@@ -198,10 +203,47 @@ export class Schematic implements SchematicProperties {
 
   /**
    * Creates an image that represents this schematic's preview
+   *
+   * @deprecated This function is deprecated, and will be removed on the next breaking release.
+   * Please use {@link render} as it is more flexible and compatible with web browsers.
    */
   async toImageBuffer(
     options: SchematicRenderingOptions = {}
   ): Promise<Buffer> {
+    const result = await this.render(options)
+    return result.toBuffer()
+  }
+
+  /**
+   * Draws this schematic onto a canvas.
+   *
+   * This method is supported works on both nodejs and the browser.
+   *
+   * When using this method inside a browser, you must provide the `assetsBaseUrl` option
+   * so this package know where to find its assets.
+   *
+   * Making the assets available is
+   * straightforward, you only need to serve them as static assets (node_modules/mindustry-schematic-parser/assets)
+   * @param options
+   */
+  async render(options?: SchematicRenderingOptions): Promise<Canvas>
+
+  async render(
+    options: WebSchematicRenderingOptions
+  ): Promise<HTMLCanvasElement>
+
+  async render(
+    options: SchematicRenderingOptions | WebSchematicRenderingOptions = {}
+  ): Promise<Canvas | HTMLCanvasElement> {
+    if (
+      typeof window !== 'undefined' &&
+      !(options as WebSchematicRenderingOptions)?.assetsBaseUrl
+    ) {
+      throw new Error(
+        'The base url for assets must be specified when in web contexts'
+      )
+    }
+
     // default options
     options.background ??= true
     options.bridges ??= { opacity: 0.7, render: true }
@@ -220,13 +262,14 @@ export class Schematic implements SchematicProperties {
       size = Math.min(options.maxSize, size)
     }
     const renderingInfo = new RenderingInfo(this, canvas, options)
+    await renderingInfo.init()
     for (const tile of this.tiles) {
       await tile.block.draw(tile, renderingInfo)
     }
     await renderingInfo.renderingQueue.execute()
     const background = createCanvas(size, size)
     if (options.background) {
-      await renderer.drawBackground(background, size)
+      await renderer.drawBackground(renderingInfo, background, size)
     }
     const bcontext = background.getContext('2d')
     const border = options.background ? 64 : 0
@@ -240,6 +283,6 @@ export class Schematic implements SchematicProperties {
       width,
       height
     )
-    return background.toBuffer()
+    return background
   }
 }

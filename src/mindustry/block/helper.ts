@@ -1,15 +1,16 @@
 import { Canvas, Image } from 'canvas'
+import { RenderingInfo } from '../../util'
 import { SchematicTile } from '../../schematic'
 
 export interface BlockRenderingOptions {
   tile: SchematicTile
-  canvas: Canvas
+  info: RenderingInfo
   category: string
   layers: string[]
 }
 export interface BlockImageRenderingOptions {
   tile: SchematicTile
-  canvas: Canvas
+  info: RenderingInfo
   image: Image | Canvas
 }
 

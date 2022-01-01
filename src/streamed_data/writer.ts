@@ -1,5 +1,3 @@
-import { TextEncoder } from 'util'
-
 export class StreamedDataWriter {
   /**
    * The `DataView` wrapped by this `StreamedDataView`.
@@ -108,7 +106,7 @@ export class StreamedDataWriter {
    * Returns a unicode character with the code from the next byte
    */
   setChar(value: string): void {
-    this.setUint8(value.codePointAt(0) as number)
+    this.setUint8(value.charCodeAt(0))
   }
 
   /**

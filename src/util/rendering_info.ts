@@ -1,22 +1,37 @@
+import { Canvas, Image } from 'canvas'
 import { Schematic, SchematicTile } from '../schematic'
 import { SchematicTileMap, handlePlacement } from './graphics'
-import { Canvas } from 'canvas'
 import { SchematicRenderingOptions } from '../schematic/schematic'
+import { basicJoin } from './basic_join'
+import { resolveAssets } from './resolve_assets'
 
 export class RenderingInfo {
   private _tileMap: SchematicTileMap | null = null
 
   readonly renderingQueue = new RenderingQueue()
 
+  getAsset!: (path: string) => Promise<Image>
+
   constructor(
     public readonly schematic: Schematic,
     public readonly canvas: Canvas,
     public readonly options: SchematicRenderingOptions
-  ) {}
+  ) {
+    this.blockAsset = this.blockAsset.bind(this)
+  }
 
   get tileMap(): SchematicTileMap {
     if (this._tileMap === null) this._tileMap = mapTiles(this.schematic)
     return this._tileMap
+  }
+
+  async init(): Promise<void> {
+    this.getAsset = await resolveAssets(this)
+  }
+
+  blockAsset(category: string, name: string): Promise<Image> {
+    const path = basicJoin('sprites/blocks', category, name + '.png')
+    return this.getAsset(path)
   }
 }
 type RenderingExecutor = () => Promise<void>

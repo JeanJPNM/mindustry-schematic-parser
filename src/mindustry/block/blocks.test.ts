@@ -16,6 +16,7 @@ test('individual block rendering', async () => {
     canvas,
     {}
   )
+  await info.init()
   for (const pair of Block.codes) {
     const [, block] = pair
     // items are the only configuration value curretly used, this might change in the future

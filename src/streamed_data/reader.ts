@@ -1,5 +1,3 @@
-import { TextDecoder } from 'util'
-
 /**
  * Similar to a DataView, but it has an auto incrementing offset.
  * A mix of `DataView` and the `DataInputStream` java class
@@ -132,7 +130,7 @@ export class StreamedDataReader {
    * Returns a unicode character with the code from the next byte
    */
   getChar(): string {
-    return String.fromCodePoint(this.getUint8())
+    return String.fromCharCode(this.getUint8())
   }
 
   /**
