@@ -4,12 +4,7 @@ import {
   BlockOutputDirection,
   BlockRenderingOptions,
 } from './helper'
-import {
-  RenderingInfo,
-  blockAsset,
-  ticksPerSecond,
-  translatePos,
-} from '../../util'
+import { RenderingInfo, ticksPerSecond, translatePos } from '../../util'
 import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
 import { UnlockableContent } from '../content'
@@ -48,25 +43,25 @@ export abstract class Block extends UnlockableContent {
   }
 
   protected renderImage({
-    canvas,
+    info,
     image,
     tile,
   }: BlockImageRenderingOptions): void {
-    const context = canvas.getContext('2d')
-    const { x, y } = translatePos(tile, canvas)
+    const context = info.canvas.getContext('2d')
+    const { x, y } = translatePos(tile, info.canvas)
     context.drawImage(image, x, y)
   }
 
   protected async render({
-    canvas,
+    info,
     category,
     layers,
     tile,
   }: BlockRenderingOptions): Promise<void> {
     for (const layer of layers) {
-      const image = await blockAsset(category, layer)
+      const image = await info.blockAsset(category, layer)
       this.renderImage({
-        canvas,
+        info,
         image,
         tile,
       })
