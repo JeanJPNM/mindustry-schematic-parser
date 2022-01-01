@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [4.1.0] - 2021-09-22
+### Added
+- Compatibility with browser environments
+- ESM module exports
+### Fixed
+- Fixed the decoding of non ascii character strings
+### Deprecated
+- `schematic.toImagerBuffer()` was deprecated, please use `schematic.render()` instead.
+
 ## [4.0.4] - 2021-09-22
 ### Fixed
 - Fixed rendered conveyors connecting to all nearby blocks
