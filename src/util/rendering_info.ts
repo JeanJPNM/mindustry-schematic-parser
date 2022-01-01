@@ -2,7 +2,7 @@ import { Canvas, Image } from 'canvas'
 import { Schematic, SchematicTile } from '../schematic'
 import { SchematicTileMap, handlePlacement } from './graphics'
 import { SchematicRenderingOptions } from '../schematic/schematic'
-import { join } from 'path'
+import { basicJoin } from './basic_join'
 import { resolveAssets } from './resolve_assets'
 
 export class RenderingInfo {
@@ -30,7 +30,7 @@ export class RenderingInfo {
   }
 
   blockAsset(category: string, name: string): Promise<Image> {
-    const path = join('sprites/blocks', category, name + '.png')
+    const path = basicJoin('sprites/blocks', category, name + '.png')
     return this.getAsset(path)
   }
 }
