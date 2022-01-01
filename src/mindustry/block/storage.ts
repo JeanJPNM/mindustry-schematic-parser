@@ -1,5 +1,5 @@
 import { BlockOutput, BlockOutputDirection } from './helper'
-import { RenderingInfo, blockAsset, tintImage } from '../../util'
+import { RenderingInfo, tintImage } from '../../util'
 import { Block } from './block'
 import { Item } from '../item'
 import { SchematicTile } from '../../schematic'
@@ -7,16 +7,16 @@ import { SchematicTile } from '../../schematic'
 const category = 'storage'
 
 abstract class StorageBlock extends Block {
-  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     await this.render({
       tile,
-      canvas,
+      info,
       category,
       layers: [this.name],
     })
-    const image = await blockAsset(category, this.name + '-team')
+    const image = await info.blockAsset(category, this.name + '-team')
     this.renderImage({
-      canvas,
+      info,
       image: tintImage(image, '#ffa600'),
       tile,
     })
@@ -69,13 +69,13 @@ export class Unloader extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
-    await this.render({ tile, canvas, category, layers: [this.name] })
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({ tile, info, category, layers: [this.name] })
     const config = tile.config as Item | null
     if (config) {
-      const image = await blockAsset(category, this.name + '-center')
+      const image = await info.blockAsset(category, this.name + '-center')
       this.renderImage({
-        canvas,
+        info,
         image: tintImage(image, config.color, 1),
         tile,
       })

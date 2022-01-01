@@ -8,10 +8,10 @@ abstract class Drill extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     await this.render({
       tile,
-      canvas,
+      info,
       category,
       layers: [this.name, this.name + '-rotator', this.name + '-top'],
     })
@@ -69,10 +69,10 @@ export class Cultivator extends Block {
 
   override powerConsumption = 0.9
 
-  async draw(tile: SchematicTile, { canvas }: RenderingInfo): Promise<void> {
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     await this.render({
       tile,
-      canvas,
+      info,
       category,
       layers: [this.name, this.name + '-top'],
     })
