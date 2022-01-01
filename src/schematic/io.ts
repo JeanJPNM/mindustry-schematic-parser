@@ -344,6 +344,8 @@ function base64ToBytes(source: string) {
 
 function bytesToBase64(source: Buffer | Uint8Array) {
   if ('write' in source) return source.toString('base64')
+  if (typeof window === 'undefined')
+    return Buffer.from(source).toString('base64')
 
   let result = ''
   for (let i = 0; i < source.length; i++) {
