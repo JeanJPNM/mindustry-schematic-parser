@@ -1,5 +1,3 @@
-import { TextEncoder } from 'util'
-
 export class StreamedDataWriter {
   /**
    * The `DataView` wrapped by this `StreamedDataView`.
