@@ -68,5 +68,5 @@ test('schematic image generation', async () => {
     readFileSync('src/schematic/schematic.test.json', 'utf-8')
   )['encodedSchematic'] as string
   const schematic = Schematic.decode(base64)
-  await schematic.toImageBuffer()
+  await schematic.render()
 })
