@@ -12,7 +12,7 @@
     "noImplicitAny": true,
     "noImplicitOverride": true,
     "noImplicitThis": true,
-    "outDir": "dist",
+    "outDir": "dist/cjs",
     "sourceMap": true,
     "strict": true,
     "stripInternal": true,
