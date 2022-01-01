@@ -36,7 +36,7 @@ export abstract class SchematicIO {
       return true
     }
     for (let i = 0; i < header.length; i++) {
-      if (header[i] !== String.fromCodePoint(data.data.getUint8(i))) {
+      if (header[i] !== String.fromCharCode(data.data.getUint8(i))) {
         return false
       }
     }

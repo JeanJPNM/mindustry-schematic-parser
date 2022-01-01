@@ -130,7 +130,7 @@ export class StreamedDataReader {
    * Returns a unicode character with the code from the next byte
    */
   getChar(): string {
-    return String.fromCodePoint(this.getUint8())
+    return String.fromCharCode(this.getUint8())
   }
 
   /**
