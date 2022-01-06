@@ -283,20 +283,15 @@ export abstract class SchematicIO {
     this.tags(cData)
     const tagsEnd = cData.offset
     const newTags = schematic.tags
-    let tagSafeSize = 0
-    newTags.forEach((val, key) => {
-      tagSafeSize += val.length + key.length
-    })
-    const writer = new StreamedDataWriter(new ArrayBuffer(tagSafeSize * 2))
+    const writer = new StreamedDataWriter(new ArrayBuffer(1024))
     writer.setInt8(newTags.size)
     newTags.forEach((value, key) => {
       writer.setString(key)
       writer.setString(value ?? '')
     })
-    const newBuffer = writer.buffer.slice(0, writer.offset)
     const result = concatBytes(
       new Uint8Array(cData.buffer).subarray(0, tagsStart),
-      new Uint8Array(newBuffer).subarray(0, writer.offset),
+      new Uint8Array(writer.buffer).subarray(0, writer.offset),
       new Uint8Array(cData.buffer).subarray(tagsEnd)
     )
     const bytes = Pako.deflate(result)
@@ -308,12 +303,10 @@ export abstract class SchematicIO {
     resultWriter.setChar('c')
     resultWriter.setChar('h')
     resultWriter.setInt8(schematic.version === 'v5' ? 0 : 1)
-    for (let i = 0; i < bytes.byteLength; i++) {
-      resultWriter.setUint8(bytes[i])
-    }
-    return bytesToBase64(
-      new Uint8Array(resultWriter.buffer.slice(0, resultWriter.offset))
-    )
+
+    const resultBuffer = new Uint8Array(resultWriter.buffer)
+    resultBuffer.set(bytes, 5)
+    return bytesToBase64(resultBuffer)
   }
 }
 
