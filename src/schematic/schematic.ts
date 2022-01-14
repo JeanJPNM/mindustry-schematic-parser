@@ -82,6 +82,10 @@ export class Schematic implements SchematicProperties {
     if (!this.description) {
       this.description = ''
     }
+
+    this.labels = this.tags.has('labels')
+      ? JSON.parse(this.tags.get('labels') as string)
+      : []
   }
 
   readonly tiles: SchematicTile[]
@@ -95,6 +99,8 @@ export class Schematic implements SchematicProperties {
   base64?: string
 
   version: MindustryVersion
+
+  labels: string[]
 
   static decode(data: string | Buffer): Schematic {
     return SchematicIO.decode(data)
