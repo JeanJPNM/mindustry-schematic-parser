@@ -10,6 +10,7 @@
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build"
   },
+  "type": "module",
   "exports": {
     ".": {
       "require": "./dist/cjs/index.js",
