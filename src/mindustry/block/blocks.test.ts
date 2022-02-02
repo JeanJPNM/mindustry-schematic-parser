@@ -1,11 +1,11 @@
 import { Schematic, SchematicTile } from '../../schematic'
 import { Block } from './index'
+import Canvas from 'canvas'
 import { Item } from '../item'
 import { RenderingInfo } from '../../util'
-import { createCanvas } from 'canvas'
 
 test('individual block rendering', async () => {
-  const canvas = createCanvas(500, 500)
+  const canvas = Canvas.createCanvas(500, 500)
   const info = new RenderingInfo(
     new Schematic({
       height: 100,

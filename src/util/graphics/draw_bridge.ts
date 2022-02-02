@@ -5,10 +5,10 @@ import {
   tileRotationToAngle,
   translatePos,
 } from '..'
+import Canvas from 'canvas'
 import { Point2 } from '../../arc'
 import { SchematicTile } from '../..'
 import { TileRotation } from '../../schematic/tile'
-import { createCanvas } from 'canvas'
 
 export interface BridgeDrawOptions {
   tile: SchematicTile
@@ -33,7 +33,7 @@ export async function drawBridge({
   const bridge = await blockAsset(category, block.name + '-bridge')
   const arrow = await blockAsset(category, block.name + '-arrow')
   const context = canvas.getContext('2d')
-  const tcanvas = createCanvas((distance + 1) * 32, 32)
+  const tcanvas = Canvas.createCanvas((distance + 1) * 32, 32)
   const tcontext = tcanvas.getContext('2d')
   let rotation: TileRotation
   if (config.x) {

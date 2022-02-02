@@ -1,6 +1,10 @@
-import { Canvas, Image, createCanvas } from 'canvas'
-export function tintImage(image: Image, color: string, opacity = 0.5): Canvas {
-  const canvas = createCanvas(image.width, image.height)
+import Canvas from 'canvas'
+export function tintImage(
+  image: Canvas.Image,
+  color: string,
+  opacity = 0.5
+): Canvas.Canvas {
+  const canvas = Canvas.createCanvas(image.width, image.height)
   const context = canvas.getContext('2d')
   context.save()
   context.fillStyle = color

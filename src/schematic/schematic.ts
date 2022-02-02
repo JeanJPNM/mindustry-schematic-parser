@@ -1,7 +1,7 @@
 import * as renderer from './renderer'
 import { Blocks, ItemCost, ItemName } from '../mindustry'
-import { Canvas, createCanvas } from 'canvas'
 import { RenderingInfo, ticksPerSecond } from '../util'
+import Canvas from 'canvas'
 import { MindustryVersion } from './version'
 import { SchematicIO } from './io'
 import { SchematicTile } from './tile'
@@ -232,7 +232,7 @@ export class Schematic implements SchematicProperties {
    * straightforward, you only need to serve them as static assets (node_modules/mindustry-schematic-parser/assets)
    * @param options
    */
-  async render(options?: SchematicRenderingOptions): Promise<Canvas>
+  async render(options?: SchematicRenderingOptions): Promise<Canvas.Canvas>
 
   async render(
     options: WebSchematicRenderingOptions
@@ -240,7 +240,7 @@ export class Schematic implements SchematicProperties {
 
   async render(
     options: SchematicRenderingOptions | WebSchematicRenderingOptions = {}
-  ): Promise<Canvas | HTMLCanvasElement> {
+  ): Promise<Canvas.Canvas | HTMLCanvasElement> {
     if (
       typeof window !== 'undefined' &&
       !(options as WebSchematicRenderingOptions)?.assetsBaseUrl
@@ -259,7 +259,7 @@ export class Schematic implements SchematicProperties {
     options.phaseBridges ??= { opacity: 1, render: true }
     options.phaseBridges.render ??= true
 
-    const canvas = createCanvas(this.width * 32, this.height * 32)
+    const canvas = Canvas.createCanvas(this.width * 32, this.height * 32)
     let size = Math.max(this.width, this.height) * 32
     if (options.background) size += 64
     if (options.size) {
@@ -273,7 +273,7 @@ export class Schematic implements SchematicProperties {
       await tile.block.draw(tile, renderingInfo)
     }
     await renderingInfo.renderingQueue.execute()
-    const background = createCanvas(size, size)
+    const background = Canvas.createCanvas(size, size)
     if (options.background) {
       await renderer.drawBackground(renderingInfo, background, size)
     }
