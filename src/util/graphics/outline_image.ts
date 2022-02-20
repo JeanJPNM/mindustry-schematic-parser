@@ -1,13 +1,7 @@
-import {
-  Canvas,
-  CanvasGradient,
-  CanvasPattern,
-  Image,
-  createCanvas,
-} from 'canvas'
+import Canvas from 'canvas'
 export interface OutlineOptions {
-  image: Image
-  fillStyle?: string | CanvasGradient | CanvasPattern
+  image: Canvas.Image
+  fillStyle?: string | Canvas.CanvasGradient | Canvas.CanvasPattern
   x?: number
   y?: number
   thickness?: number
@@ -22,8 +16,8 @@ export function outlineImage({
   image,
   fillStyle = 'black',
   thickness = 2,
-}: OutlineOptions): Canvas {
-  const canvas = createCanvas(image.width, image.height)
+}: OutlineOptions): Canvas.Canvas {
+  const canvas = Canvas.createCanvas(image.width, image.height)
   const context = canvas.getContext('2d')
   const dArr = [-1, -1, 0, -1, 1, -1, -1, 0, 1, 0, -1, 1, 0, 1, 1, 1] // offset array
   let i = 0 // iterator
