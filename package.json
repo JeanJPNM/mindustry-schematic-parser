@@ -2,20 +2,21 @@
   "name": "mindustry-schematic-parser",
   "version": "4.1.2",
   "description": "A simple api to parse mindustry schematics",
-  "types": "dist/esm/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "scripts": {
     "start": "node .",
     "test": "jest",
-    "build": "tsc && tsc -p tsconfig.web.json",
-    "watch": "tsc --watch",
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
     "prepublishOnly": "npm run build"
   },
   "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
   "exports": {
-    ".": {
-      "require": "./dist/cjs/index.js",
-      "import": "./dist/esm/index.js"
-    }
+    "require": "./dist/index.cjs",
+    "import": "./dist/index.mjs",
+    "default": "./dist/index.mjs"
   },
   "engines": {
     "node": ">=12"
