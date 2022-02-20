@@ -14,8 +14,8 @@ export async function resolveAssets(
       Canvas.loadImage(new URL(basicJoin(base.pathname, path), base).href)
   }
   if (!assetsFolder) {
-    const { default: pkgDir } = await import('pkg-dir')
-    assetsFolder = basicJoin((await pkgDir()) as string, 'assets')
+    const { packageDirectory } = await import('pkg-dir')
+    assetsFolder = basicJoin((await packageDirectory()) as string, 'assets')
   }
   return path => Canvas.loadImage(basicJoin(assetsFolder as string, path))
 }
