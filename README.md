@@ -1,6 +1,9 @@
 # Mindustry Schematic Parser
 
-A simple way to parse mindustry schematics
+A simple way to parse mindustry schematics.
+
+Most of this package's functionality is documented with JSDoc,
+so most IDEs will give you autocompletion and function and class details.
 
 ## Install
 ```shell
@@ -34,7 +37,8 @@ schematic
 
 ## Rendering options
 
-Bellow are the type definitions for 
+Bellow are the type definitions for schematic rendering options
+
 ```ts
 export interface SchematicRenderingOptions {
   /** Options for rendering coveyors */
@@ -68,3 +72,16 @@ export interface SchematicRenderingOptions {
   assetsBaseUrl: string
 }
 ```
+## Exports
+- `arc`: namespace for the emulated functionality from `Anuken/Arc`
+- `mindustry`: namespace for mindustry emulated functionality
+- `Blocks`: object containing all blocks available under categories
+- `Items`: object with all items available
+- `Liquids`: object with all liquids available
+- `Schematic`: class used to represent schematics, comes with static methods for encoding/decoding
+- `SchematicTile`: class used to represent single schematic tiles
+
+### Exported types
+- `ItemName`: an union of all the names of the available items
+- `ItemCost`: record of item names and numbers, used to represent schematic build requirements
+- `LiquidName`: an union of all the names of the available liquids
