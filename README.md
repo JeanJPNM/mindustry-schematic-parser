@@ -24,7 +24,47 @@ console.log('item cost:', schematic.requirements)
 
 // save a preview of the schematic
 schematic
-  .toImageBuffer()
+  .render({
+    background: false // disable background
+  })
+  .then(nodeCanvas => nodeCanvas.toBuffer())
   .then(buffer => fs.writeFileSync('my_file.png', buffer))
 
+```
+
+## Rendering options
+
+Bellow are the type definitions for 
+```ts
+export interface SchematicRenderingOptions {
+  /** Options for rendering coveyors */
+  conveyors?: {
+    render: boolean
+  }
+  /** Options for rendering conduits */
+  conduits?: {
+    render: boolean
+  }
+  /** Options for rendering normal bridges */
+  bridges?: {
+    render?: boolean
+    opacity: number
+  }
+  /** Options for rendering phase bridges */
+  phaseBridges?: {
+    render?: boolean
+    opacity: number
+  }
+  /** The max size in pixels for this image */
+  maxSize?: number
+  /**
+   * The size the preview must have.
+   * Using this option overshadows `maxSize`
+   */
+  size?: number
+  /** Whether the image should have a background */
+  background?: boolean
+  /** Browser only,  */
+  assetsBaseUrl: string
+}
 ```
