@@ -1,4 +1,5 @@
 import { defineConfig } from 'rollup'
+import pkg from './package.json'
 import typescript from '@rollup/plugin-typescript'
 
 const config = defineConfig({
@@ -10,16 +11,17 @@ const config = defineConfig({
   ],
   output: [
     {
-      file: 'dist/index.cjs',
+      file: pkg.main,
       format: 'cjs',
       sourcemap: true,
     },
     {
-      file: 'dist/index.mjs',
+      file: pkg.module,
       format: 'esm',
       sourcemap: true,
     },
   ],
+  external: Object.keys(pkg.dependencies),
 })
 
 export default config
