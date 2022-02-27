@@ -14,8 +14,14 @@ export async function resolveAssets(
       Canvas.loadImage(new URL(basicJoin(base.pathname, path), base).href)
   }
   if (!assetsFolder) {
+    const { fileURLToPath } = await import('url')
     const { packageDirectory } = await import('pkg-dir')
-    assetsFolder = basicJoin((await packageDirectory()) as string, 'assets')
+
+    const filePath = fileURLToPath(import.meta.url).replace(/\\/g, '/')
+    const rootFolder = await packageDirectory({
+      cwd: filePath.substring(0, filePath.lastIndexOf('/')),
+    })
+    assetsFolder = basicJoin(rootFolder, 'assets')
   }
   return path => Canvas.loadImage(basicJoin(assetsFolder as string, path))
 }
