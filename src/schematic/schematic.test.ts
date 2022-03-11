@@ -1,5 +1,8 @@
+import * as assert from 'uvu/assert'
 import { Schematic } from './schematic'
 import { readFileSync } from 'fs'
+import { test } from 'uvu'
+
 test('schematic getters functioning correctly', () => {
   const schematic = new Schematic({
     height: 0,
@@ -10,8 +13,8 @@ test('schematic getters functioning correctly', () => {
       ['description', 'something'],
     ]),
   })
-  expect(schematic.name).toBe(schematic.tags.get('name'))
-  expect(schematic.description).toBe(schematic.tags.get('description'))
+  assert.is(schematic.name, schematic.tags.get('name'))
+  assert.is(schematic.description, schematic.tags.get('description'))
 })
 test('schematic setters functioning correctly', () => {
   const schematic = new Schematic({
@@ -27,8 +30,8 @@ test('schematic setters functioning correctly', () => {
   const description = 'my custom description'
   schematic.name = name
   schematic.description = description
-  expect(schematic.tags.get('name')).toBe(name)
-  expect(schematic.tags.get('description')).toBe(description)
+  assert.is(schematic.tags.get('name'), name)
+  assert.is(schematic.tags.get('description'), description)
 })
 test('schematic encoding/decoding coherence', () => {
   const base64 = JSON.parse(
@@ -38,12 +41,12 @@ test('schematic encoding/decoding coherence', () => {
   const schematic = Schematic.decode(base64)
   const reencoded = schematic.encode()
   const redecoded = Schematic.decode(reencoded)
-  expect(redecoded.base64).toBe(schematic.base64)
-  expect(redecoded.name).toBe(schematic.name)
-  expect(redecoded.description).toBe(schematic.description)
-  expect(redecoded.powerBalance).toBe(schematic.powerBalance)
-  expect(redecoded.width).toBe(schematic.width)
-  expect(redecoded.height).toBe(schematic.height)
+  assert.is(redecoded.base64, schematic.base64)
+  assert.is(redecoded.name, schematic.name)
+  assert.is(redecoded.description, schematic.description)
+  assert.is(redecoded.powerBalance, schematic.powerBalance)
+  assert.is(redecoded.width, schematic.width)
+  assert.is(redecoded.height, schematic.height)
 })
 
 test('schematic tag editing', () => {
@@ -60,8 +63,8 @@ test('schematic tag editing', () => {
   schematic.description = description
   const reencoded = Schematic.encode(schematic)
   const redecoded = Schematic.decode(reencoded)
-  expect(redecoded.name).toBe(name)
-  expect(redecoded.description).toBe(description)
+  assert.is(redecoded.name, name)
+  assert.is(redecoded.description, description)
 })
 test('schematic image generation', async () => {
   const base64 = JSON.parse(
@@ -70,3 +73,5 @@ test('schematic image generation', async () => {
   const schematic = Schematic.decode(base64)
   await schematic.render()
 })
+
+test.run()

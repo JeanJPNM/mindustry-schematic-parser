@@ -3,6 +3,7 @@ import { Block } from './index'
 import Canvas from 'canvas'
 import { Item } from '../item'
 import { RenderingInfo } from '../../util'
+import { test } from 'uvu'
 
 test('individual block rendering', async () => {
   const canvas = Canvas.createCanvas(500, 500)
@@ -25,3 +26,5 @@ test('individual block rendering', async () => {
   }
   await info.renderingQueue.execute()
 })
+
+test.run()
