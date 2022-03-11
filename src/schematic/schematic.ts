@@ -103,7 +103,7 @@ export class Schematic implements SchematicProperties {
   labels: string[]
 
   static decode(data: string | Buffer): Schematic {
-    return SchematicIO.decode(data)
+    return new Schematic(SchematicIO.decode(data))
   }
 
   static encode(schematic: Schematic): string {

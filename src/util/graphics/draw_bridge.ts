@@ -1,14 +1,10 @@
-import {
-  RenderingInfo,
-  degreeToAngle,
-  drawRotated,
-  tileRotationToAngle,
-  translatePos,
-} from '..'
+import { degreeToAngle, drawRotated, tileRotationToAngle } from './draw_rotated'
 import Canvas from 'canvas'
 import { Point2 } from '../../arc'
+import { RenderingInfo } from '../rendering_info'
 import { SchematicTile } from '../..'
 import { TileRotation } from '../../schematic/tile'
+import { translatePos } from './positioning'
 
 export interface BridgeDrawOptions {
   tile: SchematicTile
