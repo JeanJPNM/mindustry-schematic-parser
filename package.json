@@ -5,7 +5,7 @@
   "types": "dist/types/index.d.ts",
   "scripts": {
     "start": "node .",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest",
+    "test": "uvu -r tsm src \\.test\\.ts",
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "prepublishOnly": "npm run build"
@@ -33,7 +33,6 @@
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.3.0",
-    "@types/jest": "^27.0.1",
     "@types/node": "^14.17.0",
     "@types/pako": "^1.0.2",
     "@typescript-eslint/eslint-plugin": "^5.12.0",
@@ -43,11 +42,11 @@
     "eslint-config-prettier": "^8.4.0",
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "jest": "^27.5.1",
     "prettier": "^2.5.1",
     "rollup": "^2.67.3",
-    "ts-jest": "^27.0.5",
-    "typescript": "^4.5.5"
+    "tsm": "^2.2.1",
+    "typescript": "^4.5.5",
+    "uvu": "^0.5.3"
   },
   "files": [
     "assets/",
