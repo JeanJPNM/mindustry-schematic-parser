@@ -16,10 +16,16 @@ export async function resolveAssets(
   if (!assetsFolder) {
     const { fileURLToPath } = await import('url')
     const { packageDirectory } = await import('pkg-dir')
-
-    const filePath = fileURLToPath(import.meta.url).replace(/\\/g, '/')
+    let cwd: string
+    const { url } = import.meta
+    if (url) {
+      const path = fileURLToPath(url).replace(/\\/g, '/')
+      cwd = path.substring(0, path.lastIndexOf('/'))
+    } else {
+      cwd = __dirname
+    }
     const rootFolder = await packageDirectory({
-      cwd: filePath.substring(0, filePath.lastIndexOf('/')),
+      cwd,
     })
     assetsFolder = basicJoin(rootFolder, 'assets')
   }

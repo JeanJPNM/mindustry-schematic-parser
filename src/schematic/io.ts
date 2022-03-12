@@ -235,7 +235,7 @@ export abstract class SchematicIO {
    * Parses the data and returns a schematic
    *  @param encoded The encoded schematic data
    */
-  static decode(encoded: string | Uint8Array): Schematic {
+  static decode(encoded: string | Uint8Array) {
     const decoded =
       typeof encoded === 'string' ? base64ToBytes(encoded.trim()) : encoded
 
@@ -252,14 +252,14 @@ export abstract class SchematicIO {
     const tiles = this.tiles(cData, blocks, version)
     const base64 =
       typeof encoded === 'string' ? encoded : bytesToBase64(encoded)
-    return new Schematic({
+    return {
       height,
       tags,
       tiles,
       width,
       base64,
       version: `v${version + 5}` as MindustryVersion,
-    })
+    }
   }
 
   /** Takes a decoded schematic and saves its new tags
