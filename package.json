@@ -26,6 +26,7 @@
   ],
   "author": "JeanJPNM",
   "license": "ISC",
+  "packageManager": "pnpm",
   "dependencies": {
     "canvas": "^2.9.0",
     "pako": "^2.0.4",
