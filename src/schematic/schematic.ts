@@ -1,9 +1,9 @@
 import * as renderer from './renderer'
 import { Blocks, ItemCost, ItemName } from '../mindustry'
 import { RenderingInfo, ticksPerSecond } from '../util'
+import { decodeSchematic, encodeTags } from './io'
 import Canvas from 'canvas'
 import { MindustryVersion } from './version'
-import { SchematicIO } from './io'
 import { SchematicTile } from './tile'
 const {
   power: { PowerGenerator },
@@ -97,7 +97,7 @@ export class Schematic implements SchematicProperties {
   version: MindustryVersion
 
   static decode(data: string | Buffer): Schematic {
-    return new Schematic(SchematicIO.decode(data))
+    return new Schematic(decodeSchematic(data))
   }
 
   static encode(schematic: Schematic): string {
@@ -198,7 +198,7 @@ export class Schematic implements SchematicProperties {
       throw new Error(
         'by now, the schematic needs to be generated from a SchematicDecoder'
       )
-    return SchematicIO.encodeTags(this)
+    return encodeTags(this)
   }
 
   /**
