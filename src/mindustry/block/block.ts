@@ -39,7 +39,7 @@ export abstract class Block extends UnlockableContent {
     if (block) {
       return block
     }
-    throw new Error('the block is not registered not exist')
+    throw new Error(`The block "${code}" could not be found in the registry`)
   }
 
   protected renderImage({
