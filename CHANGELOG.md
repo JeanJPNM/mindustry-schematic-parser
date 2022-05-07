@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### [4.1.7] - 2022-05-7
+
+## Added
+
+- Added support for block name aliases
+- Added support for ores
+
 ### [4.1.6] - 2022-04-19
 
 ## Added
@@ -252,7 +259,8 @@ const {
 
 - First release
 
-[4.1.6]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v4.1.6...v4.1.6
+[4.1.7]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v4.1.6...v4.1.7
+[4.1.6]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v4.1.5...v4.1.6
 [4.1.5]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v4.1.4...v4.1.5
 [4.1.4]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v4.1.3...v4.1.4
 [4.1.3]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v4.1.2...v4.1.3
