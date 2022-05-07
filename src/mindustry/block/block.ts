@@ -3,6 +3,7 @@ import {
   BlockOutput,
   BlockOutputDirection,
   BlockRenderingOptions,
+  blockAliases,
 } from './helper'
 import { RenderingInfo, ticksPerSecond, translatePos } from '../../util'
 import { ItemCost } from '../item'
@@ -35,7 +36,9 @@ export abstract class Block extends UnlockableContent {
   static readonly codes = new Map<string, Block>()
 
   static fromCode(code: string): Block {
-    const block = this.codes.get(code)
+    type K = keyof typeof blockAliases
+    const id = code in blockAliases ? blockAliases[code as K] : code
+    const block = this.codes.get(id)
     if (block) {
       return block
     }
