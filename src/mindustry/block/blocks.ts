@@ -6,6 +6,7 @@ import * as environment from './environment'
 import * as experimental from './experimental'
 import * as liquid from './liquid'
 import * as logic from './logic'
+import * as ores from './ores'
 import * as payload from './payload'
 import * as power from './power'
 import * as production from './production'
@@ -37,6 +38,7 @@ registerBlocks(environment)
 registerBlocks(experimental)
 registerBlocks(liquid)
 registerBlocks(logic)
+registerBlocks(ores)
 registerBlocks(payload)
 registerBlocks({
   ...power,
