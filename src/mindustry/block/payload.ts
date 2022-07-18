@@ -89,3 +89,62 @@ export class PayloadPropulsionTower extends Block {
     })
   }
 }
+
+export class Constructor extends Block {
+  name = 'constructor'
+
+  requirements = { thorium: 100 }
+
+  size = 3
+
+  override powerConsumption = 2.0
+
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      info,
+      category,
+      layers: [this.name, this.name + '-top'],
+      tile,
+    })
+  }
+}
+export class PayloadLoader extends Block {
+  name = 'payload-loader'
+
+  requirements = { thorium: 100 }
+
+  size = 3
+
+  override powerConsumption = 2.0
+
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      info,
+      category,
+      layers: [this.name, this.name + '-top'],
+      tile,
+    })
+  }
+}
+export class PayloadUnloader extends Block {
+  name = 'payload-unloader'
+
+  requirements = { thorium: 100 }
+
+  size = 3
+
+  override powerConsumption = 2.0
+
+  override output = BlockOutput.item
+
+  override outputDirection = BlockOutputDirection.all
+
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      info,
+      category,
+      layers: [this.name, this.name + '-top'],
+      tile,
+    })
+  }
+}
