@@ -108,11 +108,11 @@ export class PlastaniumConveyor extends TransportBlock {
     const { block } = tile
     const { x, y } = translatePos(tile, canvas)
     const base = await info.blockAsset(
-      `${category}/conveyors`,
+      `${category}/stack-conveyors`,
       block.name + '-0'
     )
     const edge = await info.blockAsset(
-      `${category}/conveyors`,
+      `${category}/stack-conveyors`,
       block.name + '-edge'
     )
     drawRotated({
