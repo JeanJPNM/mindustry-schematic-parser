@@ -74,7 +74,7 @@ export class Conduit extends Block {
     const { x, y } = translatePos(tile, info.canvas)
     const context = info.canvas.getContext('2d')
     const image = await info.blockAsset(
-      category,
+      `${category}/conduits`,
       `${tile.block.name}-top-${imageIndex}`
     )
     context.save()
@@ -108,7 +108,7 @@ export class PlatedConduit extends Conduit {
     const { x, y } = translatePos(tile, info.canvas)
     const context = info.canvas.getContext('2d')
     const image = await info.blockAsset(
-      category,
+      `${category}/conduits`,
       `${tile.block.name}-top-${imageIndex}`
     )
     context.save()
@@ -136,7 +136,7 @@ export class LiquidRouter extends Block {
       tile,
       info,
       category,
-      layers: [this.name + '-bottom', this.name + '-top'],
+      layers: [this.name + '-bottom', this.name],
     })
   }
 }
