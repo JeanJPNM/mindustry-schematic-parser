@@ -1,4 +1,10 @@
-import { RenderingInfo, drawRotatedTile } from '../../util'
+import {
+  RenderingInfo,
+  degreeToAngle,
+  drawRotated,
+  drawRotatedTile,
+  translatePos,
+} from '../../util'
 import { Block } from './block'
 import { SchematicTile } from '../../schematic'
 const category = 'power'
@@ -131,12 +137,26 @@ export class SteamGenerator extends PowerGenerator {
       tile,
       info,
       category,
-      layers: [
-        this.name,
-        this.name + '-turbine0',
-        this.name + '-turbine1',
-        this.name + '-cap',
-      ],
+      layers: [this.name],
+    })
+    const turbine = await info.blockAsset(category, this.name + '-turbine')
+    this.renderImage({
+      tile,
+      image: turbine,
+      info,
+    })
+    drawRotated({
+      canvas: info.canvas,
+      angle: degreeToAngle(45),
+      image: turbine,
+      offset: 32,
+      ...translatePos(tile, info.canvas),
+    })
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name + '-cap'],
     })
   }
 }
