@@ -3,7 +3,10 @@ import { Block } from './block'
 import { SchematicTile } from '../../schematic'
 
 const category = 'turrets'
+const defenseCategory = 'defense'
 abstract class Turret extends Block {
+  category = category
+
   async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     await this.render({
       tile,
@@ -13,7 +16,7 @@ abstract class Turret extends Block {
     })
 
     const top = outlineImage({
-      image: await info.blockAsset(category, this.name),
+      image: await info.blockAsset(this.category, this.name),
       fillStyle: '#353535',
       thickness: 3,
     })
@@ -90,6 +93,8 @@ export class Parallax extends Turret {
   requirements = { silicon: 120, titanium: 90, graphite: 30 }
 
   size = 2
+
+  override category = defenseCategory
 }
 export class Swarmer extends Turret {
   name = 'swarmer'
@@ -111,6 +116,8 @@ export class Segment extends Turret {
   requirements = { silicon: 130, thorium: 80, 'phase-fabric': 40 }
 
   size = 2
+
+  override category = defenseCategory
 }
 export class Tsunami extends Turret {
   name = 'tsunami'
