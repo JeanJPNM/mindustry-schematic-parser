@@ -213,6 +213,7 @@ export class RepairTurret extends RepairPoint {
     })
   }
 }
+
 export class ResupplyPoint extends Block {
   name = 'resupply-point'
 
@@ -220,7 +221,6 @@ export class ResupplyPoint extends Block {
 
   size = 2
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({ tile, info, category, layers: [this.name] })
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {}
 }

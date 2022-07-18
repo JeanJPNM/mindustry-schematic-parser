@@ -21,16 +21,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved `BlockUnloader` from `experimental` to `payload`
 - Renamed `ThermalPump` to `ImpulsePump`
 
-### [4.1.7] - 2022-05-7
+### Deprecated
 
-## Added
+- The `CommandCenter` block is now deprecated and won't be rendered anymore.
+- The `ResupplyPoint` block is now deprecated and won't be rendered anymore.
+
+## [4.1.7] - 2022-05-7
+
+### Added
 
 - Added support for block name aliases
 - Added support for ores
 
-### [4.1.6] - 2022-04-19
+## [4.1.6] - 2022-04-19
 
-## Added
+### Added
 
 - Added support for mindustry's environment blocks
 
