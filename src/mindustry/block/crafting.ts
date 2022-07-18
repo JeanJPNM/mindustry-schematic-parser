@@ -4,7 +4,7 @@ import { ItemCost } from '../item/item_cost'
 import { RenderingInfo } from '../../util'
 import { SchematicTile } from '../../schematic'
 
-const category = 'crafting'
+const category = 'production'
 abstract class GenericCrafter extends Block {
   override output = BlockOutput.item
 
@@ -107,7 +107,7 @@ export class PhaseWeaver extends GenericCrafter {
   }
 }
 export class SurgeSmelter extends GenericCrafter {
-  name = 'alloy-smelter'
+  name = 'surge-smelter'
 
   requirements = { silicon: 80, lead: 80, thorium: 70 }
 
@@ -131,7 +131,7 @@ export class CryofluidMixer extends GenericCrafter {
       info,
       category,
       tile,
-      layers: [this.name, this.name + '-top'],
+      layers: [this.name + '-bottom', this.name],
     })
   }
 }
