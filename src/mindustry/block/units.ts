@@ -1,15 +1,11 @@
 import { BlockOutput, BlockOutputDirection } from './helper'
-import {
-  RenderingInfo,
-  drawRotatedTile,
-  outlineImage,
-  tintImage,
-} from '../../util'
+import { RenderingInfo, drawRotatedTile, outlineImage } from '../../util'
 import { Block } from './block'
 import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
 
 const category = 'units'
+const payloadCategory = 'payload'
 
 abstract class Factory extends Block {
   override output = BlockOutput.payload
@@ -25,13 +21,13 @@ abstract class Factory extends Block {
     })
     drawRotatedTile({
       canvas: info.canvas,
-      image: await info.blockAsset(category, 'factory-out-' + this.size),
+      image: await info.blockAsset(payloadCategory, 'factory-out-' + this.size),
       tile,
     })
     await this.render({
       tile,
       info,
-      category,
+      category: payloadCategory,
       layers: ['factory-top-' + this.size],
     })
   }
@@ -49,8 +45,14 @@ abstract class Reconstructor extends Block {
       layers: [this.name],
     })
 
-    const input = await info.blockAsset(category, 'factory-in-' + this.size)
-    const output = await info.blockAsset(category, 'factory-out-' + this.size)
+    const input = await info.blockAsset(
+      payloadCategory,
+      'factory-in-' + this.size
+    )
+    const output = await info.blockAsset(
+      payloadCategory,
+      'factory-out-' + this.size
+    )
     drawRotatedTile({
       canvas: info.canvas,
       image: input,
@@ -77,20 +79,8 @@ export class CommandCenter extends Block {
 
   size = 2
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
-      tile,
-      info,
-      category,
-      layers: [this.name],
-    })
-    const detail = await info.blockAsset(category, this.name + '-team')
-    this.renderImage({
-      info,
-      image: tintImage(detail, '#ffa600'),
-      tile,
-    })
-  }
+  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {}
 }
 export class GroundFactory extends Factory {
   name = 'ground-factory'
