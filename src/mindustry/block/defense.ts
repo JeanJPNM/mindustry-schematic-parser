@@ -4,6 +4,9 @@ import { RenderingInfo } from '../../util'
 import { SchematicTile } from '../../schematic'
 
 const category = 'defense'
+
+const wallCategory = 'walls'
+
 function multiplyRequirements(requirements: ItemCost, multiplier = 4): void {
   for (const requirement in requirements) {
     const code = requirement as ItemName
@@ -23,7 +26,18 @@ abstract class DefenseBlock extends Block {
     })
   }
 }
-export abstract class Wall extends DefenseBlock {}
+
+export abstract class Wall extends DefenseBlock {
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category: wallCategory,
+      layers: [this.name],
+    })
+  }
+}
+
 export class CopperWall extends Wall {
   name = 'copper-wall'
 
@@ -140,7 +154,7 @@ export class SurgeWallLarge extends SurgeWall {
     multiplyRequirements(this.requirements)
   }
 }
-export class Door extends DefenseBlock {
+export class Door extends Wall {
   name = 'door'
 
   requirements = {
@@ -166,6 +180,17 @@ export class ScrapWall extends Wall {
   requirements = { scrap: 6 }
 
   size = 1
+
+  hasVariants = true
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category: wallCategory,
+      layers: [this.hasVariants ? this.name + '1' : this.name],
+    })
+  }
 }
 export class ScrapWallLarge extends ScrapWall {
   override name = 'scrap-wall-large'
@@ -191,6 +216,8 @@ export class ScrapWallGigantic extends ScrapWall {
   override name = 'scrap-wall-gigantic'
 
   override size = 4
+
+  override hasVariants = false
 
   constructor() {
     super()
