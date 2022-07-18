@@ -16,4 +16,10 @@ export const Items = {
   sporePod: Item.create('spore-pod'),
   blastCompound: Item.create('blast-compound'),
   pyratite: Item.create('pyratite'),
+  beryllium: Item.create('beryllium'),
+  tungsten: Item.create('tungsten'),
+  oxide: Item.create('oxide'),
+  carbide: Item.create('carbide'),
+  fissileMatter: Item.create('fissile-matter'),
+  dormantCyst: Item.create('dormant-cyst'),
 }
