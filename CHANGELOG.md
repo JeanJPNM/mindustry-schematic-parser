@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved `BlockLoader` from `experimental` to `payload`
 - Renamed `BlockUnloader` to `PayloadUnloader`
 - Moved `BlockUnloader` from `experimental` to `payload`
+- Renamed `ThermalPump` to `ImpulsePump`
 
 ### [4.1.7] - 2022-05-7
 

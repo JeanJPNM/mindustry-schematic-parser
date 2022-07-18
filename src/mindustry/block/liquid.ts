@@ -39,8 +39,8 @@ export class RotaryPump extends Pump {
 
   override powerConsumption = 0.3
 }
-export class ThermalPump extends Pump {
-  name = 'thermal-pump'
+export class ImpulsePump extends Pump {
+  name = 'impulse-pump'
 
   requirements = {
     copper: 80,
