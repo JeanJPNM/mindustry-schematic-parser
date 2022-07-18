@@ -19,7 +19,7 @@ abstract class Ore extends Block {
     await this.render({
       info,
       category: 'environment',
-      layers: [`${this.item}1`],
+      layers: [`${this.name}1`],
       tile,
     })
   }
