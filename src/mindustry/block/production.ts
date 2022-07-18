@@ -3,6 +3,7 @@ import { Block } from './block'
 import { RenderingInfo } from '../../util'
 import { SchematicTile } from '../../schematic'
 const category = 'drills'
+const prodCategory = 'production'
 abstract class Drill extends Block {
   override output = BlockOutput.item
 
@@ -73,7 +74,7 @@ export class Cultivator extends Block {
     await this.render({
       tile,
       info,
-      category,
+      category: prodCategory,
       layers: [this.name, this.name + '-top'],
     })
   }
