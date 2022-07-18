@@ -2,7 +2,7 @@ import { BlockOutput, BlockOutputDirection } from './helper'
 import { Block } from './block'
 import { RenderingInfo } from '../../util'
 import { SchematicTile } from '../../schematic'
-const category = 'production'
+const category = 'drills'
 abstract class Drill extends Block {
   override output = BlockOutput.item
 
