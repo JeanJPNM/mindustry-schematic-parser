@@ -95,4 +95,9 @@ export const blockAliases = {
   'block-forge': 'constructor',
   'block-unloader': 'payload-unloader',
   'block-loader': 'payload-loader',
+  'thermal-pump': 'impulse-pump',
+  'alloy-smelter': 'surge-smelter',
+  'steam-vent': 'rhyolite-vent',
+  fabricator: 'tank-fabricator',
+  'basic-reconstructor': 'refabricator',
 }
