@@ -3,6 +3,7 @@ import {
   ConnectionSupport,
   RenderingInfo,
   drawBridge,
+  drawConfigBridge,
   drawRotated,
   drawRotatedTile,
   getChainedSpriteVariation,
@@ -186,7 +187,7 @@ export class ItemBridge extends TransportBlock {
     const type = this instanceof PhaseConveyor ? 'phaseBridges' : 'bridges'
     if (info.options[type]?.render) {
       info.renderingQueue.add(1, () =>
-        drawBridge({
+        drawConfigBridge({
           tile,
           info,
           category,
@@ -375,14 +376,40 @@ export class DuctBridge extends TransportBlock {
     })
 
     if (info.options.bridges?.render) {
-      info.renderingQueue.add(1, () =>
-        drawBridge({
-          tile,
-          info,
-          category: `${category}/ducts`,
-          opacity: info.options.bridges?.opacity,
-        })
-      )
+      const range = 4
+      const { tileMap } = info
+
+      let { x, y } = tile
+
+      const advance = {
+        [TileRotation.bottom]: () => y--,
+        [TileRotation.left]: () => x--,
+        [TileRotation.right]: () => x++,
+        [TileRotation.top]: () => y++,
+      }[tile.rotation]
+
+      advance() // we start at the tile this block faces
+
+      // finds the nearest duct bridge in front of this one to connect
+      for (let distance = 1; distance <= range; advance(), distance++) {
+        const t = tileMap[x]?.[y]
+        if (!t) continue
+
+        if (t.block.name !== this.name) continue
+
+        info.renderingQueue.add(1, () =>
+          drawBridge({
+            tile,
+            info,
+            category: `${category}/ducts`,
+            opacity: info.options.bridges?.opacity,
+            distance,
+            rotation: tile.rotation,
+          })
+        )
+
+        break
+      }
     }
   }
 }

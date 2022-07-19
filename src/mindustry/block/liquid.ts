@@ -2,7 +2,7 @@ import { BlockOutput, BlockOutputDirection } from './helper'
 import {
   ConnectionSupport,
   RenderingInfo,
-  drawBridge,
+  drawConfigBridge,
   getChainedSpriteVariation,
   getConnections,
   tileRotationToAngle,
@@ -184,7 +184,7 @@ export class BridgeConduit extends Block {
     const type = this instanceof PhaseConduit ? 'phaseBridges' : 'bridges'
     if (info.options[type]?.render) {
       info.renderingQueue.add(1, () =>
-        drawBridge({
+        drawConfigBridge({
           tile,
           info,
           category,
