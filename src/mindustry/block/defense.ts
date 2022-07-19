@@ -1,5 +1,10 @@
 import { ItemCost, ItemName } from '../item'
-import { RenderingInfo, drawRotatedTile } from '../../util'
+import {
+  RenderingInfo,
+  defaultTeamColor,
+  drawRotatedTile,
+  tintImage,
+} from '../../util'
 import { Block } from './block'
 import { SchematicTile } from '../../schematic'
 
@@ -415,4 +420,139 @@ export class ShockMine extends DefenseBlock {
   requirements = { lead: 25, silicon: 12 }
 
   size = 1
+}
+
+export class Radar extends DefenseBlock {
+  name = 'radar'
+
+  requirements = {
+    silicon: 60,
+    graphite: 50,
+    beryllium: 10,
+  }
+
+  size = 1
+
+  override powerConsumption = 0.6
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name + '-base', this.name],
+    })
+  }
+}
+
+export class BuildTower extends DefenseBlock {
+  name = 'build-tower'
+
+  requirements = {
+    silicon: 150,
+    oxide: 40,
+    thorium: 60,
+  }
+
+  size = 3
+
+  override powerConsumption = 3
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name + '-base', this.name],
+    })
+  }
+}
+
+export class RegenProjector extends DefenseBlock {
+  name = 'regen-projector'
+
+  requirements = {
+    silicon: 80,
+    tungsten: 60,
+    oxide: 40,
+    beryllium: 80,
+  }
+
+  size = 3
+
+  override powerConsumption = 1
+}
+
+export class BarrierProjector extends DefenseBlock {
+  name = 'barrier-projector'
+
+  requirements = {
+    'surge-alloy': 100,
+    silicon: 125,
+  }
+
+  size = 3
+
+  override powerConsumption = 4
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name],
+    })
+
+    const detail = await info.blockAsset(category, this.name + '-team')
+    this.renderImage({
+      tile,
+      info,
+      image: tintImage(detail, defaultTeamColor),
+    })
+  }
+}
+
+export class ShockwaveTower extends DefenseBlock {
+  name = 'shockwave-tower'
+
+  requirements = {
+    'surge-alloy': 50,
+    silicon: 150,
+    oxide: 30,
+    tungsten: 100,
+  }
+
+  size = 3
+
+  override powerConsumption = 80 / 60
+}
+
+export class ShieldProjector extends DefenseBlock {
+  name = 'shield-projector'
+
+  //  TODO: this hasn't been defined on the game's source code yet
+  requirements = {}
+
+  size = 3
+
+  override powerConsumption = 5
+}
+
+export class LargeShieldProjector extends DefenseBlock {
+  name = 'large-shield-projector'
+
+  //  TODO: this hasn't been defined on the game's source code yet
+  requirements = {}
+
+  size = 4
+
+  override powerConsumption = 5
+}
+
+export class ShieldBreaker extends DefenseBlock {
+  name = 'shield-breaker'
+
+  requirements = {}
+
+  size = 5
 }

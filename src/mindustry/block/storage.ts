@@ -1,5 +1,5 @@
 import { BlockOutput, BlockOutputDirection } from './helper'
-import { RenderingInfo, tintImage } from '../../util'
+import { RenderingInfo, defaultTeamColor, tintImage } from '../../util'
 import { Block } from './block'
 import { Item } from '../item'
 import { SchematicTile } from '../../schematic'
@@ -17,7 +17,7 @@ abstract class StorageBlock extends Block {
     const image = await info.blockAsset(category, this.name + '-team')
     this.renderImage({
       info,
-      image: tintImage(image, '#ffa600'),
+      image: tintImage(image, defaultTeamColor),
       tile,
     })
   }
