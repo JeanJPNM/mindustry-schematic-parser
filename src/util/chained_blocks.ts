@@ -1,6 +1,6 @@
-import { BlockOutput, BlockOutputDirection } from '../mindustry/block/helper'
 import { SchematicTile, TileRotation } from '../schematic/tile'
 import { Block } from '../mindustry/block'
+import { BlockOutputDirection } from '../mindustry/block/helper'
 import { Flags } from './flags'
 import { RenderingInfo } from './rendering_info'
 import { rotateOutputDirection } from './graphics'
@@ -68,7 +68,7 @@ export function getConnections(
       const t = tiles[key]
       if (!t) continue
       result[key] ||=
-        (Flags.has(t.block.output, BlockOutput.item) &&
+        (Flags.has(t.block.output, tile.block.output) &&
           key === TileRotation[(tile.rotation + 2) % 4]) ||
         (t.block instanceof type && t.rotation === (TileRotation[key] + 2) % 4)
     }
