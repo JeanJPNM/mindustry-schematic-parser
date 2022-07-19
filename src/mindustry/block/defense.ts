@@ -1,6 +1,6 @@
 import { ItemCost, ItemName } from '../item'
+import { RenderingInfo, drawRotatedTile } from '../../util'
 import { Block } from './block'
-import { RenderingInfo } from '../../util'
 import { SchematicTile } from '../../schematic'
 
 const category = 'defense'
@@ -223,6 +223,139 @@ export class ScrapWallGigantic extends ScrapWall {
     super()
     multiplyRequirements(this.requirements, 16)
   }
+}
+
+export class Thruster extends Wall {
+  name = 'thruster'
+
+  requirements = { scrap: 96 }
+
+  size = 4
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      category: wallCategory,
+      info,
+      layers: [this.name],
+    })
+
+    drawRotatedTile({
+      canvas: info.canvas,
+      image: await info.blockAsset(wallCategory, this.name + '-top'),
+      tile,
+    })
+  }
+}
+
+export class BerylliumWall extends Wall {
+  name = 'beryllium-wall'
+
+  requirements = {
+    beryllium: 6,
+  }
+
+  size = 1
+}
+
+export class BerylliumWallLarge extends BerylliumWall {
+  override name = 'beryllium-wall-large'
+
+  override size = 4
+
+  constructor() {
+    super()
+    multiplyRequirements(this.requirements)
+  }
+}
+
+export class TungstenWall extends Wall {
+  name = 'tungsten-wall'
+
+  requirements = {
+    tungsten: 6,
+  }
+
+  size = 1
+}
+
+export class TungstenWallLarge extends TungstenWall {
+  override name = 'tungsten-wall-large'
+
+  override size = 2
+
+  constructor() {
+    super()
+    multiplyRequirements(this.requirements)
+  }
+}
+
+export class BlastDoor extends Wall {
+  name = 'blast-door'
+
+  requirements = {
+    tungsten: 24,
+    silicon: 24,
+  }
+
+  size = 2
+}
+
+export class ReinforcedSurgeWall extends Wall {
+  name = 'reinforced-surge-wall'
+
+  requirements = {
+    surgeAlloy: 6,
+    tungsten: 2,
+  }
+
+  size = 1
+}
+
+export class ReinforcedSurgeWallLarge extends ReinforcedSurgeWall {
+  override name = 'reinforced-surge-wall-large'
+
+  override size = 2
+
+  constructor() {
+    super()
+    multiplyRequirements(this.requirements)
+  }
+}
+
+export class CarbideWall extends Wall {
+  name = 'carbide-wall'
+
+  requirements = {
+    thorium: 6,
+    carbide: 6,
+  }
+
+  size = 1
+}
+
+export class CarbideWallLarge extends CarbideWall {
+  override name = 'carbide-wall-large'
+
+  override size = 2
+
+  constructor() {
+    super()
+    multiplyRequirements(this.requirements)
+  }
+}
+
+export class ShieldedWall extends Wall {
+  name = 'shielded-wall'
+
+  requirements = {
+    'phase-fabric': 20,
+    'surge-alloy': 12,
+  }
+
+  size = 2
+
+  override powerConsumption = 3 / 60
 }
 
 export class Mender extends DefenseBlock {
