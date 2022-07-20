@@ -373,6 +373,7 @@ export class DuctBridge extends TransportBlock {
             opacity: info.options.bridges?.opacity,
             distance,
             rotation: tile.rotation,
+            enableEnd: false,
           })
         )
 

@@ -11,6 +11,7 @@ export interface ConfigBridgeDrawOptions {
   info: RenderingInfo
   category: string
   opacity?: number
+  enableEnd?: boolean
 }
 
 export async function drawConfigBridge({
@@ -18,6 +19,7 @@ export async function drawConfigBridge({
   info,
   category,
   opacity,
+  enableEnd,
 }: ConfigBridgeDrawOptions): Promise<void> {
   const config = tile.config as Point2 | null
   if (!config) return
@@ -40,6 +42,7 @@ export async function drawConfigBridge({
     opacity,
     rotation,
     distance,
+    enableEnd,
   })
 }
 
@@ -50,6 +53,7 @@ export interface BridgeDrawOptions {
   category: string
   rotation: TileRotation
   opacity?: number
+  enableEnd?: boolean
 }
 
 export async function drawBridge({
@@ -59,6 +63,7 @@ export async function drawBridge({
   opacity,
   distance,
   rotation,
+  enableEnd = true,
 }: BridgeDrawOptions) {
   const { block } = tile
   const bridge = await blockAsset(category, block.name + '-bridge')
@@ -67,32 +72,30 @@ export async function drawBridge({
   const tcanvas = Canvas.createCanvas((distance + 1) * 32, 32)
   const tcontext = tcanvas.getContext('2d')
 
-  const end = await blockAsset(category, block.name + '-end')
-  drawRotated({
-    canvas: tcanvas,
-    image: end,
-    x: 0,
-    y: 0,
-    offset: 16,
-    angle: degreeToAngle(-90),
-  })
-  drawRotated({
-    canvas: tcanvas,
-    image: end,
-    x: distance * 32,
-    y: 0,
-    offset: 16,
-    angle: degreeToAngle(90),
-  })
+  if (enableEnd) {
+    const end = await blockAsset(category, block.name + '-end')
+    drawRotated({
+      canvas: tcanvas,
+      image: end,
+      x: 0,
+      y: 0,
+      offset: 16,
+      angle: degreeToAngle(-90),
+    })
+    drawRotated({
+      canvas: tcanvas,
+      image: end,
+      x: distance * 32,
+      y: 0,
+      offset: 16,
+      angle: degreeToAngle(90),
+    })
+  }
   for (let i = 1; i < distance; i++) {
     tcontext.drawImage(bridge, i * 32, 0)
   }
   const { x, y } = translatePos(tile, canvas)
   tcontext.drawImage(arrow, (tcanvas.width - arrow.width) / 2, 0)
-  // const opacity =
-  //   block instanceof PhaseConduit || block instanceof PhaseConveyor
-  //     ? options.phaseBridges?.opacity
-  //     : options.bridges?.opacity
   context.save()
   context.globalAlpha = opacity ?? 1
   drawRotated({
