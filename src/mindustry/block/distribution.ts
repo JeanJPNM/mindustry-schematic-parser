@@ -302,10 +302,7 @@ export class Duct extends TransportBlock {
   size = 1
 
   override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    const connections = getConnections(tile, info, [
-      ConnectionSupport.strict,
-      Duct,
-    ])
+    const connections = getConnections(tile, info, ConnectionSupport.regular)
     const { imageIndex, scaleX, scaleY } = getChainedSpriteVariation(
       tile,
       connections
