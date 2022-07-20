@@ -542,3 +542,7 @@ export class Pebbles extends EnvBlock {
 export class Tendrils extends EnvBlock {
   name = 'tendrils'
 }
+
+export class GraphiticWall extends EnvBlock {
+  name = 'graphitic-wall'
+}

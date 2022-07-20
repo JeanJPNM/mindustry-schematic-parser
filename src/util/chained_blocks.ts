@@ -1,9 +1,13 @@
 import { SchematicTile, TileRotation } from '../schematic/tile'
+import {
+  rotateOutputDirection,
+  tileRotationToAngle,
+  translatePos,
+} from './graphics'
 import { Block } from '../mindustry/block'
 import { BlockOutputDirection } from '../mindustry/block/helper'
 import { Flags } from './flags'
 import { RenderingInfo } from './rendering_info'
-import { rotateOutputDirection } from './graphics'
 
 export enum ConnectionSupport {
   regular,
@@ -16,11 +20,12 @@ export interface ConnectionData {
   bottom: boolean
 }
 export interface ChainedDrawOptions {
+  tile: SchematicTile
+  info: RenderingInfo
   connections: ConnectionData
+  category: string
+  name(this: void, imageIndex: number): string
 }
-// export async function drawChained({
-//   connections,
-// }: ChainedDrawOptions): Promise<void> {}
 
 export function getConnections(
   tile: SchematicTile,
@@ -140,4 +145,34 @@ export function getChainedSpriteVariation(
   }
 
   return { imageIndex, scaleX, scaleY }
+}
+
+/**
+ * Draws regular chained blocks like conveyors and conduits.
+ *
+ * This function is only intended to work with blocks that have a size equal to 1
+ */
+export async function drawChained({
+  tile,
+  info,
+  connections,
+  category,
+  name,
+}: ChainedDrawOptions) {
+  const { imageIndex, scaleX, scaleY } = getChainedSpriteVariation(
+    tile,
+    connections
+  )
+  const { x, y } = translatePos(tile, info.canvas)
+  const context = info.canvas.getContext('2d')
+  const image = await info.blockAsset(category, name(imageIndex))
+  const offset = tile.block.size * 16
+
+  context.save()
+  context.translate(x + offset, y + offset)
+  context.scale(scaleX, scaleY)
+  context.rotate(tileRotationToAngle(tile.rotation))
+  context.translate(-offset, -offset)
+  context.drawImage(image, 0, 0)
+  context.restore()
 }

@@ -2,11 +2,9 @@ import { BlockOutput, BlockOutputDirection } from './helper'
 import {
   ConnectionSupport,
   RenderingInfo,
+  drawChained,
   drawConfigBridge,
-  getChainedSpriteVariation,
   getConnections,
-  tileRotationToAngle,
-  translatePos,
 } from '../../util'
 import { Block } from './block'
 import { ItemCost } from '../item'
@@ -67,23 +65,13 @@ export class Conduit extends Block {
 
   async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     const connections = getConnections(tile, info, ConnectionSupport.regular)
-    const { imageIndex, scaleX, scaleY } = getChainedSpriteVariation(
+    await drawChained({
       tile,
-      connections
-    )
-    const { x, y } = translatePos(tile, info.canvas)
-    const context = info.canvas.getContext('2d')
-    const image = await info.blockAsset(
-      `${category}/conduits`,
-      `${tile.block.name}-top-${imageIndex}`
-    )
-    context.save()
-    context.translate(x + 16, y + 16)
-    context.scale(scaleX, scaleY)
-    context.rotate(tileRotationToAngle(tile.rotation))
-    context.translate(-16, -16)
-    context.drawImage(image, 0, 0)
-    context.restore()
+      info,
+      category: `${category}/conduits`,
+      connections,
+      name: index => `${this.name}-top-${index}`,
+    })
   }
 }
 export class PulseConduit extends Conduit {
@@ -101,23 +89,13 @@ export class PlatedConduit extends Conduit {
       ConnectionSupport.strict,
       Conduit,
     ])
-    const { imageIndex, scaleX, scaleY } = getChainedSpriteVariation(
+    await drawChained({
       tile,
-      connections
-    )
-    const { x, y } = translatePos(tile, info.canvas)
-    const context = info.canvas.getContext('2d')
-    const image = await info.blockAsset(
-      `${category}/conduits`,
-      `${tile.block.name}-top-${imageIndex}`
-    )
-    context.save()
-    context.translate(x + 16, y + 16)
-    context.scale(scaleX, scaleY)
-    context.rotate(tileRotationToAngle(tile.rotation))
-    context.translate(-16, -16)
-    context.drawImage(image, 0, 0)
-    context.restore()
+      info,
+      connections,
+      category: `${category}/conduits`,
+      name: index => `${this.name}-top-${index}`,
+    })
   }
 }
 export class LiquidRouter extends Block {
