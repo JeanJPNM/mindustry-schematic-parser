@@ -1,5 +1,6 @@
 import { SchematicTile, TileRotation } from '../schematic/tile'
 import {
+  drawRotatedTile,
   rotateOutputDirection,
   tileRotationToAngle,
   translatePos,
@@ -12,6 +13,7 @@ import { RenderingInfo } from './rendering_info'
 export enum ConnectionSupport {
   regular,
   strict,
+  stack,
 }
 export interface ConnectionData {
   top: boolean
@@ -27,11 +29,19 @@ export interface ChainedDrawOptions {
   name(this: void, imageIndex: number): string
 }
 
+export interface StackChainedDrawOptions {
+  tile: SchematicTile
+  info: RenderingInfo
+  connections: ConnectionData
+  category: string
+}
+
 export function getConnections(
   tile: SchematicTile,
   info: RenderingInfo,
   support:
     | ConnectionSupport.regular
+    | [ConnectionSupport.stack, new () => Block]
     | [ConnectionSupport.strict, new () => Block]
 ): ConnectionData {
   const result: ConnectionData = {
@@ -67,15 +77,29 @@ export function getConnections(
         Flags.has(direction, directions[key])
     }
   } else {
-    const [, type] = support
-    for (const k in tiles) {
-      const key = k as keyof typeof tiles
-      const t = tiles[key]
-      if (!t) continue
-      result[key] ||=
-        (Flags.has(t.block.output, tile.block.output) &&
-          key === TileRotation[(tile.rotation + 2) % 4]) ||
-        (t.block instanceof type && t.rotation === (TileRotation[key] + 2) % 4)
+    const [mode, type] = support
+
+    if (mode === ConnectionSupport.strict) {
+      for (const k in tiles) {
+        const key = k as keyof typeof tiles
+        const t = tiles[key]
+        if (!t) continue
+        result[key] ||=
+          (Flags.has(t.block.output, tile.block.output) &&
+            key === TileRotation[(tile.rotation + 2) % 4]) ||
+          (t.block instanceof type &&
+            t.rotation === (TileRotation[key] + 2) % 4)
+      }
+    } else {
+      for (const k in tiles) {
+        const key = k as keyof typeof tiles
+        const t = tiles[key]
+        if (!t) continue
+        result[key] ||=
+          t.block instanceof type &&
+          (t.rotation === (TileRotation[key] + 2) % 4 ||
+            key === TileRotation[tile.rotation])
+      }
     }
   }
   return result
@@ -175,4 +199,33 @@ export async function drawChained({
   context.translate(-offset, -offset)
   context.drawImage(image, 0, 0)
   context.restore()
+}
+
+/** Draws special "stack" transport blocks (currently only plastanium and surge conveyors) */
+export async function drawStackChained({
+  tile,
+  info,
+  category,
+  connections,
+}: StackChainedDrawOptions) {
+  const { canvas } = info
+  const { block } = tile
+  const base = await info.blockAsset(category, block.name + '-0')
+  const edge = await info.blockAsset(category, block.name + '-edge')
+
+  drawRotatedTile({
+    canvas,
+    image: base,
+    tile,
+  })
+  for (const k in connections) {
+    const key = k as keyof typeof connections
+    if (connections[key]) continue
+    drawRotatedTile({
+      canvas,
+      image: edge,
+      tile,
+      angle: tileRotationToAngle(TileRotation[key]),
+    })
+  }
 }
