@@ -30,7 +30,6 @@ export enum BlockOutput {
   item = 2 << 0,
   liquid = 2 << 1,
   payload = 2 << 2,
-  duct = 2 << 3,
 }
 export enum BlockOutputDirection {
   none = 0,
