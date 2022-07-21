@@ -16,6 +16,9 @@ import { Block } from './block'
 import { SchematicTile } from '../../schematic'
 import { TileRotation } from '../../schematic/tile'
 const category = 'distribution'
+const ductCategory = `${category}/ducts`
+const conveyorCategory = `${category}/conveyors`
+const stackCategory = `${category}/stack-conveyors`
 
 abstract class TransportBlock extends Block {
   override output = BlockOutput.item
@@ -45,7 +48,7 @@ export class Conveyor extends TransportBlock {
     await drawChained({
       tile,
       info,
-      category: `${category}/conveyors`,
+      category: conveyorCategory,
       connections,
       name: index => `${this.name}-${index}-0`,
     })
@@ -74,7 +77,7 @@ export class PlastaniumConveyor extends TransportBlock {
     await drawStackChained({
       tile,
       info,
-      category: `${category}/stack-conveyors`,
+      category: stackCategory,
       connections,
     })
   }
@@ -92,7 +95,7 @@ export class ArmoredConveyor extends Conveyor {
     await drawChained({
       tile,
       info,
-      category: `${category}/conveyors`,
+      category: conveyorCategory,
       connections,
       name: index => `${this.name}-${index}-0`,
     })
@@ -237,7 +240,7 @@ export class Duct extends TransportBlock {
     await drawChained({
       tile,
       info,
-      category: `${category}/ducts`,
+      category: ductCategory,
       connections,
       name: index => `${this.name}-top-${index}`,
     })
@@ -260,7 +263,7 @@ export class ArmoredDuct extends Duct {
     await drawChained({
       tile,
       info,
-      category: `${category}/ducts`,
+      category: ductCategory,
       connections,
       name: index => `${this.name}-top-${index}`,
     })
@@ -313,11 +316,16 @@ export class OverflowDuct extends TransportBlock {
   size = 1
 
   override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({ tile, info, category, layers: [this.name] })
+    await this.render({
+      tile,
+      info,
+      category: ductCategory,
+      layers: [this.name],
+    })
     drawRotatedTile({
       canvas: info.canvas,
       tile,
-      image: await info.blockAsset(category, this.name + '-top'),
+      image: await info.blockAsset(ductCategory, this.name + '-top'),
     })
   }
 }
@@ -333,11 +341,16 @@ export class UnderflowDuct extends TransportBlock {
   size = 1
 
   override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({ tile, info, category, layers: [this.name] })
+    await this.render({
+      tile,
+      info,
+      category: ductCategory,
+      layers: [this.name],
+    })
     drawRotatedTile({
       canvas: info.canvas,
       tile,
-      image: await info.blockAsset(category, this.name + '-top'),
+      image: await info.blockAsset(ductCategory, this.name + '-top'),
     })
   }
 }
@@ -358,14 +371,14 @@ export class DuctBridge extends TransportBlock {
     await this.render({
       tile,
       info,
-      category,
-      layers: [`ducts/${this.name}`],
+      category: ductCategory,
+      layers: [this.name],
     })
 
     drawRotatedTile({
       canvas: info.canvas,
       tile,
-      image: await info.blockAsset(category, `ducts/${this.name}-dir`),
+      image: await info.blockAsset(ductCategory, `${this.name}-dir`),
     })
 
     if (info.options.bridges?.render) {
@@ -394,7 +407,7 @@ export class DuctBridge extends TransportBlock {
           drawBridge({
             tile,
             info,
-            category: `${category}/ducts`,
+            category: ductCategory,
             opacity: info.options.bridges?.opacity,
             distance,
             rotation: tile.rotation,
@@ -423,13 +436,13 @@ export class DuctUnloader extends TransportBlock {
     await this.render({
       tile,
       info,
-      category,
+      category: ductCategory,
       layers: [this.name, this.name + '-top'],
     })
 
     const config = tile.config as Item | null
     const imageName = this.name + (config ? '-center' : '-arrow')
-    const image = await info.blockAsset(category, imageName)
+    const image = await info.blockAsset(ductCategory, imageName)
     if (config) {
       this.renderImage({
         tile,
