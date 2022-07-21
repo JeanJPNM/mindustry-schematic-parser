@@ -108,3 +108,37 @@ export async function drawBridge({
   })
   context.restore()
 }
+
+// TODO: find a better name
+/**
+ * Finds the next bridge that this tile is facing,
+ * the tile block must also be a bridge.
+ */
+export function findNextBridge(
+  tile: SchematicTile,
+  info: RenderingInfo,
+  range: number
+): { tile: SchematicTile; distance: number } | null {
+  const { tileMap } = info
+
+  let { x, y } = tile
+
+  const advance = {
+    [TileRotation.bottom]: () => y--,
+    [TileRotation.left]: () => x--,
+    [TileRotation.right]: () => x++,
+    [TileRotation.top]: () => y++,
+  }[tile.rotation]
+
+  advance() // we start at the tile this block faces
+
+  // finds the nearest duct bridge in front of this one to connect
+  for (let distance = 1; distance <= range; advance(), distance++) {
+    const t = tileMap[x]?.[y]
+    if (!t) continue
+
+    if (t.block.name === tile.block.name) return { tile: t, distance }
+  }
+
+  return null
+}

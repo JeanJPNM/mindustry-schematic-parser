@@ -7,6 +7,7 @@ import {
   drawConfigBridge,
   drawRotatedTile,
   drawStackChained,
+  findNextBridge,
   getConnections,
   outlineImage,
   tintImage,
@@ -14,7 +15,6 @@ import {
 import { Item, ItemCost } from '../item'
 import { Block } from './block'
 import { SchematicTile } from '../../schematic'
-import { TileRotation } from '../../schematic/tile'
 const category = 'distribution'
 const ductCategory = `${category}/ducts`
 const conveyorCategory = `${category}/conveyors`
@@ -383,40 +383,19 @@ export class DuctBridge extends TransportBlock {
     })
 
     if (info.options.bridges?.render) {
-      const range = 4
-      const { tileMap } = info
-
-      let { x, y } = tile
-
-      const advance = {
-        [TileRotation.bottom]: () => y--,
-        [TileRotation.left]: () => x--,
-        [TileRotation.right]: () => x++,
-        [TileRotation.top]: () => y++,
-      }[tile.rotation]
-
-      advance() // we start at the tile this block faces
-
-      // finds the nearest duct bridge in front of this one to connect
-      for (let distance = 1; distance <= range; advance(), distance++) {
-        const t = tileMap[x]?.[y]
-        if (!t) continue
-
-        if (t.block.name !== this.name) continue
-
+      const result = findNextBridge(tile, info, 4)
+      if (result) {
         info.renderingQueue.add(1, () =>
           drawBridge({
             tile,
             info,
             category: ductCategory,
             opacity: info.options.bridges?.opacity,
-            distance,
+            distance: result.distance,
             rotation: tile.rotation,
             enableEnd: false,
           })
         )
-
-        break
       }
     }
   }
