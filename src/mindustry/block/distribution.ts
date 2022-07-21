@@ -5,13 +5,11 @@ import {
   drawBridge,
   drawChained,
   drawConfigBridge,
-  drawRotated,
   drawRotatedTile,
+  drawStackChained,
   getConnections,
   outlineImage,
-  tileRotationToAngle,
   tintImage,
-  translatePos,
 } from '../../util'
 import { Item, ItemCost } from '../item'
 import { Block } from './block'
@@ -69,63 +67,16 @@ export class PlastaniumConveyor extends TransportBlock {
   override outputDirection = BlockOutputDirection.none
 
   override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    const connections = {
-      top: false,
-      bottom: false,
-      left: false,
-      right: false,
-    }
-    // scoped variables to get connections for this block
-    {
-      const { x, y } = tile
-      const { size } = tile.block
-      const tiles = {
-        top: info.tileMap[x]?.[y + size],
-        bottom: info.tileMap[x]?.[y - size],
-        left: info.tileMap[x - size]?.[y],
-        right: info.tileMap[x + size]?.[y],
-      }
-      for (const k in tiles) {
-        const key = k as keyof typeof tiles
-        const t = tiles[key]
-        if (!t) continue
-        connections[key] ||=
-          t.block instanceof PlastaniumConveyor &&
-          (t.rotation === (TileRotation[key] + 2) % 4 ||
-            key === TileRotation[tile.rotation])
-      }
-    }
-    const { canvas } = info
-    const { block } = tile
-    const { x, y } = translatePos(tile, canvas)
-    const base = await info.blockAsset(
-      `${category}/stack-conveyors`,
-      block.name + '-0'
-    )
-    const edge = await info.blockAsset(
-      `${category}/stack-conveyors`,
-      block.name + '-edge'
-    )
-    drawRotated({
-      canvas,
-      image: base,
-      x,
-      y,
-      offset: 16,
-      angle: tileRotationToAngle(tile.rotation),
+    const connections = getConnections(tile, info, [
+      ConnectionSupport.stack,
+      PlastaniumConveyor,
+    ])
+    await drawStackChained({
+      tile,
+      info,
+      category: `${category}/stack-conveyors`,
+      connections,
     })
-    for (const k in connections) {
-      const key = k as keyof typeof connections
-      if (connections[key]) continue
-      drawRotated({
-        canvas,
-        image: edge,
-        x,
-        y,
-        offset: 16,
-        angle: tileRotationToAngle(TileRotation[key]),
-      })
-    }
   }
 }
 export class ArmoredConveyor extends Conveyor {
