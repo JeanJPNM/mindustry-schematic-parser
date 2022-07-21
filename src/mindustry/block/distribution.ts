@@ -19,6 +19,7 @@ const category = 'distribution'
 const ductCategory = `${category}/ducts`
 const conveyorCategory = `${category}/conveyors`
 const stackCategory = `${category}/stack-conveyors`
+const unitCategory = 'units'
 
 abstract class TransportBlock extends Block {
   override output = BlockOutput.item
@@ -284,8 +285,8 @@ export class DuctRouter extends TransportBlock {
     await this.render({
       tile,
       info,
-      category,
-      layers: [`ducts/${this.name}`],
+      category: ductCategory,
+      layers: [this.name],
     })
     const config = tile.config as Item | null
     if (config) {
@@ -299,7 +300,7 @@ export class DuctRouter extends TransportBlock {
       drawRotatedTile({
         canvas: info.canvas,
         tile,
-        image: await info.blockAsset(category, `ducts/${this.name}-top`),
+        image: await info.blockAsset(ductCategory, this.name + '-top'),
       })
     }
   }
@@ -454,6 +455,131 @@ export class DuctUnloader extends TransportBlock {
         canvas: info.canvas,
         tile,
         image,
+      })
+    }
+  }
+}
+
+export class SurgeConveyor extends TransportBlock {
+  name = 'surge-conveyor'
+
+  requirements = {
+    'surge-alloy': 1,
+    tungsten: 1,
+  }
+
+  size = 1
+
+  // same as plastanium conveyors, only the end of a chain
+  // has an output
+  override outputDirection = BlockOutputDirection.none
+
+  override powerConsumption = 1 / 60
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    const connections = getConnections(tile, info, [
+      ConnectionSupport.stack,
+      SurgeConveyor,
+    ])
+
+    await drawStackChained({
+      tile,
+      info,
+      category: stackCategory,
+      connections,
+    })
+  }
+}
+
+export class SurgeRouter extends TransportBlock {
+  name = 'surge-router'
+
+  requirements = {
+    'surge-alloy': 5,
+    tungsten: 1,
+  }
+
+  size = 1
+
+  override powerConsumption = 3 / 60
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category: ductCategory,
+      layers: [this.name],
+    })
+    const config = tile.config as Item | null
+    if (config) {
+      const center = await info.blockAsset(category, 'center')
+      this.renderImage({
+        tile,
+        info,
+        image: tintImage(center, config.color, 1),
+      })
+    } else {
+      drawRotatedTile({
+        canvas: info.canvas,
+        tile,
+        image: await info.blockAsset(ductCategory, this.name + '-top'),
+      })
+    }
+  }
+}
+
+export class UnitCargoLoader extends Block {
+  name = 'unit-cargo-loader'
+
+  requirements = {
+    silicon: 80,
+    'surge-alloy': 50,
+    oxide: 20,
+  }
+
+  size = 3
+
+  override powerConsumption = 8 / 60
+
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category: unitCategory,
+      layers: [this.name],
+    })
+  }
+}
+
+export class UnitCargoUnloadPoint extends Block {
+  name = 'unit-cargo-unload-point'
+
+  requirements = {
+    silicon: 60,
+    tungsten: 60,
+  }
+
+  size = 2
+
+  override output = BlockOutput.item
+
+  override outputDirection = BlockOutputDirection.all
+
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category: unitCategory,
+      layers: [this.name],
+    })
+    const config = tile.config as Item | null
+
+    if (config) {
+      const image = await info.blockAsset(unitCategory, this.name + '-top')
+      this.renderImage({
+        tile,
+        info,
+        image: tintImage(image, config.color, 1),
       })
     }
   }
