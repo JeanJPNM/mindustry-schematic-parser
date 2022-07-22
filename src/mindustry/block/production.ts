@@ -115,7 +115,7 @@ export class VentCondenser extends Block {
     await this.render({
       tile,
       info,
-      category,
+      category: prodCategory,
       layers: [this.name + '-bottom', this.name + '-rotator', this.name],
     })
   }
