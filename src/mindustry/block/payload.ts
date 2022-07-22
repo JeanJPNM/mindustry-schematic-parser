@@ -52,6 +52,95 @@ export class PayloadRouter extends Block {
     })
   }
 }
+
+export class ReinforcedPayloadConveyor extends Block {
+  name = 'reinforced-payload-conveyor'
+
+  requirements = {
+    tungsten: 10,
+  }
+
+  size = 3
+
+  override output = BlockOutput.payload
+
+  override outputDirection = BlockOutputDirection.all
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    drawRotatedTile({
+      canvas: info.canvas,
+      image: await info.blockAsset(category, this.name + '-icon'),
+      tile,
+    })
+  }
+}
+
+export class ReinforcedPayloadRouter extends Block {
+  name = 'reinforced-payload-router'
+
+  requirements = {
+    tungsten: 15,
+  }
+
+  size = 3
+
+  override output = BlockOutput.payload
+
+  override outputDirection = BlockOutputDirection.all
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name, this.name + '-over'],
+    })
+    drawRotatedTile({
+      canvas: info.canvas,
+      image: await info.blockAsset(category, this.name + '-top'),
+      tile,
+    })
+  }
+}
+
+export class PayloadMassDriver extends Block {
+  name = 'payload-mass-driver'
+
+  requirements = {
+    tungsten: 120,
+    silicon: 120,
+    graphite: 50,
+  }
+
+  size = 3
+
+  override powerConsumption = 0.5
+
+  override output = BlockOutput.payload
+
+  override outputDirection = BlockOutputDirection.front
+
+  // TODO: complete later
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [`${this.name}-base`],
+    })
+    const top = outlineImage({
+      image: await info.blockAsset(category, this.name),
+      fillStyle: '#353535',
+      thickness: 3,
+    })
+    this.renderImage({
+      tile,
+      info,
+      image: top,
+    })
+  }
+}
+
 export class PayloadPropulsionTower extends Block {
   name = 'payload-propulsion-tower'
 
@@ -90,6 +179,54 @@ export class PayloadPropulsionTower extends Block {
   }
 }
 
+export class SmallDeconstructor extends Block {
+  name = 'small-deconstructor'
+
+  requirements = {
+    beryllium: 100,
+    silicon: 100,
+    oxide: 40,
+    graphite: 80,
+  }
+
+  size = 3
+
+  override powerConsumption = 1
+
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name, this.name + '-top'],
+    })
+  }
+}
+
+export class Deconstructor extends Block {
+  name = 'deconstructor'
+
+  requirements = {
+    beryllium: 250,
+    oxide: 100,
+    silicon: 250,
+    carbide: 250,
+  }
+
+  size = 5
+
+  override powerConsumption = 3
+
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name, this.name + '-top'],
+    })
+  }
+}
+
 export class Constructor extends Block {
   name = 'constructor'
 
@@ -105,6 +242,30 @@ export class Constructor extends Block {
       category,
       layers: [this.name, this.name + '-top'],
       tile,
+    })
+  }
+}
+
+export class LargeConstructor extends Block {
+  name = 'large-constructor'
+
+  requirements = {
+    silicon: 150,
+    oxide: 150,
+    tungsten: 200,
+    'phase-fabric': 40,
+  }
+
+  size = 5
+
+  override powerConsumption = 2
+
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name, this.name + '-top'],
     })
   }
 }
