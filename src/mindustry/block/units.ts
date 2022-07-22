@@ -3,6 +3,7 @@ import { RenderingInfo, drawRotatedTile, outlineImage } from '../../util'
 import { Block } from './block'
 import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
+import { TileRotation } from '../../schematic/tile'
 
 const category = 'units'
 const payloadCategory = 'payload'
@@ -32,6 +33,7 @@ abstract class Factory extends Block {
     })
   }
 }
+
 abstract class Reconstructor extends Block {
   override output = BlockOutput.payload
 
@@ -72,6 +74,36 @@ abstract class Reconstructor extends Block {
     })
   }
 }
+
+abstract class Fabricator extends Block {
+  override output = BlockOutput.payload
+
+  override outputDirection = BlockOutputDirection.front
+
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name],
+    })
+    drawRotatedTile({
+      canvas: info.canvas,
+      image: await info.blockAsset(
+        payloadCategory,
+        `factory-out-${this.size}-dark`
+      ),
+      tile,
+    })
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name + '-top'],
+    })
+  }
+}
+
 export class CommandCenter extends Block {
   name = 'command-center'
 
@@ -223,4 +255,207 @@ export class ResupplyPoint extends Block {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
   async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {}
+}
+
+export class TankFabricator extends Fabricator {
+  name = 'tank-fabricator'
+
+  requirements = {
+    silicon: 200,
+    beryllium: 150,
+  }
+
+  size = 3
+
+  override powerConsumption = 2
+}
+
+export class ShipFabricator extends Fabricator {
+  name = 'ship-fabricator'
+
+  requirements = {
+    silicon: 250,
+    beryllium: 200,
+  }
+
+  size = 3
+
+  override powerConsumption = 2
+}
+
+export class MechFabricator extends Fabricator {
+  name = 'mech-fabricator'
+
+  requirements = {
+    silicon: 200,
+    graphite: 300,
+    tungsten: 60,
+  }
+
+  size = 3
+
+  override powerConsumption = 2
+}
+
+export class TankRefabricator extends Fabricator {
+  name = 'tank-refabricator'
+
+  requirements = {
+    beryllium: 200,
+    tungsten: 80,
+    silicon: 100,
+  }
+
+  size = 3
+
+  override powerConsumption = 3
+}
+
+export class MechRefabricator extends Fabricator {
+  name = 'mech-refabricator'
+
+  requirements = {
+    beryllium: 250,
+    tungsten: 120,
+    silicon: 150,
+  }
+
+  size = 3
+
+  override powerConsumption = 2.5
+}
+
+export class ShipRefabricator extends Fabricator {
+  name = 'ship-refabricator'
+
+  requirements = {
+    beryllium: 200,
+    tungsten: 100,
+    silicon: 40,
+  }
+
+  size = 3
+
+  override powerConsumption = 2.5
+}
+
+export class PrimeRefabricator extends Fabricator {
+  name = 'prime-refabricator'
+
+  requirements = {
+    thorium: 250,
+    oxide: 200,
+    tungsten: 200,
+    silicon: 400,
+  }
+
+  size = 5
+
+  override powerConsumption = 5
+}
+
+export class TankAssembler extends Fabricator {
+  name = 'tank-assembler'
+
+  requirements = {
+    thorium: 500,
+    oxide: 150,
+    carbide: 80,
+    silicon: 500,
+  }
+
+  size = 5
+
+  override powerConsumption = 3
+}
+
+export class ShipAssembler extends Fabricator {
+  name = 'ship-assembler'
+
+  requirements = {
+    carbide: 100,
+    oxide: 200,
+    tungsten: 500,
+    silicon: 800,
+    thorium: 400,
+  }
+
+  size = 5
+
+  override powerConsumption = 3
+}
+
+export class MechAssembler extends Fabricator {
+  name = 'mech-assembler'
+
+  requirements = {
+    carbide: 200,
+    thorium: 600,
+    oxide: 200,
+    tungsten: 500,
+    silicon: 900,
+  }
+
+  size = 5
+
+  override powerConsumption = 3
+}
+
+export class BasicAssemblerModule extends Block {
+  name = 'basic-assembler-module'
+
+  requirements = {
+    carbide: 300,
+    thorium: 500,
+    oxide: 200,
+    'phase-fabric': 400,
+  }
+
+  size = 5
+
+  override output = BlockOutput.payload
+
+  override outputDirection = BlockOutputDirection.front
+
+  override powerConsumption = 4
+
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name],
+    })
+    const { rotation } = tile
+
+    const sideName =
+      rotation === TileRotation.right || rotation === TileRotation.top
+        ? '-side1'
+        : '-side2'
+    const side = await info.blockAsset(category, this.name + sideName)
+
+    drawRotatedTile({
+      canvas: info.canvas,
+      tile,
+      image: side,
+    })
+  }
+}
+
+export class UnitRepairTower extends Block {
+  name = 'unit-repair-tower'
+
+  requirements = {
+    graphite: 90,
+    silicon: 90,
+    tungsten: 80,
+  }
+
+  size = 2
+
+  override powerConsumption = 1
+
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({ tile, info, category, layers: [this.name] })
+  }
 }
