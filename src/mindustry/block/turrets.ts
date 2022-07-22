@@ -7,16 +7,24 @@ const defenseCategory = 'defense'
 abstract class Turret extends Block {
   category = category
 
+  reinforced = false
+
+  get asset() {
+    return this.name
+  }
+
   async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     await this.render({
       tile,
       info,
       category,
-      layers: ['bases/block-' + this.size],
+      layers: [
+        `bases/${this.reinforced ? 'reinforced-' : ''}block-${this.size}`,
+      ],
     })
 
     const top = outlineImage({
-      image: await info.blockAsset(this.category, this.name),
+      image: await info.blockAsset(this.category, this.asset),
       fillStyle: '#353535',
       thickness: 3,
     })
@@ -195,4 +203,212 @@ export class Meltdown extends Turret {
   }
 
   size = 4
+}
+
+export class Breach extends Turret {
+  name = 'breach'
+
+  requirements = {
+    beryllium: 150,
+    silicon: 150,
+    graphite: 250,
+  }
+
+  size = 3
+
+  override reinforced = true
+}
+
+export class Diffuse extends Turret {
+  name = 'diffuse'
+
+  requirements = {
+    beryllium: 150,
+    silicon: 200,
+    graphite: 200,
+    tungsten: 50,
+  }
+
+  size = 3
+
+  override reinforced = true
+
+  override category = `${category}/${this.name}`
+
+  override get asset(): string {
+    return `${this.name}-preview`
+  }
+}
+
+export class Sublimate extends Turret {
+  name = 'sublimate'
+
+  requirements = {
+    tungsten: 150,
+    silicon: 200,
+    oxide: 40,
+    beryllium: 400,
+  }
+
+  size = 3
+
+  override reinforced = true
+
+  override category = `${category}/${this.name}`
+
+  override get asset(): string {
+    return `${this.name}-preview`
+  }
+}
+
+export class Titan extends Turret {
+  name = 'titan'
+
+  requirements = {
+    tungsten: 250,
+    silicon: 300,
+    thorium: 400,
+  }
+
+  size = 4
+
+  override reinforced = true
+
+  override category = `${category}/${this.name}`
+
+  override get asset(): string {
+    return `${this.name}-preview`
+  }
+}
+
+export class Disperse extends Turret {
+  name = 'disperse'
+
+  requirements = {
+    thorium: 50,
+    oxide: 150,
+    silicon: 200,
+    beryllium: 350,
+  }
+
+  size = 4
+
+  override reinforced = true
+
+  override category = `${category}/${this.name}`
+
+  override get asset(): string {
+    return `${this.name}-preview`
+  }
+}
+
+export class Afflict extends Turret {
+  name = 'afflict'
+
+  requirements = {
+    'surge-alloy': 100,
+    silicon: 200,
+    graphite: 250,
+    oxide: 40,
+  }
+
+  size = 4
+
+  override powerConsumption = 2
+
+  override reinforced = true
+
+  override category = `${category}/${this.name}`
+
+  override get asset(): string {
+    return `${this.name}-preview`
+  }
+}
+
+export class Lustre extends Turret {
+  name = 'lustre'
+
+  requirements = {
+    silicon: 250,
+    graphite: 200,
+    oxide: 50,
+    carbide: 90,
+  }
+
+  size = 4
+
+  override reinforced = true
+
+  override category = `${category}/${this.name}`
+
+  override get asset(): string {
+    return `${this.name}-preview`
+  }
+}
+
+export class Scathe extends Turret {
+  name = 'scathe'
+
+  requirements = {
+    silicon: 300,
+    graphite: 400,
+    tungsten: 450,
+    carbide: 250,
+  }
+
+  size = 4
+
+  override reinforced = true
+
+  override category = `${category}/${this.name}`
+
+  override get asset(): string {
+    return `${this.name}-preview`
+  }
+}
+
+export class Smite extends Turret {
+  name = 'smite'
+
+  requirements = {
+    oxide: 200,
+    'surge-alloy': 400,
+    silicon: 800,
+    carbide: 500,
+    'phase-fabric': 300,
+  }
+
+  size = 5
+
+  override reinforced = true
+
+  override category = `${category}/${this.name}`
+
+  override get asset(): string {
+    return `${this.name}-preview`
+  }
+}
+
+export class Malign extends Turret {
+  name = 'malign'
+
+  requirements = {
+    carbide: 400,
+    beryllium: 2000,
+    silicon: 800,
+    graphite: 800,
+    'phase-fabric': 300,
+  }
+
+  size = 5
+
+  override powerConsumption = 5
+
+  override reinforced = true
+
+  override category = `${category}/${this.name}`
+
+  override get asset(): string {
+    return `${this.name}-preview`
+  }
 }
