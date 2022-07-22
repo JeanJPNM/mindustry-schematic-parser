@@ -1,3 +1,4 @@
+import { BlockOutput, BlockOutputDirection } from './helper'
 import {
   RenderingInfo,
   degreeToAngle,
@@ -253,6 +254,114 @@ export class ImpactReactor extends PowerGenerator {
       info,
       category,
       tile,
+      layers: [this.name + '-bottom', this.name],
+    })
+  }
+}
+
+export class BeamNode extends PowerBlock {
+  name = 'beam-node'
+
+  requirements = {
+    beryllium: 8,
+  }
+
+  size = 1
+}
+
+export class BeamTower extends PowerBlock {
+  name = 'beam-tower'
+
+  requirements = {
+    beryllium: 30,
+    oxide: 20,
+    silicon: 10,
+  }
+
+  size = 3
+}
+
+export class BeamLink extends PowerBlock {
+  name = 'beam-link'
+
+  // TODO: to be defined in the game's source code
+  requirements = {}
+
+  size = 3
+}
+
+export class TurbineCondenser extends PowerGenerator {
+  name = 'turbine-condenser'
+
+  requirements = {
+    beryllium: 60,
+  }
+
+  size = 3
+
+  powerGeneration = 3 / 9
+
+  override output = BlockOutput.liquid
+
+  override outputDirection = BlockOutputDirection.all
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name, this.name + '-rotator'],
+    })
+  }
+}
+
+export class ChemicalCombustionChamber extends PowerGenerator {
+  name = 'chemical-combustion-chamber'
+
+  requirements = {
+    graphite: 40,
+    tungsten: 40,
+    oxide: 40,
+    silicon: 30,
+  }
+
+  size = 3
+
+  powerGeneration = 9
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name + '-bottom', this.name],
+    })
+  }
+}
+
+export class PyrolysisGenerator extends PowerGenerator {
+  name = 'pyrolysis-generator'
+
+  requirements = {
+    graphite: 50,
+    carbide: 50,
+    oxide: 60,
+    silicon: 50,
+  }
+
+  size = 3
+
+  powerGeneration = 27
+
+  override output = BlockOutput.liquid
+
+  override outputDirection = BlockOutputDirection.all
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
       layers: [this.name + '-bottom', this.name],
     })
   }
