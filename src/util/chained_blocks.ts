@@ -58,14 +58,16 @@ export function getConnections(
     left: info.tileMap[x - size]?.[y],
     right: info.tileMap[x + size]?.[y],
   }
+  const directions = {
+    top: BlockOutputDirection.right,
+    bottom: BlockOutputDirection.left,
+    left: BlockOutputDirection.front,
+    right: BlockOutputDirection.back,
+  }
+
   if (support === ConnectionSupport.regular) {
     const content = tile.block.output
-    const directions = {
-      top: BlockOutputDirection.right,
-      bottom: BlockOutputDirection.left,
-      left: BlockOutputDirection.front,
-      right: BlockOutputDirection.back,
-    }
+
     for (const k in tiles) {
       const key = k as keyof typeof tiles
       const t = tiles[key]
@@ -84,9 +86,12 @@ export function getConnections(
         const key = k as keyof typeof tiles
         const t = tiles[key]
         if (!t) continue
+
+        const direction = rotateOutputDirection(t)
         result[key] ||=
           (Flags.has(t.block.output, tile.block.output) &&
-            key === TileRotation[(tile.rotation + 2) % 4]) ||
+            key === TileRotation[(tile.rotation + 2) % 4] &&
+            Flags.has(direction, directions[key])) ||
           (t.block instanceof type &&
             t.rotation === (TileRotation[key] + 2) % 4)
       }
