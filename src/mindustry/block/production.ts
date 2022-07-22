@@ -1,6 +1,6 @@
 import { BlockOutput, BlockOutputDirection } from './helper'
+import { RenderingInfo, drawRotatedTile } from '../../util'
 import { Block } from './block'
-import { RenderingInfo } from '../../util'
 import { SchematicTile } from '../../schematic'
 const category = 'drills'
 const prodCategory = 'production'
@@ -93,4 +93,161 @@ export class OilExtractor extends Drill {
   size = 3
 
   override powerConsumption = 3.0
+}
+
+export class VentCondenser extends Block {
+  name = 'vent-condenser'
+
+  requirements = {
+    graphite: 20,
+    beryllium: 60,
+  }
+
+  size = 3
+
+  override output = BlockOutput.liquid
+
+  override outputDirection = BlockOutputDirection.all
+
+  override powerConsumption = 0.5
+
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name + '-bottom', this.name + '-rotator', this.name],
+    })
+  }
+}
+
+export class CliffCrusher extends Block {
+  name = 'cliff-crusher'
+
+  requirements = {
+    graphite: 25,
+    beryllium: 20,
+  }
+
+  size = 2
+
+  override output = BlockOutput.item
+
+  override outputDirection = BlockOutputDirection.all
+
+  override powerConsumption = 11 / 60
+
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({ tile, info, category, layers: [this.name] })
+    const top = await info.blockAsset(category, this.name + '-top')
+    drawRotatedTile({
+      canvas: info.canvas,
+      tile,
+      image: top,
+    })
+  }
+}
+
+export class PlasmaBore extends Block {
+  name = 'plasma-bore'
+
+  requirements = {
+    beryllium: 40,
+  }
+
+  size = 2
+
+  override output = BlockOutput.item
+
+  override outputDirection = BlockOutputDirection.all
+
+  override powerConsumption = 0.15
+
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({ tile, info, category, layers: [this.name] })
+    const top = await info.blockAsset(category, this.name + '-top')
+    drawRotatedTile({
+      canvas: info.canvas,
+      tile,
+      image: top,
+    })
+  }
+}
+export class LargePlasmaBore extends Block {
+  name = 'large-plasma-bore'
+
+  requirements = {
+    silicon: 100,
+    oxide: 25,
+    beryllium: 100,
+    tungsten: 70,
+  }
+
+  size = 3
+
+  override output = BlockOutput.item
+
+  override outputDirection = BlockOutputDirection.all
+
+  override powerConsumption = 0.8
+
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({ tile, info, category, layers: [this.name] })
+    const top = await info.blockAsset(category, this.name + '-top')
+    drawRotatedTile({
+      canvas: info.canvas,
+      tile,
+      image: top,
+    })
+  }
+}
+
+export class ImpactDrill extends Block {
+  name = 'impact-drill'
+
+  requirements = {
+    silicon: 70,
+    beryllium: 90,
+    graphite: 60,
+  }
+
+  size = 4
+
+  override output = BlockOutput.item
+
+  override outputDirection = BlockOutputDirection.all
+
+  override powerConsumption = 160 / 60
+
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name, this.name + '-top'],
+    })
+  }
+}
+
+export class EruptionDrill extends Block {
+  name = 'eruption-drill'
+
+  requirements = { silicon: 200, oxide: 20, tungsten: 200, thorium: 120 }
+
+  size = 5
+
+  override output = BlockOutput.item
+
+  override outputDirection = BlockOutputDirection.all
+
+  override powerConsumption = 6
+
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name, this.name + '-top'],
+    })
+  }
 }
