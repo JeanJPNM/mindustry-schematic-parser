@@ -9,6 +9,13 @@ const liquidColors: LiquidColorMap = {
   slag: '#ffa166',
   oil: '#313131',
   cryofluid: '#6ecdec',
+  neoplasm: '#c33e2b',
+  arkycite: '#84a94b',
+  gallium: '#9a9dbf',
+  ozone: '#fc81dd',
+  hydrogen: '#9eabf7',
+  nitrogen: '#efe3ff',
+  cyanogen: '#89e8b6',
 }
 
 export class Liquid {
@@ -30,7 +37,19 @@ export class Liquid {
   }
 
   static fromCode(code: number): Liquid {
-    const liquids: LiquidName[] = ['water', 'slag', 'oil', 'cryofluid']
+    const liquids: LiquidName[] = [
+      'water',
+      'slag',
+      'oil',
+      'cryofluid',
+      'neoplasm',
+      'arkycite',
+      'gallium',
+      'ozone',
+      'hydrogen',
+      'nitrogen',
+      'cyanogen',
+    ]
     if (code > liquids.length - 1)
       throw new Error('Unknown liquid code: ' + code)
     const name = liquids[code]

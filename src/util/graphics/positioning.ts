@@ -40,7 +40,11 @@ export function rotateOutputDirection(
 ): BlockOutputDirection {
   const { rotation } = tile
   const { outputDirection } = tile.block
-  if (outputDirection === BlockOutputDirection.all) return outputDirection
+  if (
+    outputDirection === BlockOutputDirection.all ||
+    outputDirection === BlockOutputDirection.none
+  )
+    return outputDirection
 
   let result = BlockOutputDirection.none
   // rotates the output direction

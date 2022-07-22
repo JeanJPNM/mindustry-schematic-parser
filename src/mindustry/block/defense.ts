@@ -1,9 +1,17 @@
 import { ItemCost, ItemName } from '../item'
+import {
+  RenderingInfo,
+  defaultTeamColor,
+  drawRotatedTile,
+  tintImage,
+} from '../../util'
 import { Block } from './block'
-import { RenderingInfo } from '../../util'
 import { SchematicTile } from '../../schematic'
 
 const category = 'defense'
+
+const wallCategory = 'walls'
+
 function multiplyRequirements(requirements: ItemCost, multiplier = 4): void {
   for (const requirement in requirements) {
     const code = requirement as ItemName
@@ -23,7 +31,18 @@ abstract class DefenseBlock extends Block {
     })
   }
 }
-export abstract class Wall extends DefenseBlock {}
+
+export abstract class Wall extends DefenseBlock {
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category: wallCategory,
+      layers: [this.name],
+    })
+  }
+}
+
 export class CopperWall extends Wall {
   name = 'copper-wall'
 
@@ -140,7 +159,7 @@ export class SurgeWallLarge extends SurgeWall {
     multiplyRequirements(this.requirements)
   }
 }
-export class Door extends DefenseBlock {
+export class Door extends Wall {
   name = 'door'
 
   requirements = {
@@ -166,6 +185,17 @@ export class ScrapWall extends Wall {
   requirements = { scrap: 6 }
 
   size = 1
+
+  hasVariants = true
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category: wallCategory,
+      layers: [this.hasVariants ? this.name + '1' : this.name],
+    })
+  }
 }
 export class ScrapWallLarge extends ScrapWall {
   override name = 'scrap-wall-large'
@@ -192,10 +222,145 @@ export class ScrapWallGigantic extends ScrapWall {
 
   override size = 4
 
+  override hasVariants = false
+
   constructor() {
     super()
     multiplyRequirements(this.requirements, 16)
   }
+}
+
+export class Thruster extends Wall {
+  name = 'thruster'
+
+  requirements = { scrap: 96 }
+
+  size = 4
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      category: wallCategory,
+      info,
+      layers: [this.name],
+    })
+
+    drawRotatedTile({
+      canvas: info.canvas,
+      image: await info.blockAsset(wallCategory, this.name + '-top'),
+      tile,
+    })
+  }
+}
+
+export class BerylliumWall extends Wall {
+  name = 'beryllium-wall'
+
+  requirements = {
+    beryllium: 6,
+  }
+
+  size = 1
+}
+
+export class BerylliumWallLarge extends BerylliumWall {
+  override name = 'beryllium-wall-large'
+
+  override size = 4
+
+  constructor() {
+    super()
+    multiplyRequirements(this.requirements)
+  }
+}
+
+export class TungstenWall extends Wall {
+  name = 'tungsten-wall'
+
+  requirements = {
+    tungsten: 6,
+  }
+
+  size = 1
+}
+
+export class TungstenWallLarge extends TungstenWall {
+  override name = 'tungsten-wall-large'
+
+  override size = 2
+
+  constructor() {
+    super()
+    multiplyRequirements(this.requirements)
+  }
+}
+
+export class BlastDoor extends Wall {
+  name = 'blast-door'
+
+  requirements = {
+    tungsten: 24,
+    silicon: 24,
+  }
+
+  size = 2
+}
+
+export class ReinforcedSurgeWall extends Wall {
+  name = 'reinforced-surge-wall'
+
+  requirements = {
+    surgeAlloy: 6,
+    tungsten: 2,
+  }
+
+  size = 1
+}
+
+export class ReinforcedSurgeWallLarge extends ReinforcedSurgeWall {
+  override name = 'reinforced-surge-wall-large'
+
+  override size = 2
+
+  constructor() {
+    super()
+    multiplyRequirements(this.requirements)
+  }
+}
+
+export class CarbideWall extends Wall {
+  name = 'carbide-wall'
+
+  requirements = {
+    thorium: 6,
+    carbide: 6,
+  }
+
+  size = 1
+}
+
+export class CarbideWallLarge extends CarbideWall {
+  override name = 'carbide-wall-large'
+
+  override size = 2
+
+  constructor() {
+    super()
+    multiplyRequirements(this.requirements)
+  }
+}
+
+export class ShieldedWall extends Wall {
+  name = 'shielded-wall'
+
+  requirements = {
+    'phase-fabric': 20,
+    'surge-alloy': 12,
+  }
+
+  size = 2
+
+  override powerConsumption = 3 / 60
 }
 
 export class Mender extends DefenseBlock {
@@ -255,4 +420,139 @@ export class ShockMine extends DefenseBlock {
   requirements = { lead: 25, silicon: 12 }
 
   size = 1
+}
+
+export class Radar extends DefenseBlock {
+  name = 'radar'
+
+  requirements = {
+    silicon: 60,
+    graphite: 50,
+    beryllium: 10,
+  }
+
+  size = 1
+
+  override powerConsumption = 0.6
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name + '-base', this.name],
+    })
+  }
+}
+
+export class BuildTower extends DefenseBlock {
+  name = 'build-tower'
+
+  requirements = {
+    silicon: 150,
+    oxide: 40,
+    thorium: 60,
+  }
+
+  size = 3
+
+  override powerConsumption = 3
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name + '-base', this.name],
+    })
+  }
+}
+
+export class RegenProjector extends DefenseBlock {
+  name = 'regen-projector'
+
+  requirements = {
+    silicon: 80,
+    tungsten: 60,
+    oxide: 40,
+    beryllium: 80,
+  }
+
+  size = 3
+
+  override powerConsumption = 1
+}
+
+export class BarrierProjector extends DefenseBlock {
+  name = 'barrier-projector'
+
+  requirements = {
+    'surge-alloy': 100,
+    silicon: 125,
+  }
+
+  size = 3
+
+  override powerConsumption = 4
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name],
+    })
+
+    const detail = await info.blockAsset(category, this.name + '-team')
+    this.renderImage({
+      tile,
+      info,
+      image: tintImage(detail, defaultTeamColor),
+    })
+  }
+}
+
+export class ShockwaveTower extends DefenseBlock {
+  name = 'shockwave-tower'
+
+  requirements = {
+    'surge-alloy': 50,
+    silicon: 150,
+    oxide: 30,
+    tungsten: 100,
+  }
+
+  size = 3
+
+  override powerConsumption = 80 / 60
+}
+
+export class ShieldProjector extends DefenseBlock {
+  name = 'shield-projector'
+
+  //  TODO: this hasn't been defined on the game's source code yet
+  requirements = {}
+
+  size = 3
+
+  override powerConsumption = 5
+}
+
+export class LargeShieldProjector extends DefenseBlock {
+  name = 'large-shield-projector'
+
+  //  TODO: this hasn't been defined on the game's source code yet
+  requirements = {}
+
+  size = 4
+
+  override powerConsumption = 5
+}
+
+export class ShieldBreaker extends DefenseBlock {
+  name = 'shield-breaker'
+
+  requirements = {}
+
+  size = 5
 }

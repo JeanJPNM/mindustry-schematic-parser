@@ -20,6 +20,12 @@ const itemColors: ItemColorMap = {
   'spore-pod': '#7457ce',
   'blast-compound': '#ff795e',
   pyratite: '#ffaa5f',
+  beryllium: '#3a8f64',
+  tungsten: '#768a9a',
+  oxide: '#e4ffd6',
+  carbide: '#89769a',
+  'fissile-matter': '#5e988d',
+  'dormant-cyst': '#df824d',
 }
 
 /** A wrapper for `ItemCode`, can be useful with `instanceof` */
@@ -59,6 +65,12 @@ export class Item {
       'spore-pod',
       'blast-compound',
       'pyratite',
+      'beryllium',
+      'tungsten',
+      'oxide',
+      'carbide',
+      'fissile-matter',
+      'dormant-cyst',
     ]
     if (code > items.length - 1) throw new Error('Unknown item code: ' + code)
     const name = items[code]

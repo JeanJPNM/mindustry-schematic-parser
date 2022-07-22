@@ -5,10 +5,23 @@ import { Item } from '../item'
 import { Liquid } from '../liquid'
 import { SchematicTile } from '../../schematic'
 
+// TODO: move those blocks to their correct categories
+// do this on a major version change
 const category = 'sandbox'
+const powerCategory = 'power'
+const distributionCategory = 'distribution'
+const payloadCategory = 'payload'
+
 abstract class SandBoxBlock extends Block {
+  category = category
+
   async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({ tile, info, category, layers: [this.name] })
+    await this.render({
+      tile,
+      info,
+      category: this.category,
+      layers: [this.name],
+    })
   }
 }
 export class PowerSource extends SandBoxBlock {
@@ -17,6 +30,8 @@ export class PowerSource extends SandBoxBlock {
   requirements = {}
 
   size = 1
+
+  override category = powerCategory
 }
 export class PowerVoid extends SandBoxBlock {
   name = 'power-void'
@@ -24,6 +39,8 @@ export class PowerVoid extends SandBoxBlock {
   requirements = {}
 
   size = 1
+
+  override category = powerCategory
 }
 export class ItemSource extends SandBoxBlock {
   name = 'item-source'
@@ -40,7 +57,7 @@ export class ItemSource extends SandBoxBlock {
     await this.render({ tile, info, category, layers: [this.name] })
     const config = tile.config as Item | null
     const imgName = config ? 'center' : 'cross'
-    const image = await info.blockAsset(category, imgName)
+    const image = await info.blockAsset(distributionCategory, imgName)
     this.renderImage({
       info,
       tile,
@@ -71,7 +88,7 @@ export class LiquidSource extends SandBoxBlock {
     await this.render({ tile, info, category, layers: [this.name] })
     const config = tile.config as Liquid | null
     const imgName = config ? 'center' : 'cross'
-    const image = await info.blockAsset(category, imgName)
+    const image = await info.blockAsset(distributionCategory, imgName)
     this.renderImage({
       info,
       tile,
@@ -95,6 +112,8 @@ export class Illuminator extends LightBlock {
   size = 1
 
   override powerConsumption = 0.05
+
+  override category = powerCategory
 }
 export class PayloadSource extends SandBoxBlock {
   name = 'payload-source'
@@ -111,7 +130,7 @@ export class PayloadSource extends SandBoxBlock {
     await this.render({
       tile,
       info,
-      category,
+      category: payloadCategory,
       layers: [this.name, `${this.name}-top`],
     })
   }
@@ -127,7 +146,7 @@ export class PayloadVoid extends SandBoxBlock {
     await this.render({
       tile,
       info,
-      category,
+      category: payloadCategory,
       layers: [this.name, `${this.name}-top`],
     })
   }

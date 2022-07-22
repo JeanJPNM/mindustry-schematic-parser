@@ -75,3 +75,29 @@ export class LargeLogicDisplay extends LogicDisplay {
 
   override size = 6
 }
+
+export class Canvas extends LogicBlock {
+  name = 'canvas'
+
+  requirements = {
+    silicon: 50,
+  }
+
+  size = 2
+}
+
+export class WorldProcessor extends LogicBlock {
+  name = 'world-processor'
+
+  requirements = {}
+
+  size = 1
+}
+
+export class WorldCell extends LogicBlock {
+  name = 'world-cell'
+
+  requirements = {}
+
+  size = 1
+}

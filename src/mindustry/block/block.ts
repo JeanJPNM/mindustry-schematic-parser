@@ -36,8 +36,7 @@ export abstract class Block extends UnlockableContent {
   static readonly codes = new Map<string, Block>()
 
   static fromCode(code: string): Block {
-    type K = keyof typeof blockAliases
-    const id = code in blockAliases ? blockAliases[code as K] : code
+    const id = blockAliases.get(code) ?? code
     const block = this.codes.get(id)
     if (block) {
       return block

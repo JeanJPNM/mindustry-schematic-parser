@@ -4,7 +4,7 @@ import { ItemCost } from '../item/item_cost'
 import { RenderingInfo } from '../../util'
 import { SchematicTile } from '../../schematic'
 
-const category = 'crafting'
+const category = 'production'
 abstract class GenericCrafter extends Block {
   override output = BlockOutput.item
 
@@ -107,7 +107,7 @@ export class PhaseWeaver extends GenericCrafter {
   }
 }
 export class SurgeSmelter extends GenericCrafter {
-  name = 'alloy-smelter'
+  name = 'surge-smelter'
 
   requirements = { silicon: 80, lead: 80, thorium: 70 }
 
@@ -131,7 +131,7 @@ export class CryofluidMixer extends GenericCrafter {
       info,
       category,
       tile,
-      layers: [this.name, this.name + '-top'],
+      layers: [this.name + '-bottom', this.name],
     })
   }
 }
@@ -255,4 +255,213 @@ export class Incinerator extends GenericCrafter {
   override output = BlockOutput.none
 
   override outputDirection = BlockOutputDirection.none
+}
+
+export class SiliconArcFurnace extends GenericCrafter {
+  name = 'silicon-arc-furnace'
+
+  requirements = { beryllium: 70, graphite: 80 }
+
+  size = 3
+
+  override powerConsumption = 6
+}
+
+export class Electrolyzer extends GenericCrafter {
+  name = 'electrolyzer'
+
+  requirements = {
+    silicon: 50,
+    graphite: 40,
+    beryllium: 130,
+    tungsten: 80,
+  }
+
+  size = 3
+
+  override powerConsumption = 1
+
+  // TODO: this block has specific output directions for each liquid
+  // doesn't affect rendering too much, but is something that should
+  // be fixed in the future
+  override output = BlockOutput.item | BlockOutput.liquid
+}
+
+export class AtmosphericConcentrator extends GenericCrafter {
+  name = 'atmospheric-concentrator'
+
+  requirements = {
+    oxide: 60,
+    beryllium: 180,
+    silicon: 150,
+  }
+
+  size = 3
+
+  override powerConsumption = 2
+
+  override output = BlockOutput.liquid
+}
+
+export class OxidationChamber extends GenericCrafter {
+  name = 'oxidation-chamber'
+
+  requirements: ItemCost = {
+    tungsten: 120,
+    graphite: 100,
+    silicon: 100,
+    beryllium: 120,
+  }
+
+  size = 3
+
+  override powerConsumption = 0.5
+}
+
+export class ElectricHeater extends GenericCrafter {
+  name = 'electric-heater'
+
+  requirements = {
+    tungsten: 30,
+    oxide: 30,
+  }
+
+  size = 2
+
+  override powerConsumption = 50 / 60
+}
+
+export class SlagHeater extends GenericCrafter {
+  name = 'slag-heater'
+
+  requirements = {
+    tungsten: 50,
+    oxide: 20,
+    beryllium: 20,
+  }
+
+  size = 3
+}
+
+export class PhaseHeater extends GenericCrafter {
+  name = 'phase-heater'
+
+  requirements = {
+    oxide: 30,
+    carbide: 30,
+    beryllium: 30,
+  }
+
+  size = 2
+}
+
+export class HeatRedirector extends GenericCrafter {
+  name = 'heat-redirector'
+
+  requirements = {
+    tungsten: 10,
+    graphite: 10,
+  }
+
+  size = 3
+}
+
+export class SlagIncinerator extends GenericCrafter {
+  name = 'slag-incinerator'
+
+  requirements = {
+    tungsten: 15,
+  }
+
+  size = 1
+}
+
+export class CarbideCrucible extends GenericCrafter {
+  name = 'carbide-crucible'
+
+  requirements = {
+    tungsten: 110,
+    thorium: 150,
+    oxide: 60,
+  }
+
+  size = 3
+
+  override powerConsumption = 2
+}
+
+export class SlagCentrifuge extends GenericCrafter {
+  name = 'slag-centrifuge'
+
+  requirements = {
+    carbide: 70,
+    graphite: 60,
+    silicon: 40,
+    oxide: 40,
+  }
+
+  size = 3
+
+  override powerConsumption = 2 / 60
+
+  override output = BlockOutput.liquid
+}
+
+export class SurgeCrucible extends GenericCrafter {
+  name = 'surge-crucible'
+
+  requirements = {
+    silicon: 100,
+    graphite: 80,
+    tungsten: 80,
+    oxide: 80,
+  }
+
+  size = 3
+
+  override powerConsumption = 2
+}
+
+export class CyanogenSynthesizer extends GenericCrafter {
+  name = 'cyanogen-synthesizer'
+
+  requirements = {
+    carbide: 50,
+    silicon: 80,
+    beryllium: 90,
+  }
+
+  size = 3
+
+  override powerConsumption = 2
+
+  override output = BlockOutput.liquid
+}
+
+export class PhaseSynthesizer extends GenericCrafter {
+  name = 'phase-synthesizer'
+
+  requirements = {
+    carbide: 90,
+    silicon: 100,
+    thorium: 100,
+    tungsten: 200,
+  }
+
+  size = 3
+
+  override powerConsumption = 8
+}
+
+export class HeatReactor extends GenericCrafter {
+  name = 'heat-reactor'
+
+  requirements = {
+    oxide: 70,
+    graphite: 20,
+    carbide: 10,
+    thorium: 80,
+  }
+
+  size = 3
 }
