@@ -43,6 +43,46 @@ export class CoreNucleus extends StorageBlock {
 
   size = 5
 }
+
+export class CoreBastion extends StorageBlock {
+  name = 'core-bastion'
+
+  requirements = {
+    graphite: 1000,
+    silicon: 1000,
+    beryllium: 800,
+  }
+
+  size = 4
+}
+
+export class CoreCitadel extends StorageBlock {
+  name = 'core-citadel'
+
+  requirements = {
+    silicon: 7000,
+    beryllium: 7000,
+    tungsten: 4000,
+    oxide: 2500,
+  }
+
+  size = 5
+}
+
+export class CoreAcropolis extends StorageBlock {
+  name = 'core-acropolis'
+
+  requirements = {
+    beryllium: 12000,
+    silicon: 11000,
+    tungsten: 9000,
+    carbide: 10000,
+    oxide: 8000,
+  }
+
+  size = 6
+}
+
 export class Container extends StorageBlock {
   name = 'container'
 
@@ -81,4 +121,27 @@ export class Unloader extends Block {
       })
     }
   }
+}
+
+export class ReinforcedContainer extends StorageBlock {
+  name = 'reinforced-container'
+
+  requirements = {
+    tungsten: 30,
+    graphite: 40,
+  }
+
+  size = 2
+}
+
+export class ReinforcedVault extends StorageBlock {
+  name = 'reinforced-vault'
+
+  requirements = {
+    tungsten: 125,
+    thorium: 70,
+    beryllium: 100,
+  }
+
+  size = 3
 }
