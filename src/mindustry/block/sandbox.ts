@@ -151,3 +151,11 @@ export class PayloadVoid extends SandBoxBlock {
     })
   }
 }
+
+export class HeatSource extends SandBoxBlock {
+  name = 'heat-source'
+
+  requirements = {}
+
+  size = 1
+}
