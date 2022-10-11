@@ -160,7 +160,7 @@ export class Magmarock extends EnvBlock {
 }
 
 export class Sand extends EnvBlock {
-  name = 'sand'
+  name = 'sand-floor'
 }
 
 export class Darksand extends EnvBlock {
