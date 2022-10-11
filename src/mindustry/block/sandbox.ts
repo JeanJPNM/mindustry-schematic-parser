@@ -54,15 +54,15 @@ export class ItemSource extends SandBoxBlock {
   override outputDirection = BlockOutputDirection.all
 
   override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({ tile, info, category, layers: [this.name] })
     const config = tile.config as Item | null
-    const imgName = config ? 'center' : 'cross'
+    const imgName = config ? 'center' : 'cross-full'
     const image = await info.blockAsset(distributionCategory, imgName)
     this.renderImage({
       info,
       tile,
       image: config ? tintImage(image, config.color, 1) : image,
     })
+    await this.render({ tile, info, category, layers: [this.name] })
   }
 }
 export class ItemVoid extends SandBoxBlock {
@@ -85,15 +85,15 @@ export class LiquidSource extends SandBoxBlock {
   override outputDirection = BlockOutputDirection.all
 
   override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({ tile, info, category, layers: [this.name] })
     const config = tile.config as Liquid | null
-    const imgName = config ? 'center' : 'cross'
+    const imgName = config ? 'center' : 'cross-full'
     const image = await info.blockAsset(distributionCategory, imgName)
     this.renderImage({
       info,
       tile,
       image: config ? tintImage(image, config.color, 1) : image,
     })
+    await this.render({ tile, info, category, layers: [this.name] })
   }
 }
 export class LiquidVoid extends SandBoxBlock {
