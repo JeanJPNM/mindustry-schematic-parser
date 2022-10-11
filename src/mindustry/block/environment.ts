@@ -269,6 +269,10 @@ export class RedStoneVent extends EnvBlock {
   name = 'red-stone-vent'
 }
 
+export class CrystallineVent extends EnvBlock {
+  name = 'crystalline-vent'
+}
+
 export class Redmat extends EnvBlock {
   name = 'redmat'
 }
