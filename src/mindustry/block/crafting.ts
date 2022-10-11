@@ -163,6 +163,15 @@ export class Melter extends GenericCrafter {
   override powerConsumption = 1.0
 
   override output = BlockOutput.liquid
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      info,
+      category,
+      tile,
+      layers: [this.name + '-bottom', this.name],
+    })
+  }
 }
 export class Separator extends GenericCrafter {
   name = 'separator'
@@ -178,7 +187,7 @@ export class Separator extends GenericCrafter {
       info,
       category,
       tile,
-      layers: [this.name, this.name + '-spinner'],
+      layers: [this.name + '-bottom', this.name, this.name + '-spinner'],
     })
   }
 }
@@ -329,6 +338,10 @@ export class ElectricHeater extends GenericCrafter {
   size = 2
 
   override powerConsumption = 50 / 60
+
+  override output = BlockOutput.none
+
+  override outputDirection = BlockOutputDirection.none
 }
 
 export class SlagHeater extends GenericCrafter {
@@ -341,6 +354,10 @@ export class SlagHeater extends GenericCrafter {
   }
 
   size = 3
+
+  override output = BlockOutput.none
+
+  override outputDirection = BlockOutputDirection.none
 }
 
 export class PhaseHeater extends GenericCrafter {
@@ -353,6 +370,10 @@ export class PhaseHeater extends GenericCrafter {
   }
 
   size = 2
+
+  override output = BlockOutput.none
+
+  override outputDirection = BlockOutputDirection.none
 }
 
 export class HeatRedirector extends GenericCrafter {
@@ -364,6 +385,25 @@ export class HeatRedirector extends GenericCrafter {
   }
 
   size = 3
+
+  override output = BlockOutput.none
+
+  override outputDirection = BlockOutputDirection.none
+}
+
+export class HeatRouter extends GenericCrafter {
+  name = 'heat-router'
+
+  requirements = {
+    tungsten: 15,
+    graphite: 10,
+  }
+
+  size = 3
+
+  override output = BlockOutput.none
+
+  override outputDirection = BlockOutputDirection.none
 }
 
 export class SlagIncinerator extends GenericCrafter {

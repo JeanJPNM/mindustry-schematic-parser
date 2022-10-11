@@ -75,7 +75,7 @@ export class Cultivator extends Block {
       tile,
       info,
       category: prodCategory,
-      layers: [this.name, this.name + '-top'],
+      layers: [this.name + '-bottom', this.name, this.name + '-top'],
     })
   }
 }
