@@ -548,11 +548,3 @@ export class LargeShieldProjector extends DefenseBlock {
 
   override powerConsumption = 5
 }
-
-export class ShieldBreaker extends DefenseBlock {
-  name = 'shield-breaker'
-
-  requirements = {}
-
-  size = 5
-}
