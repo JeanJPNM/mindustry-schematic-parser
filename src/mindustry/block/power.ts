@@ -7,6 +7,7 @@ import {
   translatePos,
 } from '../../util'
 import { Block } from './block'
+import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
 const category = 'power'
 abstract class PowerBlock extends Block {
@@ -327,7 +328,7 @@ export class ChemicalCombustionChamber extends PowerGenerator {
 
   size = 3
 
-  powerGeneration = 9
+  powerGeneration = 10
 
   override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     await this.render({
@@ -351,11 +352,64 @@ export class PyrolysisGenerator extends PowerGenerator {
 
   size = 3
 
-  powerGeneration = 27
+  powerGeneration = 25
 
   override output = BlockOutput.liquid
 
   override outputDirection = BlockOutputDirection.all
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name + '-bottom', this.name],
+    })
+  }
+}
+
+export class FluxReactor extends PowerGenerator {
+  name = 'flux-reactor'
+
+  requirements: ItemCost = {
+    graphite: 300,
+    carbide: 200,
+    oxide: 100,
+    silicon: 600,
+    'surge-alloy': 300,
+  }
+
+  powerGeneration = 120
+
+  size = 5
+
+  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [this.name + '-bottom', this.name],
+    })
+  }
+}
+
+export class NeoplasiaReactor extends PowerGenerator {
+  name = 'neoplasia-reactor'
+
+  requirements: ItemCost = {
+    tungsten: 1000,
+    carbide: 300,
+    oxide: 150,
+    silicon: 500,
+    'phase-fabric': 300,
+    'surge-alloy': 200,
+  }
+
+  powerGeneration = 140
+
+  size = 5
+
+  override output = BlockOutput.liquid
 
   override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
     await this.render({
