@@ -8,7 +8,7 @@
     "test": "uvu -r tsm src \\.test\\.ts",
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "pnpm run build"
   },
   "type": "module",
   "main": "./dist/index.cjs",
