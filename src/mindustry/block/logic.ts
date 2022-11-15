@@ -86,6 +86,17 @@ export class Canvas extends LogicBlock {
   size = 2
 }
 
+export class ReinforcedMessage extends LogicBlock {
+  name = 'reinforced-message'
+
+  requirements = {
+    graphite: 10,
+    beryllium: 5,
+  }
+
+  size = 1
+}
+
 export class WorldProcessor extends LogicBlock {
   name = 'world-processor'
 
@@ -96,6 +107,14 @@ export class WorldProcessor extends LogicBlock {
 
 export class WorldCell extends LogicBlock {
   name = 'world-cell'
+
+  requirements = {}
+
+  size = 1
+}
+
+export class WorldMessage extends LogicBlock {
+  name = 'world-message'
 
   requirements = {}
 

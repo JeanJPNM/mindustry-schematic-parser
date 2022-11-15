@@ -1,6 +1,7 @@
 import { BlockOutput, BlockOutputDirection } from './helper'
 import { RenderingInfo, drawRotatedTile, outlineImage } from '../../util'
 import { Block } from './block'
+import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
 
 const category = 'payload'
@@ -106,7 +107,7 @@ export class ReinforcedPayloadRouter extends Block {
 export class PayloadMassDriver extends Block {
   name = 'payload-mass-driver'
 
-  requirements = {
+  requirements: ItemCost = {
     tungsten: 120,
     silicon: 120,
     graphite: 50,
@@ -127,6 +128,39 @@ export class PayloadMassDriver extends Block {
       info,
       category,
       layers: [`${this.name}-base`],
+    })
+    const top = outlineImage({
+      image: await info.blockAsset(category, this.name),
+      fillStyle: '#353535',
+      thickness: 3,
+    })
+    this.renderImage({
+      tile,
+      info,
+      image: top,
+    })
+  }
+}
+
+export class LargePayloadMassDriver extends Block {
+  name = 'large-payload-mass-driver'
+
+  requirements = {
+    thorium: 200,
+    tungsten: 200,
+    silicon: 200,
+    graphite: 100,
+    oxide: 30,
+  }
+
+  size = 5
+
+  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+    await this.render({
+      tile,
+      info,
+      category,
+      layers: [`${this.name}-base`, `${this.name}-top`],
     })
     const top = outlineImage({
       image: await info.blockAsset(category, this.name),
