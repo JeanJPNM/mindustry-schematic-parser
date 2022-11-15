@@ -7,11 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.2.0] - 2022-11-14
 
-## Added
+### Added
 
 - v7 environment blocks
 
-## Changed
+### Changed
 
 - Renamed `BlockForge` to `Constructor`
 - Moved `Constructor` from `experimental` to `payload`
