@@ -27,7 +27,9 @@ export async function resolveAssets(
     const rootFolder = await packageDirectory({
       cwd,
     })
-    assetsFolder = basicJoin(rootFolder, 'assets')
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    assetsFolder = basicJoin(rootFolder!, 'assets')
   }
   return path => Canvas.loadImage(basicJoin(assetsFolder as string, path))
 }
