@@ -114,8 +114,6 @@ function readConfigObject(cData: StreamedDataReader) {
         case 4:
           return Liquid.fromCode(code)
         default:
-          // consume the short to avoid errors
-          cData.getInt16()
           return
       }
     }
