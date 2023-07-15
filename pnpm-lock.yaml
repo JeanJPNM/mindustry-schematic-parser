@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@rollup/plugin-typescript': ^11.1.2
-  '@types/node': ^14.17.0
+  '@types/node': ^14.18.53
   '@types/pako': ^2.0.0
   '@typescript-eslint/eslint-plugin': ^6.0.0
   '@typescript-eslint/parser': ^6.0.0
@@ -26,7 +26,7 @@ dependencies:
 
 devDependencies:
   '@rollup/plugin-typescript': 11.1.2_btijhbnqj3bkl7p6fnurpsgzhq
-  '@types/node': 14.18.22
+  '@types/node': 14.18.53
   '@types/pako': 2.0.0
   '@typescript-eslint/eslint-plugin': 6.0.0_67z5obcwh3vgkftcfgt7udy35y
   '@typescript-eslint/parser': 6.0.0_ko3fmmbeyij36muomfgt2u76xu
@@ -215,8 +215,8 @@ packages:
     resolution: {integrity: sha512-Hr5Jfhc9eYOQNPYO5WLDq/n4jqijdHNlDXjuAQkkt+mWdQR+XJToOHrsD4cPaMXpn6KO7y2+wM8AZEs8VpBLVA==}
     dev: true
 
-  /@types/node/14.18.22:
-    resolution: {integrity: sha512-qzaYbXVzin6EPjghf/hTdIbnVW1ErMx8rPzwRNJhlbyJhu2SyqlvjGOY/tbUt6VFyzg56lROcOeSQRInpt63Yw==}
+  /@types/node/14.18.53:
+    resolution: {integrity: sha512-soGmOpVBUq+gaBMwom1M+krC/NNbWlosh4AtGA03SyWNDiqSKtwp7OulO1M6+mg8YkHMvJ/y0AkCeO8d1hNb7A==}
     dev: true
 
   /@types/pako/2.0.0:
