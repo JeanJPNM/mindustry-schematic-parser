@@ -44,7 +44,7 @@
     "eslint-plugin-prettier": "^5.0.0",
     "prettier": "^3.0.0",
     "rollup": "^3.26.2",
-    "tsm": "^2.2.1",
+    "tsm": "^2.3.0",
     "typescript": "^5.1.6",
     "uvu": "^0.5.3"
   },
