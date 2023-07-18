@@ -10,7 +10,10 @@ export class Point2 {
    * @param x X coordinate
    * @param y Y coordinate
    */
-  constructor(public x: number, public y: number) {}
+  constructor(
+    public x: number,
+    public y: number
+  ) {}
 
   /** @return a point unpacked from an integer. */
   public static unpack(pos: number): Point2 {
