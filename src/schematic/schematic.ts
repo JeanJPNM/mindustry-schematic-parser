@@ -3,7 +3,7 @@ import * as renderer from './renderer'
 import { Blocks, ItemCost, ItemName } from '../mindustry'
 import { RenderingInfo, ticksPerSecond } from '../util'
 import { decodeSchematic, encodeTags } from './io'
-import { MindustryVersion } from './version'
+import { MindustryVersion } from '.'
 import { SchematicTile } from './tile'
 const {
   power: { PowerGenerator },
