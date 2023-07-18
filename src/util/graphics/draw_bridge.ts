@@ -1,5 +1,5 @@
+import * as Canvas from 'canvas'
 import { degreeToAngle, drawRotated, tileRotationToAngle } from './draw_rotated'
-import Canvas from 'canvas'
 import { Point2 } from '../../arc'
 import { RenderingInfo } from '../rendering_info'
 import { SchematicTile } from '../..'

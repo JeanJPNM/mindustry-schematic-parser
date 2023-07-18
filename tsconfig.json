@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
     "alwaysStrict": true,
-    "allowSyntheticDefaultImports": true,
+    "allowSyntheticDefaultImports": false,
     "declaration": true,
     "declarationDir": "types",
     "downlevelIteration": true,
     "esModuleInterop": true,
     "isolatedModules": true,
-    "lib": ["ES2020", "DOM.Iterable"],
+    "lib": ["ES2020", "DOM"],
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "noImplicitAny": true,
     "noImplicitOverride": true,
     "noImplicitThis": true,

@@ -1,6 +1,6 @@
+import * as Canvas from 'canvas'
 import { Schematic, SchematicTile } from '../schematic'
 import { SchematicTileMap, handlePlacement } from './graphics'
-import Canvas from 'canvas'
 import { SchematicRenderingOptions } from '../schematic/schematic'
 import { basicJoin } from './basic_join'
 import { resolveAssets } from './resolve_assets'

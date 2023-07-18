@@ -8,7 +8,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 16
-      - run: npm i -g pnpm
+      - uses: pnpm/action-setup@v2
       - run: pnpm i
       - name: Run tests
-        run: npm test
+        run: pnpm test

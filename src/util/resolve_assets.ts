@@ -1,4 +1,4 @@
-import Canvas from 'canvas'
+import * as Canvas from 'canvas'
 import { RenderingInfo } from './rendering_info'
 import { WebSchematicRenderingOptions } from '../schematic/schematic'
 import { basicJoin } from './basic_join'
