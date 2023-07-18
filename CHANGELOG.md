@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.2.2] - 2023-07-18
 
+### Fixed
+
 - Fix the generated types not exporting the `MindustryVersion` type.
 
 ## [4.2.1] - 2022-11-24
