@@ -1,4 +1,4 @@
-import Canvas from 'canvas'
+import * as Canvas from 'canvas'
 export function tintImage(
   image: Canvas.Image,
   color: string,

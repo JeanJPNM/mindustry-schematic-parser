@@ -1,4 +1,4 @@
-import Canvas from 'canvas'
+import * as Canvas from 'canvas'
 export interface OutlineOptions {
   image: Canvas.Image
   fillStyle?: string | Canvas.CanvasGradient | Canvas.CanvasPattern

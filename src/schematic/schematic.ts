@@ -1,8 +1,8 @@
+import * as Canvas from 'canvas'
 import * as renderer from './renderer'
 import { Blocks, ItemCost, ItemName } from '../mindustry'
 import { RenderingInfo, ticksPerSecond } from '../util'
 import { decodeSchematic, encodeTags } from './io'
-import Canvas from 'canvas'
 import { MindustryVersion } from './version'
 import { SchematicTile } from './tile'
 const {
