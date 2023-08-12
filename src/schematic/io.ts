@@ -1,11 +1,11 @@
 import * as Pako from 'pako'
 import { Block, Blocks, Liquid, UnitCommand } from '../mindustry'
+import { Point2, Vec2 } from '../arc'
+import { SchematicTile, SchematicTileConfig } from './tile'
 import { StreamedDataReader, StreamedDataWriter } from '../streamed_data'
 import { Item } from '../mindustry/item'
 import { MindustryVersion } from '.'
-import { Point2 } from '../arc'
 import { Schematic } from './schematic'
-import { SchematicTile } from './tile'
 
 const {
   distribution: {
@@ -87,7 +87,7 @@ function mapConfig(block: Block, value: number, position: number) {
   return null
 }
 
-function readConfigObject(cData: StreamedDataReader) {
+function readConfigObject(cData: StreamedDataReader): SchematicTileConfig {
   const type = cData.getInt8()
   switch (type) {
     case 0:
@@ -128,11 +128,7 @@ function readConfigObject(cData: StreamedDataReader) {
     // return content.getByID(ContentType.all[read.b()], read.s());
     case 6: {
       const length = cData.getInt16()
-      const arr = []
-      for (let i = 0; i < length; i++) {
-        arr.push(cData.getInt32())
-      }
-      return arr
+      return readArray(length, () => cData.getInt32())
     }
 
     // original code
@@ -141,12 +137,7 @@ function readConfigObject(cData: StreamedDataReader) {
       return new Point2(cData.getInt32(), cData.getInt32())
     case 8: {
       const len = cData.getInt8()
-      const out = []
-      for (let i = 0; i < len; i++) {
-        out.push(Point2.unpack(cData.getInt32()))
-      }
-      // byte len = read.b(); Point2[] out = new Point2[len]; for (int i = 0; i < len; i++) out[i] = Point2.unpack(read.i());
-      return out
+      return readArray(len, () => Point2.unpack(cData.getInt32()))
     }
 
     // TODO: somehow implement java code bellow
@@ -154,7 +145,7 @@ function readConfigObject(cData: StreamedDataReader) {
       //  by now just ignore the config data
       cData.getInt8()
       cData.getInt16()
-      break
+      return
     // return TechTree.getNotNull(content.getByID(ContentType.all[read.b()], read.s()));
     case 10:
       return cData.getBool()
@@ -172,17 +163,57 @@ function readConfigObject(cData: StreamedDataReader) {
     // return LAccess.all[read.s()];
     case 14: {
       const blen = cData.getInt32()
-      const bytes = []
-      for (let i = 0; i < blen; i++) bytes.push(cData.getInt8())
-      return bytes
+      return readArray(blen, () => cData.getInt8())
     }
     // int blen = read.i(); byte[] bytes = new byte[blen]; read.b(bytes); return bytes;
     case 15:
       return UnitCommand[cData.getInt8()]
+    case 16: {
+      const len = cData.getInt32()
+      return readArray(len, () => cData.getBool())
+    }
+    case 17: {
+      cData.getInt32()
+      return
+    }
+    case 18: {
+      const len = cData.getInt16()
+      return readArray(
+        len,
+        () => new Vec2(cData.getFloat32(), cData.getFloat32())
+      )
+    }
+    case 19:
+      return new Vec2(cData.getFloat32(), cData.getFloat32())
+    case 20: {
+      cData.getUint8()
+      return
+    }
+    case 21: {
+      const len = cData.getInt16()
+      return readArray(len, () => cData.getInt32())
+    }
+    case 22: {
+      const len = cData.getInt32()
+      return readArray(len, () => readConfigObject(cData))
+    }
+    case 23: {
+      cData.getUint16()
+      return
+    }
     default:
       throw new Error('Unknown object type: ' + type)
     // throw new IllegalArgumentException('Unknown object type: ' + type)
   }
+}
+
+function readArray<T>(length: number, fn: () => T) {
+  const result = new Array<T>(length)
+
+  for (let i = 0; i < length; i++) {
+    result[i] = fn()
+  }
+  return result
 }
 
 function decodeTiles(
