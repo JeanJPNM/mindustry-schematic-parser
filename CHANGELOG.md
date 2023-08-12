@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Added support for decoding more types of schematic tile configuration.
+
 ## [4.2.2] - 2023-07-18
 
 ### Fixed
@@ -290,6 +296,7 @@ const {
 
 - First release
 
+[Unreleased]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v4.2.2...HEAD
 [4.2.2]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v4.2.1...v4.2.2
 [4.2.1]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v4.2.0...v4.2.1
 [4.2.0]: https://github.com/JeanJPNM/mindustry-schematic-parser/compare/v4.1.7...v4.2.0
