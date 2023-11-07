@@ -17,7 +17,7 @@ const config = defineConfig({
       sourcemap: true,
     },
   ],
-  external: [...Object.keys(pkg.dependencies), 'url'],
+  external: [...Object.keys(pkg.dependencies), 'node:url', 'node:path'],
   plugins: [
     typescript({
       tsconfig: './tsconfig.json',
