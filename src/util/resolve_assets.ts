@@ -2,6 +2,7 @@ import * as Canvas from 'canvas'
 import { RenderingInfo } from './rendering_info'
 import { WebSchematicRenderingOptions } from '../schematic/schematic'
 import { basicJoin } from './basic_join'
+import { buildDirName } from './constants'
 
 let assetsFolder: string | null
 export async function resolveAssets(
@@ -15,21 +16,18 @@ export async function resolveAssets(
   }
   if (!assetsFolder) {
     const { fileURLToPath } = await import('url')
-    const { packageDirectory } = await import('pkg-dir')
+
     let cwd: string
     const { url } = import.meta
     if (url) {
       const path = fileURLToPath(url).replace(/\\/g, '/')
       cwd = path.substring(0, path.lastIndexOf('/'))
     } else {
-      cwd = __dirname
+      cwd = __dirname.replace(/\\/g, '/')
     }
-    const rootFolder = await packageDirectory({
-      cwd,
-    })
+    const rootFolder = cwd.slice(0, cwd.lastIndexOf(buildDirName))
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    assetsFolder = basicJoin(rootFolder!, 'assets')
+    assetsFolder = basicJoin(rootFolder, 'assets')
   }
   return path => Canvas.loadImage(basicJoin(assetsFolder as string, path))
 }

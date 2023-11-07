@@ -30,8 +30,7 @@
   "packageManager": "pnpm@7.0.0",
   "dependencies": {
     "canvas": "^2.11.2",
-    "pako": "^2.1.0",
-    "pkg-dir": "^7.0.0"
+    "pako": "^2.1.0"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.2",
