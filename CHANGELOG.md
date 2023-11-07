@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.1] - 2023-11-07
+
+### Fixed
+
+- Fixed `types` field missing on the package.json `exports`.
+- Fixed the package breaking some web bundler builds.
+
 ## [4.3.0] - 2023-08-12
 
 ### Added
