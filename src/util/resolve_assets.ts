@@ -15,17 +15,13 @@ export async function resolveAssets(
       Canvas.loadImage(new URL(basicJoin(base.pathname, path), base).href)
   }
   if (!assetsFolder) {
-    const { fileURLToPath } = await import('url')
+    const { extname } = await import('node:path')
+    const { fileURLToPath } = await import('node:url')
 
-    let cwd: string
     const { url } = import.meta
-    if (url) {
-      const path = fileURLToPath(url).replace(/\\/g, '/')
-      cwd = path.substring(0, path.lastIndexOf('/'))
-    } else {
-      cwd = __dirname.replace(/\\/g, '/')
-    }
-    const rootFolder = cwd.slice(0, cwd.lastIndexOf(buildDirName))
+    const file = (url ? fileURLToPath(url) : __filename).replace(/\\/g, '/')
+    const codeDirName = extname(file) === '.ts' ? 'src' : buildDirName
+    const rootFolder = file.slice(0, file.lastIndexOf(codeDirName))
 
     assetsFolder = basicJoin(rootFolder, 'assets')
   }
