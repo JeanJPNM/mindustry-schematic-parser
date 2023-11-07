@@ -16,7 +16,8 @@
   "exports": {
     "require": "./dist/index.cjs",
     "import": "./dist/index.mjs",
-    "default": "./dist/index.mjs"
+    "default": "./dist/index.mjs",
+    "types": "./dist/types/index.d.ts"
   },
   "engines": {
     "node": ">=12"
