@@ -26,7 +26,7 @@
     "Mindustry"
   ],
   "author": "JeanJPNM",
-  "license": "ISC",
+  "license": "MIT",
   "packageManager": "pnpm@7.0.0",
   "dependencies": {
     "canvas": "^2.11.2",
