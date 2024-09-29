@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.2] - 2024-09-29
+
+### Misc
+
+- The package is now distributed under the MIT license.
+
 ## [4.3.1] - 2023-11-07
 
 ### Fixed
