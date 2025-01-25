@@ -17,13 +17,13 @@ export class PayloadConveyor extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  override async draw(
+  override draw(
     tile: SchematicTile,
-    { canvas, blockAsset }: RenderingInfo
-  ): Promise<void> {
+    { canvas, blockSprite }: RenderingInfo
+  ): void {
     drawRotatedTile({
       canvas,
-      image: await blockAsset(category, this.name + '-icon'),
+      image: blockSprite(category, this.name + '-icon'),
       tile,
     })
   }
@@ -39,8 +39,8 @@ export class PayloadRouter extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -48,7 +48,7 @@ export class PayloadRouter extends Block {
     })
     drawRotatedTile({
       canvas: info.canvas,
-      image: await info.blockAsset(category, this.name + '-top'),
+      image: info.blockSprite(category, this.name + '-top'),
       tile,
     })
   }
@@ -67,10 +67,10 @@ export class ReinforcedPayloadConveyor extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
     drawRotatedTile({
       canvas: info.canvas,
-      image: await info.blockAsset(category, this.name + '-icon'),
+      image: info.blockSprite(category, this.name + '-icon'),
       tile,
     })
   }
@@ -89,8 +89,8 @@ export class ReinforcedPayloadRouter extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -98,7 +98,7 @@ export class ReinforcedPayloadRouter extends Block {
     })
     drawRotatedTile({
       canvas: info.canvas,
-      image: await info.blockAsset(category, this.name + '-top'),
+      image: info.blockSprite(category, this.name + '-top'),
       tile,
     })
   }
@@ -122,15 +122,15 @@ export class PayloadMassDriver extends Block {
   override outputDirection = BlockOutputDirection.front
 
   // TODO: complete later
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
       layers: [`${this.name}-base`],
     })
     const top = outlineImage({
-      image: await info.blockAsset(category, this.name),
+      image: info.blockSprite(category, this.name),
       fillStyle: '#353535',
       thickness: 3,
     })
@@ -155,15 +155,15 @@ export class LargePayloadMassDriver extends Block {
 
   size = 5
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
       layers: [`${this.name}-base`, `${this.name}-top`],
     })
     const top = outlineImage({
-      image: await info.blockAsset(category, this.name),
+      image: info.blockSprite(category, this.name),
       fillStyle: '#353535',
       thickness: 3,
     })
@@ -193,15 +193,15 @@ export class PayloadPropulsionTower extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
       layers: [`${this.name}-base`],
     })
     const top = outlineImage({
-      image: await info.blockAsset(category, this.name),
+      image: info.blockSprite(category, this.name),
       fillStyle: '#353535',
       thickness: 3,
     })
@@ -227,8 +227,8 @@ export class SmallDeconstructor extends Block {
 
   override powerConsumption = 1
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -251,8 +251,8 @@ export class Deconstructor extends Block {
 
   override powerConsumption = 3
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -270,8 +270,8 @@ export class Constructor extends Block {
 
   override powerConsumption = 2.0
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       info,
       category,
       layers: [this.name, this.name + '-top'],
@@ -294,8 +294,8 @@ export class LargeConstructor extends Block {
 
   override powerConsumption = 2
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -312,8 +312,8 @@ export class PayloadLoader extends Block {
 
   override powerConsumption = 2.0
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       info,
       category,
       layers: [this.name, this.name + '-top'],
@@ -334,8 +334,8 @@ export class PayloadUnloader extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       info,
       category,
       layers: [this.name, this.name + '-top'],

@@ -27,10 +27,11 @@
   ],
   "author": "JeanJPNM",
   "license": "MIT",
-  "packageManager": "pnpm@7.0.0",
+  "packageManager": "pnpm@8.15.0",
   "dependencies": {
     "canvas": "^2.11.2",
-    "pako": "^2.1.0"
+    "pako": "^2.1.0",
+    "spritesmith": "^3.5.1"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.2",
@@ -63,3 +64,4 @@
   },
   "homepage": "https://github.com/JeanJPNM/mindustry-schematic-parser#readme"
 }
+

@@ -5,3 +5,5 @@ export const defaultTeamColor = '#ffa600'
 
 /** The name of the folder containing the bundled files */
 export const buildDirName = 'dist'
+
+export const spriteSheetName = 'spritesheet.png'

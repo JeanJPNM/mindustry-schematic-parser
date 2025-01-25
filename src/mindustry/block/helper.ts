@@ -1,5 +1,5 @@
 import { Canvas, Image } from 'canvas'
-import { RenderingInfo } from '../../util'
+import { RenderingInfo, Sprite } from '../../util'
 import { SchematicTile } from '../../schematic'
 
 export interface BlockRenderingOptions {
@@ -11,7 +11,7 @@ export interface BlockRenderingOptions {
 export interface BlockImageRenderingOptions {
   tile: SchematicTile
   info: RenderingInfo
-  image: Image | Canvas
+  image: Image | Canvas | Sprite
 }
 
 /**

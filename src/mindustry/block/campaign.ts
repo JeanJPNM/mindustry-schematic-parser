@@ -4,8 +4,8 @@ import { RenderingInfo } from '../../util'
 import { SchematicTile } from '../..'
 const category = 'campaign'
 abstract class Pad extends Block {
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -44,7 +44,7 @@ export class InterplanetaryAccelerator extends Block {
 
   override powerConsumption = 10.0
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({ tile, info, category, layers: [this.name] })
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({ tile, info, category, layers: [this.name] })
   }
 }

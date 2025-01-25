@@ -1,6 +1,7 @@
 import * as Canvas from 'canvas'
+import { Sprite, drawImage } from '../sprite'
 export interface OutlineOptions {
-  image: Canvas.Image
+  image: Canvas.Image | Sprite
   fillStyle?: string | Canvas.CanvasGradient | Canvas.CanvasPattern
   x?: number
   y?: number
@@ -23,7 +24,7 @@ export function outlineImage({
   let i = 0 // iterator
   // draw images at offsets from the array scaled by thickness
   for (; i < dArr.length; i += 2)
-    context.drawImage(image, dArr[i] * thickness, dArr[i + 1] * thickness)
+    drawImage(context, image, dArr[i] * thickness, dArr[i + 1] * thickness)
 
   // fill with color
   context.globalCompositeOperation = 'source-in'
@@ -32,6 +33,6 @@ export function outlineImage({
 
   // draw original image in normal mode
   context.globalCompositeOperation = 'source-over'
-  context.drawImage(image, 0, 0)
+  drawImage(context, image, 0, 0)
   return canvas
 }

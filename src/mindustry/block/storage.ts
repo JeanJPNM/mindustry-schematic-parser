@@ -7,14 +7,14 @@ import { SchematicTile } from '../../schematic'
 const category = 'storage'
 
 abstract class StorageBlock extends Block {
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
       layers: [this.name],
     })
-    const image = await info.blockAsset(category, this.name + '-team')
+    const image = info.blockSprite(category, this.name + '-team')
     this.renderImage({
       info,
       image: tintImage(image, defaultTeamColor),
@@ -109,11 +109,11 @@ export class Unloader extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({ tile, info, category, layers: [this.name] })
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({ tile, info, category, layers: [this.name] })
     const config = tile.config as Item | null
     if (config) {
-      const image = await info.blockAsset(category, this.name + '-center')
+      const image = info.blockSprite(category, this.name + '-center')
       this.renderImage({
         info,
         image: tintImage(image, config.color, 1),

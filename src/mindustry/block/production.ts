@@ -9,8 +9,8 @@ abstract class Drill extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -70,8 +70,8 @@ export class Cultivator extends Block {
 
   override powerConsumption = 0.9
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category: prodCategory,
@@ -111,8 +111,8 @@ export class VentCondenser extends Block {
 
   override powerConsumption = 0.5
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category: prodCategory,
@@ -137,9 +137,9 @@ export class CliffCrusher extends Block {
 
   override powerConsumption = 11 / 60
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({ tile, info, category, layers: [this.name] })
-    const top = await info.blockAsset(category, this.name + '-top')
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({ tile, info, category, layers: [this.name] })
+    const top = info.blockSprite(category, this.name + '-top')
     drawRotatedTile({
       canvas: info.canvas,
       tile,
@@ -163,9 +163,9 @@ export class PlasmaBore extends Block {
 
   override powerConsumption = 0.15
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({ tile, info, category, layers: [this.name] })
-    const top = await info.blockAsset(category, this.name + '-top')
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({ tile, info, category, layers: [this.name] })
+    const top = info.blockSprite(category, this.name + '-top')
     drawRotatedTile({
       canvas: info.canvas,
       tile,
@@ -191,9 +191,9 @@ export class LargePlasmaBore extends Block {
 
   override powerConsumption = 0.8
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({ tile, info, category, layers: [this.name] })
-    const top = await info.blockAsset(category, this.name + '-top')
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({ tile, info, category, layers: [this.name] })
+    const top = info.blockSprite(category, this.name + '-top')
     drawRotatedTile({
       canvas: info.canvas,
       tile,
@@ -219,8 +219,8 @@ export class ImpactDrill extends Block {
 
   override powerConsumption = 160 / 60
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -242,8 +242,8 @@ export class EruptionDrill extends Block {
 
   override powerConsumption = 6
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,

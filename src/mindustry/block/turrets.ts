@@ -13,8 +13,8 @@ abstract class Turret extends Block {
     return this.name
   }
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -24,7 +24,7 @@ abstract class Turret extends Block {
     })
 
     const top = outlineImage({
-      image: await info.blockAsset(this.category, this.asset),
+      image: info.blockSprite(this.category, this.asset),
       fillStyle: '#353535',
       thickness: 3,
     })
@@ -71,9 +71,9 @@ export class Wave extends Turret {
 
   size = 2
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await super.draw(tile, info)
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    super.draw(tile, info)
+    this.render({
       info,
       category,
       layers: [this.name + '-top'],
@@ -134,9 +134,9 @@ export class Tsunami extends Turret {
 
   size = 3
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await super.draw(tile, info)
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    super.draw(tile, info)
+    this.render({
       info,
       category,
       layers: [this.name + '-top'],

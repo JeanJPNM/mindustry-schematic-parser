@@ -22,8 +22,8 @@ function multiplyRequirements(requirements: ItemCost, multiplier = 4): void {
   }
 }
 abstract class DefenseBlock extends Block {
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -33,8 +33,8 @@ abstract class DefenseBlock extends Block {
 }
 
 export abstract class Wall extends DefenseBlock {
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category: wallCategory,
@@ -188,8 +188,8 @@ export class ScrapWall extends Wall {
 
   hasVariants = true
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category: wallCategory,
@@ -237,8 +237,8 @@ export class Thruster extends Wall {
 
   size = 4
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       category: wallCategory,
       info,
@@ -247,7 +247,7 @@ export class Thruster extends Wall {
 
     drawRotatedTile({
       canvas: info.canvas,
-      image: await info.blockAsset(wallCategory, this.name + '-top'),
+      image: info.blockSprite(wallCategory, this.name + '-top'),
       tile,
     })
   }
@@ -435,8 +435,8 @@ export class Radar extends DefenseBlock {
 
   override powerConsumption = 0.6
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -458,8 +458,8 @@ export class BuildTower extends DefenseBlock {
 
   override powerConsumption = 3
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -495,15 +495,15 @@ export class BarrierProjector extends DefenseBlock {
 
   override powerConsumption = 4
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
       layers: [this.name],
     })
 
-    const detail = await info.blockAsset(category, this.name + '-team')
+    const detail = info.blockSprite(category, this.name + '-team')
     this.renderImage({
       tile,
       info,

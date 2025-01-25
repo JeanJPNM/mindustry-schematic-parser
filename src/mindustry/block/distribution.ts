@@ -26,8 +26,8 @@ abstract class TransportBlock extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -44,9 +44,9 @@ export class Conveyor extends TransportBlock {
 
   override outputDirection = BlockOutputDirection.front
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
     const connections = getConnections(tile, info, ConnectionSupport.regular)
-    await drawChained({
+    drawChained({
       tile,
       info,
       category: conveyorCategory,
@@ -70,12 +70,12 @@ export class PlastaniumConveyor extends TransportBlock {
   // only the end of a lane actually outputs something
   override outputDirection = BlockOutputDirection.none
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
     const connections = getConnections(tile, info, [
       ConnectionSupport.stack,
       PlastaniumConveyor,
     ])
-    await drawStackChained({
+    drawStackChained({
       tile,
       info,
       category: stackCategory,
@@ -88,12 +88,12 @@ export class ArmoredConveyor extends Conveyor {
 
   override requirements = { plastanium: 1, thorium: 1, metaglass: 1 }
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
     const connections = getConnections(tile, info, [
       ConnectionSupport.strict,
       Conveyor,
     ])
-    await drawChained({
+    drawChained({
       tile,
       info,
       category: conveyorCategory,
@@ -116,8 +116,8 @@ export class ItemBridge extends TransportBlock {
 
   size = 1
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await super.draw(tile, info)
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    super.draw(tile, info)
 
     const type = this instanceof PhaseConveyor ? 'phaseBridges' : 'bridges'
     if (info.options[type]?.render) {
@@ -151,16 +151,16 @@ export class Sorter extends TransportBlock {
 
   size = 1
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
     const config = tile.config as Item | null
     const imgName = config ? 'center' : 'cross-full'
-    const image = await info.blockAsset(category, imgName)
+    const image = info.blockSprite(category, imgName)
     this.renderImage({
       info,
       tile,
       image: config ? tintImage(image, config.color, 1) : image,
     })
-    await this.render({ tile, info, category, layers: [this.name] })
+    this.render({ tile, info, category, layers: [this.name] })
   }
 }
 export class InvertedSorter extends Sorter {
@@ -203,8 +203,8 @@ export class MassDriver extends TransportBlock {
 
   override powerConsumption = 1.75
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       info,
       category,
       tile,
@@ -212,7 +212,7 @@ export class MassDriver extends TransportBlock {
     })
 
     const top = outlineImage({
-      image: await info.blockAsset(category, this.name),
+      image: info.blockSprite(category, this.name),
       fillStyle: '#353535',
       thickness: 3,
     })
@@ -236,9 +236,9 @@ export class Duct extends TransportBlock {
 
   size = 1
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
     const connections = getConnections(tile, info, ConnectionSupport.regular)
-    await drawChained({
+    drawChained({
       tile,
       info,
       category: ductCategory,
@@ -256,12 +256,12 @@ export class ArmoredDuct extends Duct {
     tungsten: 1,
   }
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
     const connections = getConnections(tile, info, [
       ConnectionSupport.strict,
       Duct,
     ])
-    await drawChained({
+    drawChained({
       tile,
       info,
       category: ductCategory,
@@ -281,8 +281,8 @@ export class DuctRouter extends TransportBlock {
 
   size = 1
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category: ductCategory,
@@ -290,7 +290,7 @@ export class DuctRouter extends TransportBlock {
     })
     const config = tile.config as Item | null
     if (config) {
-      const center = await info.blockAsset(category, 'center')
+      const center = info.blockSprite(category, 'center')
       this.renderImage({
         tile,
         info,
@@ -300,7 +300,7 @@ export class DuctRouter extends TransportBlock {
       drawRotatedTile({
         canvas: info.canvas,
         tile,
-        image: await info.blockAsset(ductCategory, this.name + '-top'),
+        image: info.blockSprite(ductCategory, this.name + '-top'),
       })
     }
   }
@@ -316,8 +316,8 @@ export class OverflowDuct extends TransportBlock {
 
   size = 1
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category: ductCategory,
@@ -326,7 +326,7 @@ export class OverflowDuct extends TransportBlock {
     drawRotatedTile({
       canvas: info.canvas,
       tile,
-      image: await info.blockAsset(ductCategory, this.name + '-top'),
+      image: info.blockSprite(ductCategory, this.name + '-top'),
     })
   }
 }
@@ -341,8 +341,8 @@ export class UnderflowDuct extends TransportBlock {
 
   size = 1
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category: ductCategory,
@@ -351,7 +351,7 @@ export class UnderflowDuct extends TransportBlock {
     drawRotatedTile({
       canvas: info.canvas,
       tile,
-      image: await info.blockAsset(ductCategory, this.name + '-top'),
+      image: info.blockSprite(ductCategory, this.name + '-top'),
     })
   }
 }
@@ -368,8 +368,8 @@ export class DuctBridge extends TransportBlock {
 
   override outputDirection = BlockOutputDirection.front
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category: ductCategory,
@@ -379,7 +379,7 @@ export class DuctBridge extends TransportBlock {
     drawRotatedTile({
       canvas: info.canvas,
       tile,
-      image: await info.blockAsset(ductCategory, `${this.name}-dir`),
+      image: info.blockSprite(ductCategory, `${this.name}-dir`),
     })
 
     if (info.options.bridges?.render) {
@@ -412,8 +412,8 @@ export class DuctUnloader extends TransportBlock {
 
   size = 1
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category: ductCategory,
@@ -422,7 +422,7 @@ export class DuctUnloader extends TransportBlock {
 
     const config = tile.config as Item | null
     const imageName = this.name + (config ? '-center' : '-arrow')
-    const image = await info.blockAsset(ductCategory, imageName)
+    const image = info.blockSprite(ductCategory, imageName)
     if (config) {
       this.renderImage({
         tile,
@@ -455,13 +455,13 @@ export class SurgeConveyor extends TransportBlock {
 
   override powerConsumption = 1 / 60
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
     const connections = getConnections(tile, info, [
       ConnectionSupport.stack,
       SurgeConveyor,
     ])
 
-    await drawStackChained({
+    drawStackChained({
       tile,
       info,
       category: stackCategory,
@@ -482,8 +482,8 @@ export class SurgeRouter extends TransportBlock {
 
   override powerConsumption = 3 / 60
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category: ductCategory,
@@ -491,7 +491,7 @@ export class SurgeRouter extends TransportBlock {
     })
     const config = tile.config as Item | null
     if (config) {
-      const center = await info.blockAsset(category, 'center')
+      const center = info.blockSprite(category, 'center')
       this.renderImage({
         tile,
         info,
@@ -501,7 +501,7 @@ export class SurgeRouter extends TransportBlock {
       drawRotatedTile({
         canvas: info.canvas,
         tile,
-        image: await info.blockAsset(ductCategory, this.name + '-top'),
+        image: info.blockSprite(ductCategory, this.name + '-top'),
       })
     }
   }
@@ -520,8 +520,8 @@ export class UnitCargoLoader extends Block {
 
   override powerConsumption = 8 / 60
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category: unitCategory,
@@ -544,8 +544,8 @@ export class UnitCargoUnloadPoint extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category: unitCategory,
@@ -554,7 +554,7 @@ export class UnitCargoUnloadPoint extends Block {
     const config = tile.config as Item | null
 
     if (config) {
-      const image = await info.blockAsset(unitCategory, this.name + '-top')
+      const image = info.blockSprite(unitCategory, this.name + '-top')
       this.renderImage({
         tile,
         info,

@@ -9,6 +9,7 @@ import { Block } from '../mindustry/block'
 import { BlockOutputDirection } from '../mindustry/block/helper'
 import { Flags } from './flags'
 import { RenderingInfo } from './rendering_info'
+import { drawImage } from './sprite'
 
 export enum ConnectionSupport {
   regular,
@@ -181,7 +182,7 @@ export function getChainedSpriteVariation(
  *
  * This function is only intended to work with blocks that have a size equal to 1
  */
-export async function drawChained({
+export function drawChained({
   tile,
   info,
   connections,
@@ -194,7 +195,7 @@ export async function drawChained({
   )
   const { x, y } = translatePos(tile, info.canvas)
   const context = info.canvas.getContext('2d')
-  const image = await info.blockAsset(category, name(imageIndex))
+  const image = info.blockSprite(category, name(imageIndex))
   const offset = tile.block.size * 16
 
   context.save()
@@ -202,12 +203,12 @@ export async function drawChained({
   context.scale(scaleX, scaleY)
   context.rotate(tileRotationToAngle(tile.rotation))
   context.translate(-offset, -offset)
-  context.drawImage(image, 0, 0)
+  drawImage(context, image, 0, 0)
   context.restore()
 }
 
 /** Draws special "stack" transport blocks (currently only plastanium and surge conveyors) */
-export async function drawStackChained({
+export function drawStackChained({
   tile,
   info,
   category,
@@ -215,8 +216,8 @@ export async function drawStackChained({
 }: StackChainedDrawOptions) {
   const { canvas } = info
   const { block } = tile
-  const base = await info.blockAsset(category, block.name + '-0')
-  const edge = await info.blockAsset(category, block.name + '-edge')
+  const base = info.blockSprite(category, block.name + '-0')
+  const edge = info.blockSprite(category, block.name + '-edge')
 
   drawRotatedTile({
     canvas,

@@ -1,4 +1,5 @@
 import { Canvas, Image } from 'canvas'
+import { Sprite, drawImage } from '../sprite'
 import { SchematicTile } from '../../schematic'
 import { TileRotation } from '../../schematic/tile'
 import { translatePos } from './positioning'
@@ -6,7 +7,7 @@ import { translatePos } from './positioning'
 export interface TileRotatedDrawOptions {
   canvas: Canvas
   tile: SchematicTile
-  image: Image
+  image: Image | Sprite
   angle?: number
 }
 export function drawRotatedTile({
@@ -25,7 +26,7 @@ export function drawRotatedTile({
 }
 interface RotatedDrawOptions {
   canvas: Canvas
-  image: Image | Canvas
+  image: Image | Canvas | Sprite
   x: number
   y: number
   offset: number
@@ -45,7 +46,7 @@ export function drawRotated({
   context.translate(x + offset, y + offset)
   context.rotate(angle)
   context.translate(-offset, -offset)
-  context.drawImage(image, 0, 0)
+  drawImage(context, image, 0, 0)
   context.restore()
 }
 export function tileRotationToAngle(rotation: TileRotation): number {

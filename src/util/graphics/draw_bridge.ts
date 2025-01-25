@@ -4,6 +4,7 @@ import { Point2 } from '../../arc'
 import { RenderingInfo } from '../rendering_info'
 import { SchematicTile } from '../..'
 import { TileRotation } from '../../schematic/tile'
+import { drawImage } from '../sprite'
 import { translatePos } from './positioning'
 
 export interface ConfigBridgeDrawOptions {
@@ -14,13 +15,13 @@ export interface ConfigBridgeDrawOptions {
   enableEnd?: boolean
 }
 
-export async function drawConfigBridge({
+export function drawConfigBridge({
   tile,
   info,
   category,
   opacity,
   enableEnd,
-}: ConfigBridgeDrawOptions): Promise<void> {
+}: ConfigBridgeDrawOptions): void {
   const config = tile.config as Point2 | null
   if (!config) return
   const { block } = tile
@@ -35,7 +36,7 @@ export async function drawConfigBridge({
   } else {
     rotation = config.y > 0 ? TileRotation.top : TileRotation.bottom
   }
-  await drawBridge({
+  drawBridge({
     tile,
     info,
     category,
@@ -56,9 +57,9 @@ export interface BridgeDrawOptions {
   enableEnd?: boolean
 }
 
-export async function drawBridge({
+export function drawBridge({
   tile,
-  info: { canvas, blockAsset },
+  info: { canvas, blockSprite },
   category,
   opacity,
   distance,
@@ -66,14 +67,14 @@ export async function drawBridge({
   enableEnd = true,
 }: BridgeDrawOptions) {
   const { block } = tile
-  const bridge = await blockAsset(category, block.name + '-bridge')
-  const arrow = await blockAsset(category, block.name + '-arrow')
+  const bridge = blockSprite(category, block.name + '-bridge')
+  const arrow = blockSprite(category, block.name + '-arrow')
   const context = canvas.getContext('2d')
   const tcanvas = Canvas.createCanvas((distance + 1) * 32, 32)
   const tcontext = tcanvas.getContext('2d')
 
   if (enableEnd) {
-    const end = await blockAsset(category, block.name + '-end')
+    const end = blockSprite(category, block.name + '-end')
     drawRotated({
       canvas: tcanvas,
       image: end,
@@ -92,10 +93,10 @@ export async function drawBridge({
     })
   }
   for (let i = 1; i < distance; i++) {
-    tcontext.drawImage(bridge, i * 32, 0)
+    drawImage(tcontext, bridge, i * 32, 0)
   }
   const { x, y } = translatePos(tile, canvas)
-  tcontext.drawImage(arrow, (tcanvas.width - arrow.width) / 2, 0)
+  drawImage(tcontext, arrow, (tcanvas.width - arrow.width) / 2, 0)
   context.save()
   context.globalAlpha = opacity ?? 1
   drawRotated({

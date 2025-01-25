@@ -264,12 +264,12 @@ export class Schematic implements SchematicProperties {
     const renderingInfo = new RenderingInfo(this, canvas, options)
     await renderingInfo.init()
     for (const tile of this.tiles) {
-      await tile.block.draw(tile, renderingInfo)
+      tile.block.draw(tile, renderingInfo)
     }
-    await renderingInfo.renderingQueue.execute()
+    renderingInfo.renderingQueue.execute()
     const background = Canvas.createCanvas(size, size)
     if (options.background) {
-      await renderer.drawBackground(renderingInfo, background, size)
+      renderer.drawBackground(renderingInfo, background, size)
     }
     const bcontext = background.getContext('2d')
     const border = options.background ? 64 : 0

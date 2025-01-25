@@ -15,8 +15,8 @@ const payloadCategory = 'payload'
 abstract class SandBoxBlock extends Block {
   category = category
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category: this.category,
@@ -53,16 +53,16 @@ export class ItemSource extends SandBoxBlock {
 
   override outputDirection = BlockOutputDirection.all
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
     const config = tile.config as Item | null
     const imgName = config ? 'center' : 'cross-full'
-    const image = await info.blockAsset(distributionCategory, imgName)
+    const image = info.blockSprite(distributionCategory, imgName)
     this.renderImage({
       info,
       tile,
       image: config ? tintImage(image, config.color, 1) : image,
     })
-    await this.render({ tile, info, category, layers: [this.name] })
+    this.render({ tile, info, category, layers: [this.name] })
   }
 }
 export class ItemVoid extends SandBoxBlock {
@@ -84,16 +84,16 @@ export class LiquidSource extends SandBoxBlock {
 
   override outputDirection = BlockOutputDirection.all
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
     const config = tile.config as Liquid | null
     const imgName = config ? 'center' : 'cross-full'
-    const image = await info.blockAsset(distributionCategory, imgName)
+    const image = info.blockSprite(distributionCategory, imgName)
     this.renderImage({
       info,
       tile,
       image: config ? tintImage(image, config.color, 1) : image,
     })
-    await this.render({ tile, info, category, layers: [this.name] })
+    this.render({ tile, info, category, layers: [this.name] })
   }
 }
 export class LiquidVoid extends SandBoxBlock {
@@ -126,8 +126,8 @@ export class PayloadSource extends SandBoxBlock {
 
   override outputDirection = BlockOutputDirection.all
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category: payloadCategory,
@@ -142,8 +142,8 @@ export class PayloadVoid extends SandBoxBlock {
 
   size = 5
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category: payloadCategory,

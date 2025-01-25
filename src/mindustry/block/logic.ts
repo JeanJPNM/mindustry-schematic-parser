@@ -3,8 +3,8 @@ import { RenderingInfo } from '../../util'
 import { SchematicTile } from '../../schematic'
 const category = 'logic'
 abstract class LogicBlock extends Block {
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({ tile, info, category, layers: [this.name] })
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({ tile, info, category, layers: [this.name] })
   }
 }
 export class Message extends LogicBlock {

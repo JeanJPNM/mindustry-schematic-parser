@@ -21,8 +21,8 @@ abstract class Pump extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({ tile, info, category, layers: [this.name] })
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({ tile, info, category, layers: [this.name] })
   }
 }
 
@@ -68,9 +68,9 @@ export class Conduit extends Block {
 
   override outputDirection = BlockOutputDirection.front
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+  draw(tile: SchematicTile, info: RenderingInfo): void {
     const connections = getConnections(tile, info, ConnectionSupport.regular)
-    await drawChained({
+    drawChained({
       tile,
       info,
       category: conduitCategory,
@@ -89,12 +89,12 @@ export class PlatedConduit extends Conduit {
 
   override requirements = { thorium: 2, metaglass: 1, plastanium: 1 }
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
     const connections = getConnections(tile, info, [
       ConnectionSupport.strict,
       Conduit,
     ])
-    await drawChained({
+    drawChained({
       tile,
       info,
       connections,
@@ -114,8 +114,8 @@ export class LiquidRouter extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -153,8 +153,8 @@ export class LiquidJunction extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({ tile, info, category, layers: [this.name] })
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({ tile, info, category, layers: [this.name] })
   }
 }
 export class BridgeConduit extends Block {
@@ -168,8 +168,8 @@ export class BridgeConduit extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -227,13 +227,13 @@ export class ReinforcedConduit extends Block {
 
   override outputDirection = BlockOutputDirection.front
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+  draw(tile: SchematicTile, info: RenderingInfo): void {
     const connections = getConnections(tile, info, [
       ConnectionSupport.strict,
       ReinforcedConduit,
     ])
 
-    await drawChained({
+    drawChained({
       tile,
       info,
       category: conduitCategory,
@@ -257,8 +257,8 @@ export class ReinforcedLiquidJunction extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({ tile, info, category, layers: [this.name] })
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({ tile, info, category, layers: [this.name] })
   }
 }
 
@@ -276,8 +276,8 @@ export class ReinforcedBridgeConduit extends Block {
 
   override outputDirection = BlockOutputDirection.front
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -287,7 +287,7 @@ export class ReinforcedBridgeConduit extends Block {
     drawRotatedTile({
       canvas: info.canvas,
       tile,
-      image: await info.blockAsset(category, `${this.name}-dir`),
+      image: info.blockSprite(category, `${this.name}-dir`),
     })
 
     if (info.options.bridges?.render) {
@@ -323,8 +323,8 @@ export class ReinforcedLiquidRouter extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,

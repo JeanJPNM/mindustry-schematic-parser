@@ -1,23 +1,23 @@
 import * as Canvas from 'canvas'
 import { Schematic, SchematicTile } from '../schematic'
 import { SchematicTileMap, handlePlacement } from './graphics'
+import { Sprite, isSpritesheetLoaded, loadSpritesheet } from './sprite'
 import { SchematicRenderingOptions } from '../schematic/schematic'
-import { basicJoin } from './basic_join'
+import { coordinates } from 'virtual:sprites'
 import { resolveAssets } from './resolve_assets'
+import { spriteSheetName } from './constants'
 
 export class RenderingInfo {
   private _tileMap: SchematicTileMap | null = null
 
   readonly renderingQueue = new RenderingQueue()
 
-  getAsset!: (path: string) => Promise<Canvas.Image>
-
   constructor(
     public readonly schematic: Schematic,
     public readonly canvas: Canvas.Canvas,
     public readonly options: SchematicRenderingOptions
   ) {
-    this.blockAsset = this.blockAsset.bind(this)
+    this.blockSprite = this.blockSprite.bind(this)
   }
 
   get tileMap(): SchematicTileMap {
@@ -26,15 +26,19 @@ export class RenderingInfo {
   }
 
   async init(): Promise<void> {
-    this.getAsset = await resolveAssets(this)
+    if (isSpritesheetLoaded()) return
+
+    const getAsset = await resolveAssets(this)
+    loadSpritesheet(await getAsset(spriteSheetName))
   }
 
-  blockAsset(category: string, name: string): Promise<Canvas.Image> {
-    const path = basicJoin('sprites/blocks', category, name + '.png')
-    return this.getAsset(path)
+  blockSprite(category: string, name: string): Sprite {
+    const { x, y, width, height } = coordinates[`blocks/${category}/${name}`]
+
+    return Sprite.block(x, y, width, height)
   }
 }
-type RenderingExecutor = () => Promise<void>
+type RenderingExecutor = () => void
 class RenderingQueue {
   private _map: Map<number, RenderingExecutor[]> = new Map()
 
@@ -46,14 +50,14 @@ class RenderingQueue {
     executors.push(executor)
   }
 
-  async execute(): Promise<void> {
+  execute(): void {
     if (this._map.size === 0) return
     const keys = Array.from(this._map.keys()).sort((a, b) => a - b)
 
     for (const key of keys) {
       const executors = this._map.get(key) as RenderingExecutor[]
       for (const executor of executors) {
-        await executor()
+        executor()
       }
     }
   }

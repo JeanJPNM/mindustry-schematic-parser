@@ -23,7 +23,8 @@ export async function resolveAssets(
     const codeDirName = extname(file) === '.ts' ? 'src' : buildDirName
     const rootFolder = file.slice(0, file.lastIndexOf(codeDirName))
 
-    assetsFolder = basicJoin(rootFolder, 'assets')
+    // assets are bundled in the dist folder
+    assetsFolder = basicJoin(rootFolder, 'dist')
   }
   return path => Canvas.loadImage(basicJoin(assetsFolder as string, path))
 }

@@ -13,7 +13,7 @@ export class AirBlock extends Block {
   size = 1
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  async draw(): Promise<void> {}
+  draw(): void {}
 }
 
 abstract class EnvBlock extends Block {
@@ -23,9 +23,9 @@ abstract class EnvBlock extends Block {
 
   size = 1
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+  draw(tile: SchematicTile, info: RenderingInfo): void {
     const name = this.sprite ?? `${this.name}1`
-    await this.render({
+    this.render({
       info,
       category: envCategory,
       layers: [name],
@@ -40,9 +40,9 @@ abstract class PropBlock extends Block {
 
   size = 1
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
+  draw(tile: SchematicTile, info: RenderingInfo): void {
     const name = this.sprite ?? `${this.name}1`
-    await this.render({
+    this.render({
       info,
       category: propCategory,
       layers: [name],
@@ -132,7 +132,7 @@ export class Empty extends EnvBlock {
   override sprite = this.name
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  override async draw(): Promise<void> {}
+  override draw(): void {}
 }
 
 export class Stone extends EnvBlock {

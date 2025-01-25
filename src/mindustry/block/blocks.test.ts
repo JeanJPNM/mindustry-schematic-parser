@@ -42,9 +42,9 @@ test('individual block rendering', async () => {
       ? new Point2(3, 0)
       : Items.copper
     const tile = new SchematicTile(block, 0, 0, config, 0)
-    await block.draw(tile, info)
+    block.draw(tile, info)
   }
-  await info.renderingQueue.execute()
+  info.renderingQueue.execute()
 })
 
 test.run()

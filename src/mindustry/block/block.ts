@@ -5,7 +5,7 @@ import {
   BlockRenderingOptions,
   blockAliases,
 } from './helper'
-import { RenderingInfo, ticksPerSecond, translatePos } from '../../util'
+import { RenderingInfo, Sprite, ticksPerSecond, translatePos } from '../../util'
 import { ItemCost } from '../item'
 import { SchematicTile } from '../../schematic'
 import { UnlockableContent } from '../content'
@@ -51,17 +51,22 @@ export abstract class Block extends UnlockableContent {
   }: BlockImageRenderingOptions): void {
     const context = info.canvas.getContext('2d')
     const { x, y } = translatePos(tile, info.canvas)
-    context.drawImage(image, x, y)
+
+    if (image instanceof Sprite) {
+      image.draw(context, x, y)
+    } else {
+      context.drawImage(image, x, y)
+    }
   }
 
-  protected async render({
+  protected render({
     info,
     category,
     layers,
     tile,
-  }: BlockRenderingOptions): Promise<void> {
+  }: BlockRenderingOptions): void {
     for (const layer of layers) {
-      const image = await info.blockAsset(category, layer)
+      const image = info.blockSprite(category, layer)
       this.renderImage({
         info,
         image,
@@ -76,5 +81,5 @@ export abstract class Block extends UnlockableContent {
    * @package
    * @internal
    */
-  abstract draw(tile: SchematicTile, info: RenderingInfo): Promise<void>
+  abstract draw(tile: SchematicTile, info: RenderingInfo): void
 }

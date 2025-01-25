@@ -13,8 +13,8 @@ abstract class Factory extends Block {
 
   override outputDirection = BlockOutputDirection.front
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -22,10 +22,10 @@ abstract class Factory extends Block {
     })
     drawRotatedTile({
       canvas: info.canvas,
-      image: await info.blockAsset(payloadCategory, 'factory-out-' + this.size),
+      image: info.blockSprite(payloadCategory, 'factory-out-' + this.size),
       tile,
     })
-    await this.render({
+    this.render({
       tile,
       info,
       category: payloadCategory,
@@ -39,22 +39,16 @@ abstract class Reconstructor extends Block {
 
   override outputDirection = BlockOutputDirection.front
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
       layers: [this.name],
     })
 
-    const input = await info.blockAsset(
-      payloadCategory,
-      'factory-in-' + this.size
-    )
-    const output = await info.blockAsset(
-      payloadCategory,
-      'factory-out-' + this.size
-    )
+    const input = info.blockSprite(payloadCategory, 'factory-in-' + this.size)
+    const output = info.blockSprite(payloadCategory, 'factory-out-' + this.size)
     drawRotatedTile({
       canvas: info.canvas,
       image: input,
@@ -66,7 +60,7 @@ abstract class Reconstructor extends Block {
       tile,
     })
 
-    await this.render({
+    this.render({
       tile,
       info,
       category,
@@ -80,8 +74,8 @@ abstract class Fabricator extends Block {
 
   override outputDirection = BlockOutputDirection.front
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -89,13 +83,10 @@ abstract class Fabricator extends Block {
     })
     drawRotatedTile({
       canvas: info.canvas,
-      image: await info.blockAsset(
-        payloadCategory,
-        `factory-out-${this.size}-dark`
-      ),
+      image: info.blockSprite(payloadCategory, `factory-out-${this.size}-dark`),
       tile,
     })
-    await this.render({
+    this.render({
       tile,
       info,
       category,
@@ -112,7 +103,7 @@ export class CommandCenter extends Block {
   size = 2
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {}
+  draw(tile: SchematicTile, info: RenderingInfo): void {}
 }
 export class GroundFactory extends Factory {
   name = 'ground-factory'
@@ -198,8 +189,8 @@ export class RepairPoint extends Block {
 
   size = 1
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -207,7 +198,7 @@ export class RepairPoint extends Block {
     })
 
     const top = outlineImage({
-      image: await info.blockAsset(category, this.name),
+      image: info.blockSprite(category, this.name),
       fillStyle: '#353535',
       thickness: 3,
     })
@@ -226,15 +217,15 @@ export class RepairTurret extends RepairPoint {
 
   override size = 2
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category: 'turrets',
       layers: ['bases/block-2'],
     })
     const top = outlineImage({
-      image: await info.blockAsset(category, this.name),
+      image: info.blockSprite(category, this.name),
       fillStyle: '#353535',
       thickness: 3,
     })
@@ -254,7 +245,7 @@ export class ResupplyPoint extends Block {
   size = 2
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {}
+  draw(tile: SchematicTile, info: RenderingInfo): void {}
 }
 
 export class TankFabricator extends Fabricator {
@@ -419,8 +410,8 @@ export class BasicAssemblerModule extends Block {
 
   override powerConsumption = 4
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -432,7 +423,7 @@ export class BasicAssemblerModule extends Block {
       rotation === TileRotation.right || rotation === TileRotation.top
         ? '-side1'
         : '-side2'
-    const side = await info.blockAsset(category, this.name + sideName)
+    const side = info.blockSprite(category, this.name + sideName)
 
     drawRotatedTile({
       canvas: info.canvas,
@@ -455,7 +446,7 @@ export class UnitRepairTower extends Block {
 
   override powerConsumption = 1
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({ tile, info, category, layers: [this.name] })
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({ tile, info, category, layers: [this.name] })
   }
 }

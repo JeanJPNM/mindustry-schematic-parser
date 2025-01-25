@@ -10,8 +10,8 @@ abstract class GenericCrafter extends Block {
 
   override outputDirection = BlockOutputDirection.all
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       tile,
       info,
       category,
@@ -97,8 +97,8 @@ export class PhaseWeaver extends GenericCrafter {
 
   override powerConsumption = 5.0
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       info,
       category,
       tile,
@@ -126,8 +126,8 @@ export class CryofluidMixer extends GenericCrafter {
 
   override output = BlockOutput.liquid
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       info,
       category,
       tile,
@@ -164,8 +164,8 @@ export class Melter extends GenericCrafter {
 
   override output = BlockOutput.liquid
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       info,
       category,
       tile,
@@ -182,8 +182,8 @@ export class Separator extends GenericCrafter {
 
   override powerConsumption = 1.1
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       info,
       category,
       tile,
@@ -216,8 +216,8 @@ export class SporePress extends GenericCrafter {
 
   override output = BlockOutput.liquid
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       info,
       category,
       tile,
@@ -234,8 +234,8 @@ export class Pulverizer extends GenericCrafter {
 
   override powerConsumption = 0.5
 
-  override async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  override draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       info,
       category,
       tile,

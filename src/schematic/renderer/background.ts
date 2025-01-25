@@ -1,13 +1,14 @@
 import { Canvas } from 'canvas'
 import { RenderingInfo } from '../../util'
 
-export async function drawBackground(
-  { blockAsset }: RenderingInfo,
+export function drawBackground(
+  { blockSprite }: RenderingInfo,
   backgroundCanvas: Canvas,
   size: number
-): Promise<void> {
+): void {
   const context = backgroundCanvas.getContext('2d')
-  const floor = await blockAsset('environment', 'metal-floor')
+  const floor = blockSprite('environment', 'metal-floor').toCanvas()
+
   const pattern = context.createPattern(floor, 'repeat')
 
   context.save()

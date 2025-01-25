@@ -15,8 +15,8 @@ abstract class Ore extends Block {
     this.name = `ore-${item}`
   }
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       info,
       category: 'environment',
       layers: [`${this.name}1`],
@@ -93,8 +93,8 @@ export class GraphiticWall extends Block {
 
   size = 1
 
-  async draw(tile: SchematicTile, info: RenderingInfo): Promise<void> {
-    await this.render({
+  draw(tile: SchematicTile, info: RenderingInfo): void {
+    this.render({
       category: 'environment',
       info,
       layers: [this.name + '1'],
