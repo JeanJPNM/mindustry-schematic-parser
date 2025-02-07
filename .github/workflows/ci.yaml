@@ -10,5 +10,7 @@ jobs:
           node-version: 18
       - uses: pnpm/action-setup@v2
       - run: pnpm i
+      - name: Build (for the spritesheet)
+        run: pnpm build
       - name: Run tests
         run: pnpm test
