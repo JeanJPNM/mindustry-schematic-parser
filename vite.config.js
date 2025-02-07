@@ -1,57 +1,39 @@
+// @ts-check
+import { dirname, join, resolve } from 'node:path'
 import Spritesmith from 'spritesmith'
-import { defineConfig } from 'rollup'
-import { join } from 'node:path'
-import pkg from './package.json' assert { type: 'json' }
+import { defineConfig } from 'vite'
+import { fileURLToPath } from 'node:url'
+import pkg from './package.json' with { type: 'json' }
 import { readdir } from 'node:fs/promises'
-import typescript from '@rollup/plugin-typescript'
 
 const coordsModule = 'virtual:sprites'
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const config = defineConfig({
-  input: 'src/index.ts',
-  output: [
-    {
-      file: pkg.main,
-      format: 'cjs',
-      sourcemap: true,
-      plugins: [preserveEsmImports('pkg-dir')],
+  plugins: [spritesheetPlugin()],
+  build: {
+    lib: {
+      entry: resolve(__dirname, 'src/index.ts'),
+      formats: ['es', 'cjs'],
+      fileName(format, entryName) {
+        const ext = format === 'es' ? 'mjs' : 'cjs'
+        return `${entryName}.${ext}`
+      },
     },
-    {
-      file: pkg.module,
-      format: 'esm',
-      sourcemap: true,
+    minify: false,
+    rollupOptions: {
+      external: [...Object.keys(pkg.dependencies), /node:*/],
     },
-  ],
-  external: [...Object.keys(pkg.dependencies), 'node:url', 'node:path'],
-  plugins: [
-    typescript({
-      tsconfig: './tsconfig.json',
-    }),
-    spritesheetPlugin(),
-  ],
+  },
 })
 
 export default config
 
 /**
- * @param {string[]} targets
- * @returns {import("rollup").Plugin}
- */
-function preserveEsmImports(...targets) {
-  const ids = new Set(targets)
-  return {
-    name: 'preserve-esm-imports',
-    renderDynamicImport({ targetModuleId }) {
-      if (ids.has(targetModuleId)) return { left: 'import(', right: ')' }
-    },
-  }
-}
-
-/**
- * @returns {import("rollup").Plugin}
+ * @returns {import("vite").Plugin}
  */
 function spritesheetPlugin() {
-  /** @type {Record<string, {x: number, y: number, width: number, height: number>}} */
+  /** @type {Record<string, {x: number, y: number, width: number, height: number}>}} */
   let coordinates = {}
   return {
     name: 'spritesheet',

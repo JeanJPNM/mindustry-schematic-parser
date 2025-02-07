@@ -4,7 +4,7 @@ import Canvas from 'canvas'
 import { Items } from '../item'
 import { Point2 } from '../../arc'
 import { RenderingInfo } from '../../util'
-import { test } from 'uvu'
+import { test } from 'vitest'
 
 test('individual block rendering', async () => {
   const canvas = Canvas.createCanvas(500, 500)
@@ -46,5 +46,3 @@ test('individual block rendering', async () => {
   }
   info.renderingQueue.execute()
 })
-
-test.run()
