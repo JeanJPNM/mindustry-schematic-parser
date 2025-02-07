@@ -5,12 +5,13 @@ import { defineConfig } from 'vite'
 import { fileURLToPath } from 'node:url'
 import pkg from './package.json' with { type: 'json' }
 import { readdir } from 'node:fs/promises'
+import dtsPlugin from 'vite-plugin-dts'
 
 const coordsModule = 'virtual:sprites'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const config = defineConfig({
-  plugins: [spritesheetPlugin()],
+  plugins: [spritesheetPlugin(), dtsPlugin()],
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
@@ -50,7 +51,6 @@ function spritesheetPlugin() {
         })
       })
 
-      // eslint-disable-next-line prefer-destructuring
       coordinates = Object.fromEntries(
         Object.entries(result.coordinates).map(([key, value]) => [
           key.replace('assets/sprites/', '').replace('.png', ''),
