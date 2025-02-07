@@ -102,7 +102,7 @@ export class CommandCenter extends Block {
 
   size = 2
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   draw(tile: SchematicTile, info: RenderingInfo): void {}
 }
 export class GroundFactory extends Factory {
@@ -244,7 +244,7 @@ export class ResupplyPoint extends Block {
 
   size = 2
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   draw(tile: SchematicTile, info: RenderingInfo): void {}
 }
 

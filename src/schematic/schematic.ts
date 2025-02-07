@@ -177,7 +177,6 @@ export class Schematic implements SchematicProperties {
     const requirements: ItemCost = {}
     for (const tile of this.tiles) {
       const { block } = tile
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const req = block.requirements
       for (const key in req) {
         // console.log(block.name, req)

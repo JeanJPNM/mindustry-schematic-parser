@@ -12,7 +12,6 @@ export class AirBlock extends Block {
 
   size = 1
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   draw(): void {}
 }
 
@@ -131,7 +130,6 @@ export class Empty extends EnvBlock {
 
   override sprite = this.name
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   override draw(): void {}
 }
 
